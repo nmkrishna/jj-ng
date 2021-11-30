@@ -1,0 +1,26 @@
+#Application properties
+server:
+  port: 8081
+
+
+#AWS properties
+cloud:
+  aws:
+    region:
+      static: ap-south-1
+    stack:
+      auto: false
+    credentials:
+      accessKey: AKIARBQYI4XZ6O3UACVS
+      secretKey: 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
+
+application:
+  bucket:
+    name: poc-demo-it05
+
+logging:
+  level:
+    com:
+      amazonaws:
+        util:
+          EC2MetadataUtils: error

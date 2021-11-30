@@ -1,0 +1,72 @@
+<!DOCTYPE html><html lang="en"><head><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+    <meta charset="utf-8">
+    <title>JjChart</title>
+    <base href="/">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+    <style type="text/css">@font-face{font-family:'Material Icons';font-style:normal;font-weight:400;src:url(https://fonts.gstatic.com/s/materialicons/v114/flUhRq6tzZclQEJ-Vdg-IuiaDsNcIhQ8tQ.woff2) format('woff2');}.material-icons{font-family:'Material Icons';font-weight:normal;font-style:normal;font-size:24px;line-height:1;letter-spacing:normal;text-transform:none;display:inline-block;white-space:nowrap;word-wrap:normal;direction:ltr;-webkit-font-feature-settings:'liga';-webkit-font-smoothing:antialiased;}</style>
+    <script type="text/javascript" src="./assets/html2canvas.min.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
+    <script src="https://cdn.amcharts.com/lib/4/themes/animated.js"></script>
+
+    <style>
+      #export {
+        visibility: hidden;
+        position: absolute;
+        right: 160px;
+        margin: 20px;
+        padding: 5px;
+        cursor: pointer;
+        z-index: 5;
+      }
+    </style>
+  <link rel="stylesheet" href="styles.31d6cfe0d16ae931b73c.css"></head>
+  <body>
+    <button id="export" onclick="screenshot();">Export</button>
+    <app-root></app-root>
+    <script type="text/javascript">
+      function saveAs(uri, filename) {
+        var link = document.createElement("a");
+        if (typeof link.download === "string") {
+          link.href = uri;
+          link.download = filename;
+
+          //Firefox requires the link to be in the body
+          document.body.appendChild(link);
+
+          //simulate click
+          link.click();
+
+          //remove the link when done
+          document.body.removeChild(link);
+        } else {
+          window.open(uri);
+        }
+      }
+
+      function screenshot() {
+        document
+          .getElementsByClassName("amcharts-Scrollbar-group")
+          .forEach((element) => {
+            element.setAttribute("style", "display: none");
+          });
+        window
+          .html2canvas(document.getElementById("container"), {
+            height: window.outerHeight + 600,
+            windowHeight: window.outerHeight + 700,
+          })
+          .then(function (canvas) {
+            //document.body.appendChild(canvas);
+            saveAs(canvas.toDataURL(), `jjchart${Date.now()}.png`);
+            document
+              .getElementsByClassName("amcharts-Scrollbar-group")
+              .forEach((element) => {
+                element.setAttribute("style", "display: block");
+              });
+          });
+      }
+    </script>
+  <script src="runtime.f2d8656a8d7677226064.js" defer></script><script src="polyfills.2234604ce0ea51176398.js" defer></script><script src="main.80bb51c12eae2ff7be0c.js" defer></script>
+
+</body></html>
