@@ -401,14 +401,6 @@ const ownerColors = [
     '#4CAF50',
     '#EF6C00'
 ]
-// const owners = [
-//      "Enterprise Q&C",
-//     { category: "Janssen BRQC" },
-//     { category: "Janssen PQM" },
-//     { category: "Janssen PQM" },
-//     { category: "Janssen BRQC" },
-//     { category: "n/a" }
-// ];
 
 const categories = [
     ...new Set(
@@ -440,6 +432,29 @@ const listOwners = (rawData: any) => {
     return [...new Set(rawData.map((i: any) => i.functionalOwnership))];
 };
 
+const OWNERS_COLORS = [{
+    "name": "Enterprise Q&C",
+    "fill": "blue"
+}, {
+    "name": "Janssen BRQC",
+    "fill": "red"
+}, {
+    "name": "Janssen PQM",
+    "fill": "green"
+}, {
+    "name": "Janssen PQS",
+    "fill": "purple"
+}, {
+    "name": "Janssen BQ",
+    "fill": "pink"
+}, {
+    "name": "Janssen SCQ",
+    "fill": "cyan"
+}, {
+    "name": "Janssen PQM/JSCQ/BRQC",
+    "fill": "yellow"
+}];
+
 const getStratergies = (rawData: any) => {
     let result: any = [];
     rawData.map((i: any) => {
@@ -450,7 +465,7 @@ const getStratergies = (rawData: any) => {
 
 const lookupTopStrategy = (strategy: any) => {
     let topStrategy = "n/a";
-    strategiesMap.map((obj: any) => {
+    strategiesMap.forEach((obj: any) => {
         if (obj.children.indexOf(strategy) > 0) {
             topStrategy = obj.name;
         }
@@ -460,8 +475,6 @@ const lookupTopStrategy = (strategy: any) => {
 
 
 const getInitiativesSeries = (rawData: any) => {
-    let series: any = [];
-    let initiatives = getInitiatives(rawData);
     rawData.forEach((entry: any, initIndex: number) => {
         entry.strategies.forEach((strategy: any, index: any) => {
             let seriesObj: any = {};
@@ -480,12 +493,42 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.investmentType = entry.investmentType;
             seriesObj.projectLead = entry.projectLead;
             seriesObj.colorSettings = getOwnerColor(entry.functionalOwnership);
+
+            //Placeholders
+            seriesObj.projectName = "Integrated Quality";
+            seriesObj.businessObjectivesRelational = "I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.",
+                seriesObj.benfitsAndRationale = "";
+            seriesObj.function = [];
+            seriesObj.projectId = "JSC-0056633";
+            seriesObj.financials = {
+                "capital": "$0",
+                "expense": "$774,000"
+            };
+            seriesObj.plannedStartDate = "01/Jan/22";
+            seriesObj.expireDate = "31/Jan/22";
+            seriesObj.carStatus = [
+                "Not Yet Started",
+                "Draft"
+            ];
+            seriesObj.primaryJanssenOneAccesslerator = [
+                "Complete For Patients"
+            ];
+            seriesObj.affectedQCDimensions = [
+                "Next Generation Quality"
+            ];
+            seriesObj.bamAllignment = [
+                "100% Digital QMS",
+                "80% Automated QC and Product Release"
+            ];
+            seriesObj.rpaValueScore = [
+                "0.2"
+            ];
+            seriesObj.resourceRequired = "2 FTE";
             series.push(seriesObj);
         });
 
     });
-    //console.log('series with owners', series);
-    return series.splice(0, 50);
+    return series.splice(0, 100);
 };
 
 const getInitiatives = (rawData: any) => {
@@ -495,8 +538,6 @@ const getInitiatives = (rawData: any) => {
     });
     return [...new Set(result)];
 };
-
-
 
 const getSeries = (rawData: any, categories: any) => {
     let series: any = [];
@@ -594,5 +635,6 @@ export {
     primary_accelerators,
     primary_dimensions,
     primary_allignment,
-    primary_valuescore
+    primary_valuescore,
+    OWNERS_COLORS
 };
