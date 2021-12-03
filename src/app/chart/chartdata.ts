@@ -9,6 +9,20 @@ const allStrategies = [
     'Intelligent Automation',
 ];
 
+const function_owners = ["Q&C", "BRQC", "PQM"];
+
+const investment_type = ["Strategic"];
+
+const car_status = ["Not Yet Started", "Draft", "Business Alligned", "Submitted"]
+
+const primary_accelerators = ["Select For Success", "Design For Access", "Dirve The Debate", "Analyze And Discript", "Complete For Patients"]
+
+const primary_dimensions = ["Our People", "Trusted Partnership", "Quality As a Differentiator", "Next Generation Quality"]
+
+const primary_allignment = ["100% Integrated EZE Data", "100% Digital QMS", "80% Automated QC and Product Release", "75% Focused on Patient, Customer and Customer Exp", "96% Satisfaction in Customer Facing KPI's"]
+
+const primary_valuescore = ["the Ratio"]
+
 const strategiesMap = [
     {
         name: "People",
@@ -470,7 +484,7 @@ const getInitiativesSeries = (rawData: any) => {
         });
 
     });
-    console.log('series with owners', series);
+    //console.log('series with owners', series);
     return series.splice(0, 50);
 };
 
@@ -573,5 +587,12 @@ export {
     getSeries,
     getInitiatives,
     getInitiativesSeries,
-    getOwnerColor
+    getOwnerColor,
+    function_owners,
+    investment_type,
+    car_status,
+    primary_accelerators,
+    primary_dimensions,
+    primary_allignment,
+    primary_valuescore
 };

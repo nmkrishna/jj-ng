@@ -1,7 +1,10 @@
 import { SelectorMatcher } from '@angular/compiler';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
+import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore } from "./chartdata";
+import { faMinusSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
 
 declare const window: any;
 
@@ -32,7 +35,20 @@ import {
     styleUrls: ['./chart.component.scss'],
 })
 export class ChartComponent implements OnInit {
-    constructor(private chartService: ChartService) { }
+    modalContent: any = {}
+    FUNCTION_OWNERS: Array<string> = function_owners;
+    INVESTMENT_TYPE: Array<string> = investment_type;
+    CAR_STATUS: Array<string> = car_status;
+    PRIMARY_ACCELERATORS: Array<string> = primary_accelerators;
+    PRIMARY_DIMENSIONS: Array<string> = primary_dimensions;
+    PRIMARY_ALLIGNMENT: Array<string> = primary_allignment;
+    PRIMARY_VALUESCORE: Array<string> = primary_valuescore;
+    objectKeys = Object.keys
+    faMinusSquare = faMinusSquare;
+    faCheckSquare = faCheckSquare;
+    @ViewChild('dataModal') dataModal: TemplateRef<any>;
+
+    constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
     ngOnInit(): void {
         // Themes begin
@@ -43,7 +59,7 @@ export class ChartComponent implements OnInit {
             const owners = getOwners(data, categories);
             //   const chartSeries = getSeries(data, categories);
             const strategies = getStratergies(data);
-            const chartSeries = getInitiativesSeries(data);
+            //const chartSeries = getInitiativesSeries(data);
 
 
             const dummySeries = [
@@ -96,12 +112,13 @@ export class ChartComponent implements OnInit {
 
 
             var initiatives: any = [];
-            chartSeries.forEach((el: any) => {
-                initiatives.push(el.initiative);
-            });
-            initiatives = [...new Set(initiatives)];
+            // chartSeries.forEach((el: any) => {
+            //     initiatives.push(el.initiative);
+            // });
+            //initiatives = [...new Set(initiatives)];
+            initiatives = [...new Set(data.map((i: any) => i.initiative))];
 
-            const oldSeries = getSeries(data, categories);
+            //const oldSeries = getSeries(data, categories);
             // let initiativeData: any = [];
             // initiatives.forEach((item, index) => {
             //     initiativeData.push({ "name": item, "value": index });
@@ -134,6 +151,7 @@ export class ChartComponent implements OnInit {
             chart.panY = false;
             chart.dx = 210;
             chart.dy = -20;
+            chart.responsive.enabled = true;
 
 
             // Category Axis
@@ -150,7 +168,7 @@ export class ChartComponent implements OnInit {
             categoryAxis.mouseEnabled = false;
             categoryAxis.tooltip.disabled = true;
 
-            categoryAxis.data = chartSeries;
+            categoryAxis.data = data;
 
             var valueAxis = chart.xAxes.push(new window.am4charts.ValueAxis());
             valueAxis.renderer.labels.template.horizontalCenter = "left";
@@ -173,7 +191,49 @@ export class ChartComponent implements OnInit {
                 series1.dataFields.valueX = "end" + i;
                 series1.dataFields.openValueX = "start" + i;
                 series1.clustered = false;
-                series1.columns.template.tooltipText = '{initiative} => {owner} => {strategy}';
+                series1.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
+                <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
+                <hr/>
+                <table>
+                </tr>
+                    <tr>
+                  <th align="left" style="font-size:8px">Lead</th>
+                  <td style="font-size:8px">{projectLead}</td>
+                </tr>
+                <tr>
+                  <th align="left" style="font-size:8px">Ownership</th>
+                  <td style="font-size:8px">{owner}</td>
+                </tr>
+                <tr>
+                  <th align="left" style="font-size:8px">Strategy</th>
+                  <td style="font-size:8px">{strategy}</td>
+                </tr>
+                <tr>
+                  <th align="left" style="font-size:8px">Quality Enabler</th>
+                  <td style="font-size:8px">{qualityEnabler}</td>
+                </tr>
+                <tr>
+                  <th align="left" style="font-size:8px">Strategy</th>
+                  <td style="font-size:8px">{topStrategy}</td>
+                </tr>
+                  <th align="left" style="font-size:8px">Accelerator</th>
+                  <td style="font-size:8px">{topStrategy}</td>
+                </tr>
+                  <th align="left" style="font-size:8px">Investment Type</th>
+                  <td style="font-size:8px">{investmentType}</td>
+                </tr>
+                    <th align="left" style="font-size:8px">Planned Start</th>
+                  <td style="font-size:8px"></td>
+                </tr>
+                <tr>
+                <th align="left" style="font-size:8px">Planned End</th>
+                  <td style="font-size:8px"></td>
+                </tr>
+                <tr>
+                <th align="left" style="font-size:8px">BAM Alignmnent</th>
+                  <td style="font-size:8px"></td>
+                </tr>
+                </body>`;
                 series1.zIndex = 100;
                 series1.columns.template.events.on("hit", this.onClickDownload, this);
                 // series1.columns.template.adapter.add("fill", function (fill: any, target: any) {
@@ -187,25 +247,25 @@ export class ChartComponent implements OnInit {
 
             }
 
-            // chart.series.legendSettings.labelText = '{owner}';
-            // chart.cursor = new window.am4charts.RadarCursor();
-            // chart.cursor.lineX.disabled = true;
-            // chart.legend = new window.am4charts.Legend();
-            // chart.legend.useDefaultMarker = true;
-            // chart.legend.position = 'absolute';
-            // chart.legend.maxWidth = 100;
-            // chart.legend.fillOpacity = 0.70;
-            // chart.legend.strokeWidth = 0;
-            // chart.legend.x = 100;
-            // chart.legend.y = 100;
-            // chart.legend.itemContainers.template.paddingTop = 250;
-            // chart.legend.fontSize = 10;
-            // let marker = chart.legend.markers.template.children.getIndex(0);
-            // marker.cornerRadius(12, 12, 12, 12);
-            // marker.strokeWidth = 0;
-            // marker.strokeOpacity = 1;
+            //chart.series.legendSettings.labelText = '{owner}';
+            chart.cursor = new window.am4charts.RadarCursor();
+            chart.cursor.lineX.disabled = true;
+            chart.legend = new window.am4charts.Legend();
+            chart.legend.useDefaultMarker = true;
+            chart.legend.position = 'absolute';
+            chart.legend.maxWidth = 100;
+            chart.legend.fillOpacity = 0.70;
+            chart.legend.strokeWidth = 0;
+            chart.legend.x = 100;
+            chart.legend.y = 100;
+            chart.legend.itemContainers.template.paddingTop = 250;
+            chart.legend.fontSize = 10;
+            let marker = chart.legend.markers.template.children.getIndex(0);
+            marker.cornerRadius(12, 12, 12, 12);
+            marker.strokeWidth = 0;
+            marker.strokeOpacity = 1;
 
-            chart.data = chartSeries;
+            chart.data = data;
 
 
             // ===== ACCELERATORS ===
@@ -416,10 +476,16 @@ export class ChartComponent implements OnInit {
 
 
     }
+
+    onCloseModal() {
+        this.modalService.dismissAll()
+    }
+
     onClickDownload(event: any) {
-        console.log("clicked on ", event.target.dataItem.dataContext);
+        this.modalService.open(this.dataModal, { size: 'xl' });
+        this.modalContent = event.target.dataItem.dataContext;
+        console.log("clicked on ", this.modalContent);
         // var element = document.getElementById('html-template');
         // html2pdf(element);
-        alert(event.target.dataItem.dataContext);
     }
 }
