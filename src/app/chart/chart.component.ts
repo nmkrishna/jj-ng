@@ -26,7 +26,7 @@ import {
     getStratergies,
     getInitiatives,
     getInitiativesSeries,
-    getOwnerColor,
+    getInitiativeColor,
     rawData,
 } from '../chart/chartdata';
 
@@ -80,17 +80,17 @@ export class ChartComponent implements OnInit {
             window.am4charts.RadarChart
         );
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-        chart.colors.step = 4;
-
+        // chart.colors.step = 4;
         // Chart settings
         // Chart settings
         chart.startAngle = 180;
         chart.endAngle = 0;
-        chart.innerRadius = window.am4core.percent(75);
+        chart.innerRadius = window.am4core.percent(55);
+        chart.radius = window.am4core.percent(88);
         chart.panX = true;
         chart.panY = true;
-        chart.dx = 200;
-        chart.dy = -300;
+        chart.dx = 145;
+        chart.dy = -320;
         chart.responsive.enabled = true;
 
 
@@ -98,37 +98,47 @@ export class ChartComponent implements OnInit {
         // Category Axis
         var categoryAxis = chart.yAxes.push(new window.am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "initiative";
-        categoryAxis.renderer.grid.template.location = 0;
-        categoryAxis.renderer.tooltipLocation = 0.5;
-        categoryAxis.renderer.grid.template.strokeOpacity = 0;
-        categoryAxis.renderer.minGridDistance = 40;
-        categoryAxis.renderer.labels.isMeasured = false;
-        categoryAxis.mouseEnabled = false;
-        categoryAxis.tooltip.disabled = true;
-        categoryAxis.visible = false;
-        categoryAxis.wheelable = false;
+        // categoryAxis.renderer.grid.template.location = 0;
+        // categoryAxis.renderer.tooltipLocation = 0.5;
+        // categoryAxis.renderer.minGridDistance = 400;
+        // categoryAxis.renderer.labels.isMeasured = false;
+        // categoryAxis.mouseEnabled = false;
+        // categoryAxis.tooltip.disabled = true;
+        // categoryAxis.visible = true;
+        categoryAxis.fixedWidthGrid = true;
+        // categoryAxis.wheelable = false;
+        // categoryAxis.renderer.grid.template.strokeOpacity = 0.5;
+        // categoryAxis.renderer.grid.template.strokeWidth = 1;
+        // categoryAxis.renderer.grid.template.stroke = "0xC0C0C0";
+        categoryAxis.renderer.axisFills.template.disabled = false;
+        categoryAxis.renderer.line.strokeOpacity = 1;
+        categoryAxis.renderer.line.strokeWidth = 2;
+        categoryAxis.renderer.line.stroke = window.am4core.color("red");
+
+
         categoryAxis.data = chartSeries;
 
         var valueAxis = chart.xAxes.push(new window.am4charts.ValueAxis());
         valueAxis.renderer.labels.template.horizontalCenter = "left";
-        valueAxis.strictMinMax = true;
-        valueAxis.renderer.maxLabelPosition = 0.99;
-        valueAxis.renderer.grid.template.strokeOpacity = 0;
+        // valueAxis.strictMinMax = true;
+        // valueAxis.renderer.maxLabelPosition = 0.99;
+        // valueAxis.renderer.grid.template.strokeOpacity = 0;
         valueAxis.min = 0;
         valueAxis.max = strategies.length;
-        valueAxis.mouseEnabled = false;
-        valueAxis.tooltip.disabled = true;
-        valueAxis.renderer.axisFills.template.disabled = false;
-        valueAxis.interactionsEnabled = true;
+        // valueAxis.mouseEnabled = false;
+        // valueAxis.tooltip.disabled = true;
+        // valueAxis.renderer.axisFills.template.disabled = false;
+        // valueAxis.interactionsEnabled = true;
         valueAxis.disabled = true;
 
         for (var i = 0; i < initiatives.length; i++) {
             let initiativesSeries = chart.series.push(new window.am4charts.RadarColumnSeries());
-            initiativesSeries.name = '{owner}';
+            initiativesSeries.name = `{owner}`;
             initiativesSeries.dataFields.categoryY = 'initiative';
             initiativesSeries.dataFields.valueX = "end" + i;
             initiativesSeries.dataFields.openValueX = "start" + i;
             initiativesSeries.clustered = false;
+            initiativesSeries.fill = getInitiativeColor(initiatives[i]);
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
             <hr/>
@@ -233,6 +243,9 @@ export class ChartComponent implements OnInit {
         // ===== ACCELERATORS ===
 
         var chart = window.am4core.create('chartdiv2', window.am4charts.PieChart);
+        chart.dy = -300;
+        // Add data
+
         const iconMap = [
             'light-mode',
             'tungsten',
@@ -241,7 +254,7 @@ export class ChartComponent implements OnInit {
             'group',
             'table_view',
         ];
-        // Add data
+
         chart.data = accelerators.map((acc, index) => ({
             label: acc,
             value: 100 / accelerators.length,
@@ -250,7 +263,6 @@ export class ChartComponent implements OnInit {
 
         // Add and configure Series
         var pieSeries = chart.series.push(new window.am4charts.PieSeries());
-        pieSeries.dy = -300;
         pieSeries.dataFields.value = 'value';
         pieSeries.dataFields.category = 'label';
         //pieSeries.dataFields.icon = 'icon';
@@ -299,6 +311,7 @@ export class ChartComponent implements OnInit {
             }
             label1.scale = scale;
         });
+
 
         //gauge chart
 
