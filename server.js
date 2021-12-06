@@ -9,10 +9,10 @@ const express = require('express');
 const app = express();
 app.use(requireHTTPS);
 
-app.use(express.static(’./dist/jj-chart’));
+app.use(express.static('./dist/jj-chart'));
 
-app.get(’/*’, function(req, res) {
-  res.sendFile(’index.html’, {root: 'dist/jj-chart/’}
+app.get('/*', function(req, res) {
+  res.sendFile('index.html', {root: 'dist/jj-chart/'}
 );
 });
 
