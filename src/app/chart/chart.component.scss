@@ -72,23 +72,15 @@ small{
     margin: .1rem;
 }
 .description-card{
-    display: table;
-    min-height: 11rem;
     overflow: hidden;
 }
-.businessObjectivesRelational-card{
-    display: table;
-    min-height: 11rem;
+.businessObjectivesRelational-card{ 
     overflow: hidden;
 }
 .benfitsAndRationale-card{
-    display: table;
-    min-height: 5.5rem;
     overflow: hidden;
 }
-.potentialRisk-card{
-    display: table;
-    min-height: 7.9rem;
+.potentialRisk-card{ 
     overflow: hidden;
 }
 .primary-cards-title{
@@ -100,8 +92,6 @@ small{
 .primary-cards-list{
     font-size: .8rem !important;
 }
-.tech-resrc-cards{
-    display: table;
-    min-height: 4.5rem;
+.tech-resrc-cards{   
     overflow: hidden;
 }
