@@ -1,10 +1,13 @@
 import { SelectorMatcher } from '@angular/compiler';
-import { Component, Input, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, Input, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
 import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore, OWNERS_COLORS } from "./chartdata";
 import { faMinusSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+
 
 declare const window: any;
 
@@ -48,7 +51,7 @@ export class ChartComponent implements OnInit {
     faMinusSquare = faMinusSquare;
     faCheckSquare = faCheckSquare;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
-
+    
     constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
     ngOnInit(): void {
@@ -451,5 +454,19 @@ export class ChartComponent implements OnInit {
         this.modalService.open(this.dataModal, { size: 'xl' });
         this.modalContent = event.target.dataItem.dataContext;
         console.log("clicked on ", this.modalContent);
+    }
+
+    downloadAsPDF() {
+        const modalBody = document.getElementById("modal-body") as HTMLElement;
+        html2canvas(modalBody).then(canvas => {
+            let fileWidth = 208;
+            let fileHeight = canvas.height * fileWidth / canvas.width;
+            
+            const FILEURI = canvas.toDataURL('image/png');
+            let PDF = new jsPDF('p', 'mm', 'a4');
+            let position = 0;
+            PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
+            PDF.save('demo.pdf');            
+        })
     }
 }
