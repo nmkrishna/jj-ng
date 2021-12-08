@@ -451,7 +451,7 @@ const OWNERS_COLORS = [{
     "name": "Janssen SCQ",
     "fill": "cyan"
 }, {
-    "name": "Janssen PQM/JSCQ/BRQC",
+    "name": "Janssen PQM,JSCQ,BRQC",
     "fill": "yellow"
 }];
 
@@ -492,7 +492,7 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.potentialRisk = entry.potentialRisk;
             seriesObj.investmentType = entry.investmentType;
             seriesObj.projectLead = entry.projectLead;
-            seriesObj.colorSettings = getOwnerColor(entry.functionalOwnership);
+            seriesObj.colorSettings = getInitiativeColor(entry.initiative);
 
             //Placeholders
             seriesObj.projectName = "Integrated Quality";
@@ -613,8 +613,14 @@ owners = [...new Set(owners)];
 const accelerators = [...new Set(rawData.map((i) => i.janssenOneAccelerator))];
 
 
-function getOwnerColor(owner: string) {
-    return ownerColors[owners.indexOf(owner)];;
+function getInitiativeColor(init: string) {
+    let entry = rawData.find(element => element.initiative > init) || { functionalOwnership: "n/a" };
+    let match = OWNERS_COLORS.find(t => t.name == entry.functionalOwnership);
+    if (match) {
+        return match.fill;
+    } else {
+        return "blue";
+    }
 }
 
 export {
@@ -628,7 +634,7 @@ export {
     getSeries,
     getInitiatives,
     getInitiativesSeries,
-    getOwnerColor,
+    getInitiativeColor,
     function_owners,
     investment_type,
     car_status,
