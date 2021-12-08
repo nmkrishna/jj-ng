@@ -50,7 +50,7 @@
                                             <small class="mb-0">
                                                 {{owner}}
                                                 <fa-icon class="ml-2 mr-3"
-                                                    [icon]="modalContent[obj].indexOf(owner) < 0 ? faMinusSquare : faCheckSquare"></fa-icon>
+                                                    [icon]="modalContent[obj] && modalContent[obj].indexOf(owner) < 0 ? faMinusSquare : faCheckSquare"></fa-icon>
                                             </small>
                                         </ng-container>
                                     </div>
@@ -83,7 +83,7 @@
                                         <ng-container *ngFor="let type of INVESTMENT_TYPE">
                                             <small class="mb-0">
                                                 {{type}}
-                                                <fa-icon [icon]="modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
+                                                <fa-icon [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
                                                     class="ml-2 mr-3"></fa-icon>
                                             </small>
                                         </ng-container>
@@ -138,7 +138,7 @@
                                         <ng-container *ngFor="let type of CAR_STATUS">
                                             <small class="mb-0">
                                                 {{type}}
-                                                <fa-icon [icon]="modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
+                                                <fa-icon [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
                                                     class="ml-2 mr-3"></fa-icon>
                                             </small>
                                         </ng-container>
@@ -172,7 +172,7 @@
                             <ng-container *ngFor="let type of PRIMARY_ACCELERATORS">
                                 <p class="mb-0 primary-cards-list">
                                     {{type}}
-                                    <fa-icon [icon]="modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
+                                    <fa-icon [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
                                         class="float-right mt-1"></fa-icon>
                                 </p>
                             </ng-container>
@@ -181,7 +181,7 @@
                             <ng-container *ngFor="let type of PRIMARY_DIMENSIONS">
                                 <p class="mb-0 primary-cards-list">
                                     {{type}}
-                                    <fa-icon [icon]="modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
+                                    <fa-icon [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
                                         class="float-right mt-1"></fa-icon>
                                 </p>
                             </ng-container>
@@ -190,7 +190,7 @@
                             <ng-container *ngFor="let type of PRIMARY_ALLIGNMENT">
                                 <p class="mb-0 primary-cards-list">
                                     {{type}}
-                                    <fa-icon [icon]="modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
+                                    <fa-icon [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
                                         class="float-right mt-1"></fa-icon>
                                 </p>
                             </ng-container>
@@ -199,7 +199,7 @@
                             <ng-container *ngFor="let type of PRIMARY_VALUESCORE">
                                 <p class="mb-0 primary-cards-list">
                                     {{type}}
-                                    <fa-icon [icon]="modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
+                                    <fa-icon [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
                                         class="float-right mt-1"></fa-icon>
                                 </p>
                             </ng-container>
