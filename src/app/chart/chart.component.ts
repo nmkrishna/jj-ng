@@ -279,8 +279,15 @@ export class ChartComponent implements OnInit {
         // categoryAxis.renderer.labels.isMeasured = false;
         categoryAxis.mouseEnabled = true;
         // categoryAxis.tooltip.disabled = true;
-        categoryAxis.visible = false;
+        // categoryAxis.visible = false;
         categoryAxis.fixedWidthGrid = true;
+        let categoryAxisRenderer = categoryAxis.renderer;
+        categoryAxisRenderer.grid.template.stroke = "0xFF0000";
+        categoryAxisRenderer.grid.template.strokeWidth = 1;
+        categoryAxisRenderer.labels.template.visible = false;
+        categoryAxisRenderer.labels.template.diabled = false;
+
+
         // categoryAxis.wheelable = false;
         // categoryAxis.renderer.grid.template.strokeOpacity = 0.5;
         // categoryAxis.renderer.grid.template.strokeWidth = 1;
