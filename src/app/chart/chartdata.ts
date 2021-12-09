@@ -425,11 +425,27 @@ const getCategories = (rawData: any) => {
 };
 
 const getAccelarators = (rawData: any) => {
-    return [...new Set(rawData.map((i: any) => i.janssenOneAccelerator))];
+    return [
+        ...new Set(
+            rawData.reduce((acc: any, i: any) => {
+                const qE = i.janssenOneAccelerator;
+                acc.push(qE);
+                return acc;
+            }, [])
+        ),
+    ];
 };
 
 const listOwners = (rawData: any) => {
-    return [...new Set(rawData.map((i: any) => i.functionalOwnership))];
+    return [
+        ...new Set(
+            rawData.reduce((acc: any, i: any) => {
+                const qE = i.functionalOwnership;
+                acc.push(qE);
+                return acc;
+            }, [])
+        ),
+    ];
 };
 
 const OWNERS_COLORS = [{
