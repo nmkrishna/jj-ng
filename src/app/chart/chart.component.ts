@@ -11,16 +11,28 @@ import html2canvas from 'html2canvas';
 
 declare const window: any;
 
-let colors = [
-    '#FEC100',
-    '#00B0EF',
-    '#6633CB',
-    '#FF6600',
-    '#FF0100',
-    'green',
-    'cyan',
-    'gray',
+let accelerator_colors = [
+    window.am4core.color('#00A9E8'),
+    window.am4core.color('#00477F'),
+    window.am4core.color('#0B75BD'),
+    window.am4core.color('#535864'),
+    window.am4core.color('#404450'),
+    window.am4core.color('#2888B4')
 ];
+let topStratergy_colors = [
+    window.am4core.color('#009999'),
+    window.am4core.color('#CC0199'),
+    window.am4core.color('#090099'),
+    window.am4core.color('#C60519')
+];
+let stratergy_colors = [
+    window.am4core.color("#845EC2"),
+    window.am4core.color("#D65DB1"),
+    window.am4core.color("#FF6F91"),
+    window.am4core.color("#FF9671"),
+    window.am4core.color("#FFC75F"),
+    window.am4core.color("#F9F871")
+  ];
 import {
     getAccelarators,
     getCategories,
@@ -163,7 +175,7 @@ export class ChartComponent implements OnInit {
 
         //colors
         var cs = acceleratorsSeries.colors;
-        cs.list = [window.am4core.color(new window.am4core.ColorSet().getIndex(0))];
+        cs.list = accelerator_colors;
         cs.stepOptions = {
             lightness: -0.05,
             hue: 0
@@ -183,10 +195,12 @@ export class ChartComponent implements OnInit {
         topStrategiesSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0.05;
         topStrategiesSeries.slices.template.states.getKey("hover").properties.scale = 1;
 
-        topStrategiesSeries.radius = window.am4core.percent(25);
+        topStrategiesSeries.colors.list = topStratergy_colors
+
+        topStrategiesSeries.radius = window.am4core.percent(22);
         topStrategiesSeries.verticalCenter = "middle";
         topStrategiesSeries.alignLabels = false;
-        topStrategiesSeries.innerRadius = window.am4core.percent(20);
+        topStrategiesSeries.innerRadius = window.am4core.percent(28);
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
@@ -204,22 +218,23 @@ export class ChartComponent implements OnInit {
         topStrategiesSeries.alignLabels = false;
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
         topStrategyLabelsTemplate.text = '{category}';
-        topStrategyLabelsTemplate.bent = true;
+        //topStrategyLabelsTemplate.bent = true;
 
 
-        // topStrategyLabelsTemplate.radius = 10;
+        topStrategyLabelsTemplate.radius = 2;
         topStrategyLabelsTemplate.inside = true;
         topStrategyLabelsTemplate.padding(0, 0, 0, 0);
         topStrategyLabelsTemplate.wrap = true;
-        topStrategyLabelsTemplate.truncate = true;
+        //topStrategyLabelsTemplate.truncate = true;
         topStrategyLabelsTemplate.fontSize = 10;
-        topStrategyLabelsTemplate.maxWidth = 100;
+        topStrategyLabelsTemplate.maxWidth = 70;
         topStrategyLabelsTemplate.strictMinMax = true;
         topStrategyLabelsTemplate.verticalCenter = 'center';
         topStrategyLabelsTemplate.horizontalCenter = 'middle';
         topStrategyLabelsTemplate.rotation = -360;
 
         // topStrategyLabelsTemplate.relativeRotation = 180;
+        //topStrategyLabelsTemplate.relativeRotation = 90;
 
 
         //Tooltip
@@ -236,8 +251,8 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
         strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
         strategySeries.radius = window.am4core.percent(34);
-        strategySeries.innerRadius = window.am4core.percent(28);
-
+        strategySeries.innerRadius = window.am4core.percent(40);
+        strategySeries.colors.list = stratergy_colors;
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
@@ -246,7 +261,9 @@ export class ChartComponent implements OnInit {
         let strategyLabelsTemplate = strategySeries.labels.template;
         strategyLabelsTemplate.text = '{category}';
         // strategyLabelsTemplate.bent = true;
-        strategyLabelsTemplate.radius = 10;
+        //strategyLabelsTemplate.radius = 10;
+        //strategyLabelsTemplate.bent = true;
+        strategyLabelsTemplate.radius = 5;
         strategyLabelsTemplate.inside = true;
         strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.wrap = true;
@@ -255,6 +272,9 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.rotation = -360;
         strategyLabelsTemplate.valign = 'center';
         strategyLabelsTemplate.align = 'right';
+        strategyLabelsTemplate.maxWidth = 65;
+        strategyLabelsTemplate.verticalCenter = 'center';
+        strategyLabelsTemplate.horizontalCenter = 'middle';
 
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}";
@@ -281,7 +301,7 @@ export class ChartComponent implements OnInit {
         radialChart.padding(20, 20, 20, 20);
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
-        radialChart.innerRadius = window.am4core.percent(40);
+        radialChart.innerRadius = window.am4core.percent(48);
 
 
 
