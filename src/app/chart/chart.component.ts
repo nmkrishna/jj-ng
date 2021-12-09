@@ -52,13 +52,12 @@ export class ChartComponent implements OnInit {
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
-    
+
     constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
     ngOnInit(): void {
         // Themes begin
         let data = rawData;
-        console.log('chart api successfull', data);
         const categories = getCategories(data);
         const accelerators = getAccelarators(data);
         const owners = getOwners(data, categories);
@@ -70,45 +69,229 @@ export class ChartComponent implements OnInit {
         });
         initiatives = [...new Set(initiatives)];
 
+        var gaugeData = [
+            {
+                value: 1,
+                name: 'Our People',
+            },
+            {
+                value: 1,
+                name: 'Trusted partnership',
+            },
+            {
+                value: 1,
+                name: 'Quality as a differentiator',
+            },
+            {
+                value: 1,
+                name: 'Next gen quality',
+            },
+        ];
+        console.log('owners', owners);
+        console.log('accelerators', accelerators);
+        console.log('categorie', categories);
+        console.log('strategies', strategies);
+        console.log('chartSeries', chartSeries);
 
         window.am4core.addLicense('CH300383565');
         //enable class names for custom styling
         window.am4core.options.autoSetClassName = true;
         window.am4core.useTheme(window.am4themes_animated);
 
+        // CONTAINER ///
+        var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
+        chartcontainer.width = window.am4core.percent(100);
+        chartcontainer.height = window.am4core.percent(100);
+        // chartcontainer.layout = "vertical";
 
-        // ===== INITIATIVES ==== 
-        // Create chart
-        var chart = window.am4core.create(
-            'chartdiv',
-            window.am4charts.RadarChart
-        );
-        chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-        // chart.colors.step = 4;
-        // Chart settings
-        // Chart settings
+        // Create chart instance
+        var chart = chartcontainer.createChild(window.am4charts.PieChart)
+        // var chart = window.am4core.create("chartdiv", window.am4charts.PieChart);
         chart.startAngle = 180;
         chart.endAngle = 0;
-        chart.innerRadius = window.am4core.percent(55);
-        chart.radius = window.am4core.percent(88);
-        chart.panX = true;
-        chart.panY = true;
-        chart.dx = 145;
-        chart.dy = -320;
-        chart.responsive.enabled = true;
+        chart.dy = -300;
+
+        // Let's cut a hole in our Pie chart
+        chart.innerRadius = window.am4core.percent(3);
+
+        // Add and configure Series
+        var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
+        acceleratorsSeries.radius = window.am4core.percent(15);
+        acceleratorsSeries.innerRadius = window.am4core.percent(1);
+        acceleratorsSeries.startAngle = 360;
+        acceleratorsSeries.endAngle = 0;
+
+        acceleratorsSeries.dataFields.value = "value";
+        acceleratorsSeries.dataFields.category = "name";
+        acceleratorsSeries.slices.template.stroke = new window.am4core.InterfaceColorSet().getFor("background");
+        acceleratorsSeries.slices.template.strokeWidth = 1;
+        acceleratorsSeries.slices.template.strokeOpacity = 1;
+
+        // Labels
+        // Disabling labels and ticks on inner circle
+        // pieSeries.labels.template.disabled = true;
+        acceleratorsSeries.ticks.template.disabled = true;
+        acceleratorsSeries.alignLabels = false;
+        let acceleratorsLabelTemplate = acceleratorsSeries.labels.template;
+        acceleratorsLabelTemplate.text = '{category}';
+        // acceleratorsLabelTemplate.bent = true;
+        acceleratorsLabelTemplate.radius = -2;
+        // acceleratorsLabelTemplate.inside = true;
+        acceleratorsLabelTemplate.padding(0, 0, 0, 0);
+        acceleratorsLabelTemplate.wrap = true;
+        acceleratorsLabelTemplate.fontSize = 10;
+        acceleratorsLabelTemplate.maxWidth = 80;
+        acceleratorsLabelTemplate.verticalCenter = 'center';
+        acceleratorsLabelTemplate.horizontalCenter = 'left';
+
+        // acceleratorsLabelTemplate.rotation = 180;
+
+
+        const centerLabel = new window.am4core.Label();
+        centerLabel.parent = radialChart;
+        centerLabel.text = 'JanssenOne';
+        centerLabel.horizontalCenter = 'middle';
+        centerLabel.verticalCenter = 'middle';
+        centerLabel.fontSize = 11;
+
+        // Disable sliding out of slices
+        acceleratorsSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+        acceleratorsSeries.slices.template.states.getKey("hover").properties.scale = 1;
+
+        //Tooltip
+        acceleratorsSeries.slices.template.tooltipText = "{category}";
+
+        //colors
+        var cs = acceleratorsSeries.colors;
+        cs.list = [window.am4core.color(new window.am4core.ColorSet().getIndex(0))];
+        cs.stepOptions = {
+            lightness: -0.05,
+            hue: 0
+        };
+        cs.wrap = true;
+        acceleratorsSeries.data = accelerators.map((name, index) => ({ "name": name, "value": 1 }))
+
+
+
+        // Add second series
+        var topStrategiesSeries = chart.series.push(new window.am4charts.PieSeries());
+        topStrategiesSeries.dataFields.value = "value";
+        topStrategiesSeries.dataFields.category = "name";
+        topStrategiesSeries.slices.template.stroke = new window.am4core.InterfaceColorSet().getFor("background");
+        topStrategiesSeries.slices.template.strokeWidth = 1;
+        topStrategiesSeries.slices.template.strokeOpacity = 1;
+        topStrategiesSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0.05;
+        topStrategiesSeries.slices.template.states.getKey("hover").properties.scale = 1;
+
+        topStrategiesSeries.radius = window.am4core.percent(25);
+        topStrategiesSeries.verticalCenter = "middle";
+        topStrategiesSeries.alignLabels = false;
+        topStrategiesSeries.innerRadius = window.am4core.percent(20);
+        topStrategiesSeries.maxWidth = 50;
+        topStrategiesSeries.wrap = true;
+        topStrategiesSeries.inside = true;
+        // pieSeries2.bent = true;
+        topStrategiesSeries.slices.template.interactionsEnabled = false;
+        // pieSeries2.relativeRotation = -180;
+
+
+
+
+        // Labels
+        // Disabling labels and ticks on inner circle
+        // pieSeries.labels.template.disabled = true;
+        topStrategiesSeries.ticks.template.disabled = true;
+        topStrategiesSeries.alignLabels = false;
+        let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
+        topStrategyLabelsTemplate.text = '{category}';
+        topStrategyLabelsTemplate.bent = true;
+
+
+        // topStrategyLabelsTemplate.radius = 10;
+        topStrategyLabelsTemplate.inside = true;
+        topStrategyLabelsTemplate.padding(0, 0, 0, 0);
+        topStrategyLabelsTemplate.wrap = true;
+        topStrategyLabelsTemplate.truncate = true;
+        topStrategyLabelsTemplate.fontSize = 10;
+        topStrategyLabelsTemplate.maxWidth = 100;
+        topStrategyLabelsTemplate.strictMinMax = true;
+        topStrategyLabelsTemplate.verticalCenter = 'center';
+        topStrategyLabelsTemplate.horizontalCenter = 'middle';
+        topStrategyLabelsTemplate.relativeRotation = 180;
+
+
+        //Tooltip
+        topStrategiesSeries.slices.template.tooltipText = "{category}";
+        topStrategiesSeries.data = gaugeData;
+
+        // Add third series
+        var strategySeries = chart.series.push(new window.am4charts.PieSeries());
+        strategySeries.dataFields.value = "value";
+        strategySeries.dataFields.category = "name";
+        strategySeries.slices.template.stroke = new window.am4core.InterfaceColorSet().getFor("background");
+        strategySeries.slices.template.strokeWidth = 1;
+        strategySeries.slices.template.strokeOpacity = 1;
+        strategySeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+        strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
+        strategySeries.radius = window.am4core.percent(34);
+        strategySeries.innerRadius = window.am4core.percent(28);
+
+        // Labels
+        // Disabling labels and ticks on inner circle
+        // pieSeries.labels.template.disabled = true;
+        // pieSeries3.ticks.template.disabled = true;
+        strategySeries.alignLabels = false;
+        let strategyLabelsTemplate = strategySeries.labels.template;
+        strategyLabelsTemplate.text = '{category}';
+        strategyLabelsTemplate.bent = true;
+        strategyLabelsTemplate.radius = 8;
+        strategyLabelsTemplate.inside = true;
+        strategyLabelsTemplate.padding(0, 0, 0, 0);
+        strategyLabelsTemplate.wrap = true;
+        strategyLabelsTemplate.fontSize = 10;
+        strategyLabelsTemplate.maxWidth = 20;
+        strategyLabelsTemplate.verticalCenter = 'center';
+        strategyLabelsTemplate.horizontalCenter = 'middle';
+
+        //Tooltip
+        strategySeries.slices.template.tooltipText = "{category}";
+        strategySeries.data = strategies.map((name, index) => ({ "name": name, "value": 1 }));
+
+
+        // var label = chart.seriesContainer.createChild(window.am4core.Label);
+        // label.textAlign = "middle";
+        // label.horizontalCenter = "middle";
+        // label.verticalCenter = "middle";
+        // label.adapter.add("text", function(text, target){
+        //   return "[font-size:18px]total[/]:\n[bold font-size:30px]" + pieSeries.dataItem.values.value.sum + "[/]";
+        // })
+
+
+
+
+        /// Radial
+        var radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
+
+        radialChart.startAngle = 180;
+        radialChart.endAngle = 0;
+        radialChart.dy = -300;
+        radialChart.padding(20, 20, 20, 20);
+        radialChart.colors.step = 2;
+        radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
+        radialChart.innerRadius = window.am4core.percent(40);
 
 
 
         // Category Axis
-        var categoryAxis = chart.yAxes.push(new window.am4charts.CategoryAxis());
+        var categoryAxis = radialChart.yAxes.push(new window.am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "initiative";
         // categoryAxis.renderer.grid.template.location = 0;
         // categoryAxis.renderer.tooltipLocation = 0.5;
         // categoryAxis.renderer.minGridDistance = 400;
         // categoryAxis.renderer.labels.isMeasured = false;
-        // categoryAxis.mouseEnabled = false;
+        categoryAxis.mouseEnabled = true;
         // categoryAxis.tooltip.disabled = true;
-        // categoryAxis.visible = true;
+        categoryAxis.visible = false;
         categoryAxis.fixedWidthGrid = true;
         // categoryAxis.wheelable = false;
         // categoryAxis.renderer.grid.template.strokeOpacity = 0.5;
@@ -117,26 +300,26 @@ export class ChartComponent implements OnInit {
         categoryAxis.renderer.axisFills.template.disabled = false;
         categoryAxis.renderer.line.strokeOpacity = 1;
         categoryAxis.renderer.line.strokeWidth = 2;
-        categoryAxis.renderer.line.stroke = window.am4core.color("red");
+        // categoryAxis.renderer.line.stroke = window.am4core.color("red");
 
 
-        categoryAxis.data = chartSeries;
+        // categoryAxis.data = chartSeries;
 
-        var valueAxis = chart.xAxes.push(new window.am4charts.ValueAxis());
+        var valueAxis = radialChart.xAxes.push(new window.am4charts.ValueAxis());
         valueAxis.renderer.labels.template.horizontalCenter = "left";
         // valueAxis.strictMinMax = true;
         // valueAxis.renderer.maxLabelPosition = 0.99;
         // valueAxis.renderer.grid.template.strokeOpacity = 0;
         valueAxis.min = 0;
         valueAxis.max = strategies.length;
-        // valueAxis.mouseEnabled = false;
+        valueAxis.mouseEnabled = true;
         // valueAxis.tooltip.disabled = true;
         // valueAxis.renderer.axisFills.template.disabled = false;
         // valueAxis.interactionsEnabled = true;
         valueAxis.disabled = true;
 
         for (var i = 0; i < initiatives.length; i++) {
-            let initiativesSeries = chart.series.push(new window.am4charts.RadarColumnSeries());
+            let initiativesSeries = radialChart.series.push(new window.am4charts.RadarColumnSeries());
             initiativesSeries.name = `{owner}`;
             initiativesSeries.dataFields.categoryY = 'initiative';
             initiativesSeries.dataFields.valueX = "end" + i;
@@ -189,262 +372,109 @@ export class ChartComponent implements OnInit {
             initiativesSeries.zIndex = -1;
             initiativesSeries.columns.template.events.on("hit", this.onClickChartItem, this);
         }
-
-
         //Legend
-        chart.cursor = new window.am4charts.RadarCursor();
-        chart.cursor.lineX.disabled = true;
-        chart.legend = new window.am4charts.Legend();
-        chart.legend.useDefaultMarker = true;
-        chart.legend.position = 'absolute';
-        chart.legend.maxWidth = 100;
-        chart.legend.fillOpacity = 0.70;
-        chart.legend.strokeWidth = 0;
+        radialChart.cursor = new window.am4charts.RadarCursor();
+        radialChart.cursor.lineX.disabled = true;
+        radialChart.legend = new window.am4charts.Legend();
+        radialChart.legend.useDefaultMarker = true;
+        radialChart.legend.position = 'absolute';
+        radialChart.legend.maxWidth = 100;
+        radialChart.legend.fillOpacity = 0.70;
+        radialChart.legend.strokeWidth = 0;
         //chart.legend.x = 150;
-        chart.legend.y = 150;
-        chart.legend.itemContainers.template.paddingTop = 250;
-        chart.legend.fontSize = 10;
-        chart.legend.contentAlign = "center";
-        chart.legend.itemContainers.template.clickable = true;
-        chart.legend.itemContainers.template.focusable = true;
-        chart.legend.itemContainers.template.events.on("hit", function (ev: any) {
+        radialChart.legend.y = 150;
+        radialChart.legend.itemContainers.template.paddingTop = 250;
+        radialChart.legend.fontSize = 10;
+        radialChart.legend.contentAlign = "center";
+        radialChart.legend.itemContainers.template.clickable = true;
+        radialChart.legend.itemContainers.template.focusable = true;
+        radialChart.legend.itemContainers.template.events.on("hit", function (ev: any) {
             let ownerValue = ev.target.dataItem.name;
             let enabled = ev.target.dataItem.hasProperties;
             console.log("Clicked on", ownerValue + ":" + enabled);
-            let result = chartSeries;
-            chart.legend.dataItems.values.forEach((item: any) => {
+            let result = radialChart.data;
+
+            radialChart.legend.dataItems.values.forEach((item: any) => {
                 console.log(item.name + ":" + item.hasProperties);
-                if (item.name == ownerValue) {
-                    if (enabled) {
-                        result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === item.name));
-                    } else {
-                        result = result.filter((chartItem: any) => chartItem.owner !== item.name);
-                    }
-                } else {
-                    if (item.hasProperties) {
-                        result = result.filter((chartItem: any) => chartItem.owner !== item.name)
-                    } else {
-                        result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === item.name));
-                    }
-                }
-            })
+            });
+            // if (enabled) {
+            //     result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === ownerValue));
+            // } else {
+            //     result = result.filter((chartItem: any) => chartItem.owner === ownerValue);
+            // }
+
+            // radialChart.legend.dataItems.values.forEach((item: any) => {
+            //     console.log(item.name + ":" + item.hasProperties);
+            //     if (item.name == ownerValue) {
+            //         if (enabled) {
+            //             result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === item.name));
+            //         } else {
+            //             result = result.filter((chartItem: any) => chartItem.owner !== item.name);
+            //         }
+            //     } else {
+            //         if (item.hasProperties) {
+            //             result = result.filter((chartItem: any) => chartItem.owner !== item.name)
+            //         } else {
+            //             result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === item.name));
+            //         }
+            //     }
+            // })
             categoryAxis.data = result;
-            chart.data = result;
-            console.log("filtered chart.data", chart.data);
+            radialChart.data = result;
+            console.log("filtered chart.data", radialChart.data.length);
         });
 
-        let marker = chart.legend.markers.template.children.getIndex(0);
+        let marker = radialChart.legend.markers.template.children.getIndex(0);
         marker.cornerRadius(12, 12, 12, 12);
         marker.strokeWidth = 0;
         marker.strokeOpacity = 1;
         marker.events.on("hit", function (ev: any) {
             alert("sdw");
         });
-        chart.legend.data = OWNERS_COLORS;
-        chart.data = chartSeries;
+        radialChart.legend.data = OWNERS_COLORS;
+
+        // Zoom Controls
+        radialChart.scrollbarX = new window.am4core.Scrollbar();
+        radialChart.scrollbarX.exportable = false;
+        radialChart.scrollbarY = new window.am4core.Scrollbar();
+        radialChart.scrollbarY.exportable = false;
+
+        var zoomOutButton = radialChart.zoomOutButton;
+        zoomOutButton.dx = 0;
+        zoomOutButton.dy = 0;
+        zoomOutButton.marginBottom = 15;
+        zoomOutButton.parent = radialChart.xAxesContainer;
+
+        radialChart.data = chartSeries;
+
+        chart.toFront();
 
 
-        // ===== ACCELERATORS ===
+        //events
+        strategySeries.slices.template.events.on("hit", function (ev: any) {
+            let finalData: any = [];
+            console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + chartSeries.length);
+            strategySeries.slices.values.forEach((element: any) => {
+                if (element.isActive) {
+                    element.fillOpacity = 1;
+                    let filteredData = chartSeries.filter(function (item: any) {
+                        return item.strategy === element.dataItem.dataContext.name;
+                    });
+                    finalData = finalData.concat(filteredData);
+                    console.log("adding items for strategy:" + element.dataItem.dataContext.name + ":" + filteredData.length);
+                } else {
+                    element.fillOpacity = 0.5;
+                }
 
-        var chart = window.am4core.create('chartdiv2', window.am4charts.PieChart);
-        chart.dy = -300;
-        // Add data
-
-        const iconMap = [
-            'light-mode',
-            'tungsten',
-            'question_answer',
-            'moving',
-            'group',
-            'table_view',
-        ];
-
-        chart.data = accelerators.map((acc, index) => ({
-            label: acc,
-            value: 100 / accelerators.length,
-            icon: iconMap[index],
-        }));
-
-        // Add and configure Series
-        var pieSeries = chart.series.push(new window.am4charts.PieSeries());
-        pieSeries.dataFields.value = 'value';
-        pieSeries.dataFields.category = 'label';
-        //pieSeries.dataFields.icon = 'icon';
-        pieSeries.ticks.template.disabled = true;
-        // pieSeries.labels.template.html = '<i class="material-icons">{icon}</i>';
-        pieSeries.alignLabels = false;
-        pieSeries.labels.template.text = '{category}';
-        //pieSeries.labels.template.radius = window.am4core.percent(-40);
-        //pieSeries.labels.template.fill = window.am4core.color('white');
-        //pieSeries.labels.template.bent = true;
-        pieSeries.labels.template.radius = -50;
-        //pieSeries.labels.template.padding(5, 5, 5, 5);
-        //pieSeries.labels.template.rotation = -90;
-        //chart.seriesContainer.zIndex = -1;
-        pieSeries.slices.template.tooltipText = '{category}';
-
-        //pieSeries.labels.template.tooltipText = '{category}';
-
-        let labelT = pieSeries.labels.template;
-        labelT.wrap = true;
-        labelT.fontSize = 11;
-        labelT.maxWidth = 60;
-        labelT.verticalCenter = 'bottom';
-        labelT.horizontalCenter = 'middle';
-
-        chart.innerRadius = window.am4core.percent(20);
-        chart.radius = window.am4core.percent(70);
-        let container = new window.am4core.Container();
-        container.parent = pieSeries;
-        container.horizontalCenter = 'middle';
-        container.verticalCenter = 'middle';
-        container.width = window.am4core.percent(40);
-        container.fill = 'white';
-
-        const label1 = new window.am4core.Label();
-        label1.parent = container;
-        label1.text = 'Janssen One';
-        label1.horizontalCenter = 'middle';
-        label1.verticalCenter = 'middle';
-        label1.fontSize = 11;
-
-        chart.events.on('sizechanged', function (ev: any) {
-            let scale = (pieSeries.pixelInnerRadius * 2) / label1.bbox.width;
-            if (scale > 1) {
-                scale = 1;
-            }
-            label1.scale = scale;
+            });
+            console.log("final filtered size:" + finalData.length);
+            radialChart.data = finalData;
         });
-
-
-        //gauge chart
-
-        var chart3 = window.am4core.create(
-            'gaugeChart1',
-            window.am4charts.GaugeChart
-        );
-        chart3.hiddenState.properties.opacity = 0; // this makes initial fade in effect
-
-        chart3.innerRadius = -50;
-        chart3.startAngle = 0;
-        chart3.endAngle = 180;
-        chart3.dy = -300;
-
-        var axis = chart3.xAxes.push(new window.am4charts.ValueAxis());
-        axis.min = 0;
-        axis.max = 400;
-        axis.strictMinMax = true;
-        axis.renderer.grid.template.stroke =
-            new window.am4core.InterfaceColorSet().getFor('background');
-        axis.renderer.grid.template.strokeOpacity = 0.3;
-        axis.renderer.minGridDistance = 10000;
-
-        var colorSet = ['#CA001B', 'blue', '#CC0099', '#009999'];
-
-        let gaugeData = [
-            {
-                category: 1,
-                value: 'Our People',
-            },
-            {
-                category: 2,
-                value: 'Trusted partnership',
-            },
-            {
-                category: 3,
-                value: 'Quality as a differentiator',
-            },
-            {
-                category: 4,
-                value: 'Next gen quality',
-            },
-        ];
-        gaugeData = gaugeData.reverse();
-        let slice = 100;
-        for (let i = 0; i < 4; i++) {
-            const range = axis.axisRanges.create();
-            range.value = 0 + i * slice;
-            range.endValue = 100 + i * slice;
-            range.axisFill.fillOpacity = 0.6;
-            range.axisFill.fill = colorSet[3 - i];
-            range.axisFill.zIndex = -1;
-            range.locations.category = 10.5;
-            range.locations.endCategory = 20.5;
-            range.label.text = gaugeData[i].value;
-            range.label.fontSize = 10;
-            range.label.inside = true;
-            range.label.verticalCenter = 'top';
-            range.label.rotation = 0;
-            range.label.wrap = true;
-            range.label.maxWidth = 60;
-            range.label.contentAlign = "left";
-            range.label.isMeasured = true;
-            chart3.numberFormatter.numberFormat = '';
-        }
-
-        // gauge 2
-
-        var chart4 = window.am4core.create(
-            'gaugeChart2',
-            window.am4charts.GaugeChart
-        );
-        chart4.hiddenState.properties.opacity = 0; // this makes initial fade in effect
-
-        chart4.innerRadius = -60;
-        chart4.startAngle = 0;
-        chart4.endAngle = 180;
-        chart4.dy = -300;
-
-        var axis = chart4.xAxes.push(new window.am4charts.ValueAxis());
-        axis.min = 0;
-        axis.max = strategies.length * 100;
-        axis.strictMinMax = true;
-        axis.renderer.grid.template.stroke =
-            new window.am4core.InterfaceColorSet().getFor('background');
-        axis.renderer.grid.template.strokeOpacity = 0.3;
-        axis.renderer.minGridDistance = 10000;
-
-        let gaugeData2 = strategies.map((str) => ({ value: str }));
-
-        let colorSet2 = [
-            '#808080',
-            '#dcdcdc',
-            '#778899',
-            '#696969',
-            '#c9c0bb',
-            '#cfcfc4',
-            '#c4aead',
-            '#acacac',
-        ];
-        gaugeData2 = gaugeData2.reverse();
-        for (let i = 0; i < strategies.length; i++) {
-            const range = axis.axisRanges.create();
-            range.value = 0 + i * 100;
-            range.endValue = 100 + i * 100;
-            range.axisFill.fillOpacity = 1;
-            range.axisFill.fill = colorSet2[i];
-            range.axisFill.zIndex = -1;
-            range.locations.category = 117.5;
-            range.locations.endCategory = 192.5;
-            range.label.text = gaugeData2[i].value;
-            range.label.fontSize = 10;
-            range.label.inside = true;
-            range.label.verticalCenter = 'top';
-            range.label.rotation = 0;
-            range.label.isMeasured = true;
-            range.label.wrap = true;
-            chart4.numberFormatter.numberFormat = '';
-            range.label.position = 'top';
-            range.label.locationX = 200.2;
-            range.label.locationY = -2;
-        }
 
 
         document
             .getElementById('export')
             ?.setAttribute('style', 'visibility: visible');
-
-
     }
 
     onCloseModal() {
