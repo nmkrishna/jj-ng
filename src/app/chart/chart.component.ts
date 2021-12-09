@@ -507,13 +507,13 @@ export class ChartComponent implements OnInit {
         }
     }
 
-    downloadAsPDF() {
+    downloadAsPNG() {
         const modalBody = document.getElementById("modal-body") as HTMLElement;
         window.html2canvas(modalBody, {
-            height: window.outerHeight + 600,
-            windowHeight: window.outerHeight + 700,
-        }).then(canvas => {
-            this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
-        })
+                    height: window.outerHeight,
+                    windowHeight: window.outerHeight + 700,
+                }).then(canvas => {
+                    this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
+                })
     }
 }
