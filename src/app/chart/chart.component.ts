@@ -4,7 +4,7 @@ import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
 import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore, OWNERS_COLORS } from "./chartdata";
-import { faMinusSquare, faCheckSquare } from '@fortawesome/free-solid-svg-icons';
+import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -50,6 +50,7 @@ export class ChartComponent implements OnInit {
     objectKeys = Object.keys
     faMinusSquare = faMinusSquare;
     faCheckSquare = faCheckSquare;
+    faDownload = faDownload;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
     
     constructor(private chartService: ChartService, private modalService: NgbModal) { }
@@ -456,17 +457,32 @@ export class ChartComponent implements OnInit {
         console.log("clicked on ", this.modalContent);
     }
 
+    saveAs(uri, filename) {
+        var link = document.createElement("a");
+            if (typeof link.download === "string") {
+                link.href = uri;
+                link.download = filename;
+
+                //Firefox requires the link to be in the body
+                document.body.appendChild(link);
+
+                //simulate click
+                link.click();
+
+                //remove the link when done
+                document.body.removeChild(link);
+            } else {
+                window.open(uri);
+            }
+    }
+
     downloadAsPDF() {
         const modalBody = document.getElementById("modal-body") as HTMLElement;
-        html2canvas(modalBody).then(canvas => {
-            let fileWidth = 208;
-            let fileHeight = canvas.height * fileWidth / canvas.width;
-            
-            const FILEURI = canvas.toDataURL('image/png');
-            let PDF = new jsPDF('p', 'mm', 'a4');
-            let position = 0;
-            PDF.addImage(FILEURI, 'PNG', 0, position, fileWidth, fileHeight);
-            PDF.save('demo.pdf');            
-        })
+        window.html2canvas(modalBody, {
+                    height: window.outerHeight + 600,
+                    windowHeight: window.outerHeight + 700,
+                }).then(canvas => {
+                    this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
+                })
     }
 }
