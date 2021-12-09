@@ -217,7 +217,9 @@ export class ChartComponent implements OnInit {
         topStrategyLabelsTemplate.strictMinMax = true;
         topStrategyLabelsTemplate.verticalCenter = 'center';
         topStrategyLabelsTemplate.horizontalCenter = 'middle';
-        topStrategyLabelsTemplate.relativeRotation = 180;
+        topStrategyLabelsTemplate.rotation = -360;
+
+        // topStrategyLabelsTemplate.relativeRotation = 180;
 
 
         //Tooltip
@@ -243,15 +245,16 @@ export class ChartComponent implements OnInit {
         strategySeries.alignLabels = false;
         let strategyLabelsTemplate = strategySeries.labels.template;
         strategyLabelsTemplate.text = '{category}';
-        strategyLabelsTemplate.bent = true;
-        strategyLabelsTemplate.radius = 8;
+        // strategyLabelsTemplate.bent = true;
+        strategyLabelsTemplate.radius = 10;
         strategyLabelsTemplate.inside = true;
         strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.wrap = true;
         strategyLabelsTemplate.fontSize = 10;
-        strategyLabelsTemplate.maxWidth = 20;
-        strategyLabelsTemplate.verticalCenter = 'center';
-        strategyLabelsTemplate.horizontalCenter = 'middle';
+        strategyLabelsTemplate.maxWidth = 70;
+        strategyLabelsTemplate.rotation = -360;
+        strategyLabelsTemplate.valign = 'center';
+        strategyLabelsTemplate.align = 'right';
 
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}";
