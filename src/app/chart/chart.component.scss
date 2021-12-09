@@ -1,3 +1,8 @@
+#chartdiv {
+  width: 100%;
+  height: 100%;
+}
+
 small{
     font-size: 1rem !important;
 }
@@ -32,6 +37,7 @@ small{
     color: #000;
     text-shadow: 0 1px 0 #fff;
     opacity: 0.5;
+    outline: none;
 }
 
 .card-container{
@@ -40,19 +46,15 @@ small{
     margin: .1rem;
 }
 .description-card{
-    height: 11rem;
     overflow: hidden;
 }
-.businessObjectivesRelational-card{
-    height: 11rem;
+.businessObjectivesRelational-card{ 
     overflow: hidden;
 }
 .benfitsAndRationale-card{
-    height: 5.5rem;
     overflow: hidden;
 }
-.potentialRisk-card{
-    height: 7.9rem;
+.potentialRisk-card{ 
     overflow: hidden;
 }
 .primary-cards-title{
@@ -64,7 +66,6 @@ small{
 .primary-cards-list{
     font-size: .8rem !important;
 }
-.tech-resrc-cards{
-    height: 4.5rem;
+.tech-resrc-cards{   
     overflow: hidden;
 }
