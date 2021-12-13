@@ -32,12 +32,11 @@ let stratergy_colors = [
     window.am4core.color("#FF9671"),
     window.am4core.color("#FFC75F"),
     window.am4core.color("#F9F871")
-  ];
+];
 import {
     getAccelarators,
     getCategories,
     getOwners,
-    getSeries,
     getStratergies,
     getInitiatives,
     getInitiativesSeries,
@@ -75,11 +74,7 @@ export class ChartComponent implements OnInit {
         const owners = getOwners(data, categories);
         const strategies = getStratergies(data);
         const chartSeries = getInitiativesSeries(data);
-        var initiatives: any = [];
-        chartSeries.forEach((el: any) => {
-            initiatives.push(el.initiative);
-        });
-        initiatives = [...new Set(initiatives)];
+        const initiatives = getInitiatives(data);
 
         var gaugeData = [
             {
@@ -116,15 +111,24 @@ export class ChartComponent implements OnInit {
         chartcontainer.height = window.am4core.percent(100);
         // chartcontainer.layout = "vertical";
 
+
         // Create chart instance
         var chart = chartcontainer.createChild(window.am4charts.PieChart)
         // var chart = window.am4core.create("chartdiv", window.am4charts.PieChart);
         chart.startAngle = 180;
         chart.endAngle = 0;
         chart.dy = -300;
-
         // Let's cut a hole in our Pie chart
         chart.innerRadius = window.am4core.percent(3);
+
+        var janssonLabel = chartcontainer.createChild(window.am4core.Label);
+        janssonLabel.text = "Janssen One";
+        janssonLabel.fontSize = 10;
+        janssonLabel.horizontalCenter = "middle";
+        janssonLabel.verticalCenter = "middle";
+        janssonLabel.radius = window.am4core.percent(5);
+
+
 
         // Add and configure Series
         var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
@@ -158,13 +162,6 @@ export class ChartComponent implements OnInit {
 
         // acceleratorsLabelTemplate.rotation = 180;
 
-
-        const centerLabel = new window.am4core.Label();
-        centerLabel.parent = radialChart;
-        centerLabel.text = 'JanssenOne';
-        centerLabel.horizontalCenter = 'middle';
-        centerLabel.verticalCenter = 'middle';
-        centerLabel.fontSize = 11;
 
         // Disable sliding out of slices
         acceleratorsSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
@@ -206,16 +203,11 @@ export class ChartComponent implements OnInit {
         topStrategiesSeries.inside = true;
         // pieSeries2.bent = true;
         topStrategiesSeries.slices.template.interactionsEnabled = false;
-        // pieSeries2.relativeRotation = -180;
-
-
-
 
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
         topStrategiesSeries.ticks.template.disabled = true;
-        topStrategiesSeries.alignLabels = false;
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
         topStrategyLabelsTemplate.text = '{category}';
         //topStrategyLabelsTemplate.bent = true;
@@ -229,9 +221,9 @@ export class ChartComponent implements OnInit {
         topStrategyLabelsTemplate.fontSize = 10;
         topStrategyLabelsTemplate.maxWidth = 70;
         topStrategyLabelsTemplate.strictMinMax = true;
-        topStrategyLabelsTemplate.verticalCenter = 'center';
-        topStrategyLabelsTemplate.horizontalCenter = 'middle';
-        topStrategyLabelsTemplate.rotation = -360;
+        // topStrategyLabelsTemplate.verticalCenter = 'center';
+        // topStrategyLabelsTemplate.horizontalCenter = 'middle';
+        // topStrategyLabelsTemplate.rotation = -360;
 
         // topStrategyLabelsTemplate.relativeRotation = 180;
         //topStrategyLabelsTemplate.relativeRotation = 90;
@@ -250,6 +242,7 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.strokeOpacity = 1;
         strategySeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
         strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
+        strategySeries.slices.template.states.getKey("active").properties.scale = 1;
         strategySeries.radius = window.am4core.percent(34);
         strategySeries.innerRadius = window.am4core.percent(40);
         strategySeries.colors.list = stratergy_colors;
@@ -268,7 +261,7 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.wrap = true;
         strategyLabelsTemplate.fontSize = 10;
-        strategyLabelsTemplate.maxWidth = 70;
+        strategyLabelsTemplate.maxWidth = 100;
         strategyLabelsTemplate.rotation = -360;
         strategyLabelsTemplate.valign = 'center';
         strategyLabelsTemplate.align = 'right';
@@ -277,8 +270,8 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.horizontalCenter = 'middle';
 
         //Tooltip
-        strategySeries.slices.template.tooltipText = "{category}";
-        strategySeries.data = strategies.map((name, index) => ({ "name": name, "value": 1 }));
+        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects ";
+        strategySeries.data = strategies;
 
 
         // var label = chart.seriesContainer.createChild(window.am4core.Label);
@@ -298,7 +291,7 @@ export class ChartComponent implements OnInit {
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
         radialChart.dy = -300;
-        radialChart.padding(20, 20, 20, 20);
+        // radialChart.padding(20, 20, 20, 20);
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
         radialChart.innerRadius = window.am4core.percent(48);
@@ -314,15 +307,22 @@ export class ChartComponent implements OnInit {
         // categoryAxis.renderer.labels.isMeasured = false;
         categoryAxis.mouseEnabled = true;
         // categoryAxis.tooltip.disabled = true;
-        categoryAxis.visible = false;
+        // categoryAxis.visible = false;
         categoryAxis.fixedWidthGrid = true;
+        let categoryAxisRenderer = categoryAxis.renderer;
+        categoryAxisRenderer.grid.template.stroke = "0xFF0000";
+        categoryAxisRenderer.grid.template.strokeWidth = 1;
+        categoryAxisRenderer.labels.template.visible = false;
+        categoryAxisRenderer.labels.template.diabled = false;
+
+
         // categoryAxis.wheelable = false;
         // categoryAxis.renderer.grid.template.strokeOpacity = 0.5;
         // categoryAxis.renderer.grid.template.strokeWidth = 1;
         // categoryAxis.renderer.grid.template.stroke = "0xC0C0C0";
-        categoryAxis.renderer.axisFills.template.disabled = false;
-        categoryAxis.renderer.line.strokeOpacity = 1;
-        categoryAxis.renderer.line.strokeWidth = 2;
+        // categoryAxis.renderer.axisFills.template.disabled = false;
+        // categoryAxis.renderer.line.strokeOpacity = 1;
+        // categoryAxis.renderer.line.strokeWidth = 2;
         // categoryAxis.renderer.line.stroke = window.am4core.color("red");
 
 
@@ -332,7 +332,7 @@ export class ChartComponent implements OnInit {
         valueAxis.renderer.labels.template.horizontalCenter = "left";
         // valueAxis.strictMinMax = true;
         // valueAxis.renderer.maxLabelPosition = 0.99;
-        // valueAxis.renderer.grid.template.strokeOpacity = 0;
+        valueAxis.renderer.grid.template.strokeOpacity = 0.25;
         valueAxis.min = 0;
         valueAxis.max = strategies.length;
         valueAxis.mouseEnabled = true;
@@ -415,35 +415,36 @@ export class ChartComponent implements OnInit {
             let ownerValue = ev.target.dataItem.name;
             let enabled = ev.target.dataItem.hasProperties;
             console.log("Clicked on", ownerValue + ":" + enabled);
-            let result = radialChart.data;
+            let finalData: any = [];
 
             radialChart.legend.dataItems.values.forEach((item: any) => {
                 console.log(item.name + ":" + item.hasProperties);
+                console.log(item.name + ":" + item.hasProperties);
             });
-            // if (enabled) {
-            //     result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === ownerValue));
-            // } else {
-            //     result = result.filter((chartItem: any) => chartItem.owner === ownerValue);
-            // }
-
-            // radialChart.legend.dataItems.values.forEach((item: any) => {
-            //     console.log(item.name + ":" + item.hasProperties);
-            //     if (item.name == ownerValue) {
-            //         if (enabled) {
-            //             result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === item.name));
-            //         } else {
-            //             result = result.filter((chartItem: any) => chartItem.owner !== item.name);
-            //         }
-            //     } else {
-            //         if (item.hasProperties) {
-            //             result = result.filter((chartItem: any) => chartItem.owner !== item.name)
-            //         } else {
-            //             result.concat(chartSeries.filter((chartItem: any) => chartItem.owner === item.name));
-            //         }
-            //     }
-            // })
-            categoryAxis.data = result;
-            radialChart.data = result;
+            radialChart.legend.dataItems.values.forEach((element: any) => {
+                if (!element.hasProperties) {
+                    let filteredData = chartSeries.filter(function (item: any) {
+                        return item.owner === element.name;
+                    });
+                    finalData = finalData.concat(filteredData);
+                    console.log("adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
+                }
+            });
+            if (enabled) {
+                let filteredData = chartSeries.filter(function (item: any) {
+                    return item.owner === ownerValue;
+                });
+                finalData = finalData.concat(filteredData);
+                console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
+            } else {
+                finalData = finalData.filter(function (item: any) {
+                    return item.owner != ownerValue;
+                });
+                console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
+            }
+            console.log("final filtered size:" + finalData.length);
+            radialChart.data = finalData;
+            categoryAxis.data = finalData;
             console.log("filtered chart.data", radialChart.data.length);
         });
 
@@ -477,6 +478,7 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.events.on("hit", function (ev: any) {
             let finalData: any = [];
             console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + chartSeries.length);
+            var allOff = true;
             strategySeries.slices.values.forEach((element: any) => {
                 if (element.isActive) {
                     element.fillOpacity = 1;
@@ -484,12 +486,16 @@ export class ChartComponent implements OnInit {
                         return item.strategy === element.dataItem.dataContext.name;
                     });
                     finalData = finalData.concat(filteredData);
+                    allOff = false;
                     console.log("adding items for strategy:" + element.dataItem.dataContext.name + ":" + filteredData.length);
                 } else {
                     element.fillOpacity = 0.5;
                 }
 
             });
+            if (allOff) {
+                finalData = chartSeries;
+            }
             console.log("final filtered size:" + finalData.length);
             radialChart.data = finalData;
         });
@@ -512,30 +518,30 @@ export class ChartComponent implements OnInit {
 
     saveAs(uri, filename) {
         var link = document.createElement("a");
-            if (typeof link.download === "string") {
-                link.href = uri;
-                link.download = filename;
+        if (typeof link.download === "string") {
+            link.href = uri;
+            link.download = filename;
 
-                //Firefox requires the link to be in the body
-                document.body.appendChild(link);
+            //Firefox requires the link to be in the body
+            document.body.appendChild(link);
 
-                //simulate click
-                link.click();
+            //simulate click
+            link.click();
 
-                //remove the link when done
-                document.body.removeChild(link);
-            } else {
-                window.open(uri);
-            }
+            //remove the link when done
+            document.body.removeChild(link);
+        } else {
+            window.open(uri);
+        }
     }
 
     downloadAsPNG() {
         const modalBody = document.getElementById("modal-body") as HTMLElement;
         window.html2canvas(modalBody, {
-                    height: window.outerHeight,
-                    windowHeight: window.outerHeight + 700,
-                }).then(canvas => {
-                    this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
-                })
+            height: window.outerHeight,
+            windowHeight: window.outerHeight + 700,
+        }).then(canvas => {
+            this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
+        })
     }
 }
