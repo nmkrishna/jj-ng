@@ -64,72 +64,36 @@ export class ChartComponent implements OnInit {
     faDownload = faDownload;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
 
+    data = rawData;
+    categories = getCategories(this.data);
+    accelerators = getAccelarators(this.data);
+    owners = getOwners(this.data, this.categories);
+    strategies = getStratergies(this.data);
+    chartSeries = getInitiativesSeries(this.data);
+    initiatives = getInitiatives(this.data);
+
+    gaugeData = [
+        {
+            value: 1,
+            name: 'Our People',
+        },
+        {
+            value: 1,
+            name: 'Trusted partnership',
+        },
+        {
+            value: 1,
+            name: 'Quality as a differentiator',
+        },
+        {
+            value: 1,
+            name: 'Next gen quality',
+        },
+    ];
+
     constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
-    ngOnInit(): void {
-        // Themes begin
-        let data = rawData;
-        const categories = getCategories(data);
-        const accelerators = getAccelarators(data);
-        const owners = getOwners(data, categories);
-        const strategies = getStratergies(data);
-        const chartSeries = getInitiativesSeries(data);
-        const initiatives = getInitiatives(data);
-
-        var gaugeData = [
-            {
-                value: 1,
-                name: 'Our People',
-            },
-            {
-                value: 1,
-                name: 'Trusted partnership',
-            },
-            {
-                value: 1,
-                name: 'Quality as a differentiator',
-            },
-            {
-                value: 1,
-                name: 'Next gen quality',
-            },
-        ];
-        console.log('owners', owners);
-        console.log('accelerators', accelerators);
-        console.log('categorie', categories);
-        console.log('strategies', strategies);
-        console.log('chartSeries', chartSeries);
-
-        window.am4core.addLicense('CH300383565');
-        //enable class names for custom styling
-        window.am4core.options.autoSetClassName = true;
-        window.am4core.useTheme(window.am4themes_animated);
-
-        // CONTAINER ///
-        var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
-        chartcontainer.width = window.am4core.percent(100);
-        chartcontainer.height = window.am4core.percent(100);
-        // chartcontainer.layout = "vertical";
-
-
-        // Create chart instance
-        var chart = chartcontainer.createChild(window.am4charts.PieChart)
-        // var chart = window.am4core.create("chartdiv", window.am4charts.PieChart);
-        chart.startAngle = 180;
-        chart.endAngle = 0;
-        chart.dy = -300;
-        // Let's cut a hole in our Pie chart
-        chart.innerRadius = window.am4core.percent(3);
-
-        var janssonLabel = chartcontainer.createChild(window.am4core.Label);
-        janssonLabel.text = "Janssen One";
-        janssonLabel.fontSize = 10;
-        janssonLabel.horizontalCenter = "middle";
-        janssonLabel.verticalCenter = "middle";
-        janssonLabel.radius = window.am4core.percent(5);
-
-
-
+    renderAcceleratorChart(chart) {
         // Add and configure Series
         var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
         acceleratorsSeries.radius = window.am4core.percent(15);
@@ -183,10 +147,10 @@ export class ChartComponent implements OnInit {
             hue: 0
         };
         cs.wrap = true;
-        acceleratorsSeries.data = accelerators.map((name, index) => ({ "name": name, "value": 1 }))
+        acceleratorsSeries.data = this.accelerators.map((name, index) => ({ "name": name, "value": 1 }))
+    }
 
-
-
+    renderTopStratergiesChart(chart) { // configuring top stratergies pie chart
         // Add second series
         var topStrategiesSeries = chart.series.push(new window.am4charts.PieSeries());
         topStrategiesSeries.dataFields.value = "value";
@@ -234,10 +198,10 @@ export class ChartComponent implements OnInit {
 
         //Tooltip
         topStrategiesSeries.slices.template.tooltipText = "{category}";
-        topStrategiesSeries.data = gaugeData;
+        topStrategiesSeries.data = this.gaugeData;
+    }
 
-        // Add third series
-        var strategySeries = chart.series.push(new window.am4charts.PieSeries());
+    renderStratergiesChart(strategySeries) { // configuring stratergy pie chart
         strategySeries.dataFields.value = "value";
         strategySeries.dataFields.category = "name";
         strategySeries.slices.template.stroke = new window.am4core.InterfaceColorSet().getFor("background");
@@ -272,23 +236,10 @@ export class ChartComponent implements OnInit {
 
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects ";
-        strategySeries.data = strategies;
+        strategySeries.data = this.strategies;
+    }
 
-
-        // var label = chart.seriesContainer.createChild(window.am4core.Label);
-        // label.textAlign = "middle";
-        // label.horizontalCenter = "middle";
-        // label.verticalCenter = "middle";
-        // label.adapter.add("text", function(text, target){
-        //   return "[font-size:18px]total[/]:\n[bold font-size:30px]" + pieSeries.dataItem.values.value.sum + "[/]";
-        // })
-
-
-
-
-        /// Radial
-        var radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
-
+    renderRadialChart(radialChart) { // configuring radial chart
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
         radialChart.dy = -320;
@@ -303,13 +254,7 @@ export class ChartComponent implements OnInit {
         // Category Axis
         var categoryAxis = radialChart.yAxes.push(new window.am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "initiative";
-        // categoryAxis.renderer.grid.template.location = 0;
-        // categoryAxis.renderer.tooltipLocation = 0.5;
-        // categoryAxis.renderer.minGridDistance = 400;
-        // categoryAxis.renderer.labels.isMeasured = false;
         categoryAxis.mouseEnabled = true;
-        // categoryAxis.tooltip.disabled = true;
-        // categoryAxis.visible = false;
         categoryAxis.fixedWidthGrid = true;
         let categoryAxisRenderer = categoryAxis.renderer;
         categoryAxisRenderer.grid.template.stroke = "0xFF0000";
@@ -317,40 +262,22 @@ export class ChartComponent implements OnInit {
         categoryAxisRenderer.labels.template.visible = false;
         categoryAxisRenderer.labels.template.diabled = false;
 
-
-        // categoryAxis.wheelable = false;
-        // categoryAxis.renderer.grid.template.strokeOpacity = 0.5;
-        // categoryAxis.renderer.grid.template.strokeWidth = 1;
-        // categoryAxis.renderer.grid.template.stroke = "0xC0C0C0";
-        // categoryAxis.renderer.axisFills.template.disabled = false;
-        // categoryAxis.renderer.line.strokeOpacity = 1;
-        // categoryAxis.renderer.line.strokeWidth = 2;
-        // categoryAxis.renderer.line.stroke = window.am4core.color("red");
-
-
-        // categoryAxis.data = chartSeries;
-
         var valueAxis = radialChart.xAxes.push(new window.am4charts.ValueAxis());
         valueAxis.renderer.labels.template.horizontalCenter = "left";
-        // valueAxis.strictMinMax = true;
-        // valueAxis.renderer.maxLabelPosition = 0.99;
         valueAxis.renderer.grid.template.strokeOpacity = 0.25;
         valueAxis.min = 0;
-        valueAxis.max = strategies.length;
+        valueAxis.max = this.strategies.length;
         valueAxis.mouseEnabled = true;
-        // valueAxis.tooltip.disabled = true;
-        // valueAxis.renderer.axisFills.template.disabled = false;
-        // valueAxis.interactionsEnabled = true;
         valueAxis.disabled = true;
 
-        for (var i = 0; i < initiatives.length; i++) {
+        for (var i = 0; i < this.initiatives.length; i++) {
             let initiativesSeries = radialChart.series.push(new window.am4charts.RadarColumnSeries());
             initiativesSeries.name = `{owner}`;
             initiativesSeries.dataFields.categoryY = 'initiative';
             initiativesSeries.dataFields.valueX = "end" + i;
             initiativesSeries.dataFields.openValueX = "start" + i;
             initiativesSeries.clustered = false;
-            initiativesSeries.fill = getInitiativeColor(initiatives[i]);
+            initiativesSeries.fill = getInitiativeColor(this.initiatives[i]);
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
             <hr/>
@@ -413,7 +340,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
         radialChart.legend.itemContainers.template.focusable = true;
-        radialChart.legend.itemContainers.template.events.on("hit", function (ev: any) {
+        radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
             let enabled = ev.target.dataItem.hasProperties;
             console.log("Clicked on", ownerValue + ":" + enabled);
@@ -425,29 +352,29 @@ export class ChartComponent implements OnInit {
             // });
             radialChart.legend.dataItems.values.forEach((element: any) => {
                 if (!element.hasProperties) {
-                    let filteredData = chartSeries.filter(function (item: any) {
+                    let filteredData = this.chartSeries.filter(function (item: any) {
                         return item.owner === element.name;
                     });
                     finalData = finalData.concat(filteredData);
-                    console.log("adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
+                    //console.log("adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
                 }
             });
             if (enabled) {
-                let filteredData = chartSeries.filter(function (item: any) {
+                let filteredData = this.chartSeries.filter(function (item: any) {
                     return item.owner === ownerValue;
                 });
                 finalData = finalData.concat(filteredData);
-                console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
+                //console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
             } else {
                 finalData = finalData.filter(function (item: any) {
                     return item.owner != ownerValue;
                 });
-                console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
+                //console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
             }
-            console.log("final filtered size:" + finalData.length);
+            //console.log("final filtered size:" + finalData.length);
             radialChart.data = finalData;
             categoryAxis.data = finalData;
-            console.log("filtered chart.data", radialChart.data.length);
+            //console.log("filtered chart.data", radialChart.data.length);
         });
 
         let marker = radialChart.legend.markers.template.children.getIndex(0);
@@ -477,34 +404,83 @@ export class ChartComponent implements OnInit {
         zoomOutButton.icon.strokeWidth = 2;
         zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
 
-        radialChart.data = chartSeries;
+        radialChart.data = this.chartSeries;
+    }
+
+    ngOnInit(): void {
+        // Themes begin
+
+        // console.log('owners', this.owners);
+        // console.log('accelerators', this.accelerators);
+        // console.log('categorie', this.categories);
+        // console.log('strategies', this.strategies);
+        // console.log('chartSeries', this.chartSeries);
+
+        window.am4core.addLicense('CH300383565');
+        //enable class names for custom styling
+        window.am4core.options.autoSetClassName = true;
+        window.am4core.useTheme(window.am4themes_animated);
+
+        // CONTAINER ///
+        var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
+        chartcontainer.width = window.am4core.percent(100);
+        chartcontainer.height = window.am4core.percent(100);
+        // chartcontainer.layout = "vertical";
+
+
+        // Create chart instance
+        var chart = chartcontainer.createChild(window.am4charts.PieChart)
+        // var chart = window.am4core.create("chartdiv", window.am4charts.PieChart);
+        chart.startAngle = 180;
+        chart.endAngle = 0;
+        chart.dy = -300;
+        // Let's cut a hole in our Pie chart
+        chart.innerRadius = window.am4core.percent(3);
+
+        var janssonLabel = chartcontainer.createChild(window.am4core.Label);
+        janssonLabel.text = "Janssen One";
+        janssonLabel.fontSize = 7;
+        janssonLabel.minWidth = "5px";
+        janssonLabel.y = 260;
+        janssonLabel.align = "center"
+        janssonLabel.zIndex = "10"
+
+        //accelerator chart
+        this.renderAcceleratorChart(chart);
+        //Top Stratergies chart
+        this.renderTopStratergiesChart(chart);
+        // Startergies chart
+        let strategySeries = chart.series.push(new window.am4charts.PieSeries());
+        this.renderStratergiesChart(strategySeries);
+        //radial chart
+        let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
+        this.renderRadialChart(radialChart);
 
         chart.toFront();
 
-
         //events
-        strategySeries.slices.template.events.on("hit", function (ev: any) {
+        strategySeries.slices.template.events.on("hit", (ev: any) => {
             let finalData: any = [];
-            console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + chartSeries.length);
+            //console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + this.chartSeries.length);
             var allOff = true;
             strategySeries.slices.values.forEach((element: any) => {
                 if (element.isActive) {
                     element.fillOpacity = 1;
-                    let filteredData = chartSeries.filter(function (item: any) {
+                    let filteredData = this.chartSeries.filter(function (item: any) {
                         return item.strategy === element.dataItem.dataContext.name;
                     });
                     finalData = finalData.concat(filteredData);
                     allOff = false;
-                    console.log("adding items for strategy:" + element.dataItem.dataContext.name + ":" + filteredData.length);
+                    //console.log("adding items for strategy:" + element.dataItem.dataContext.name + ":" + filteredData.length);
                 } else {
                     element.fillOpacity = 0.5;
                 }
 
             });
             if (allOff) {
-                finalData = chartSeries;
+                finalData = this.chartSeries;
             }
-            console.log("final filtered size:" + finalData.length);
+            //console.log("final filtered size:" + finalData.length);
             radialChart.data = finalData;
         });
 
