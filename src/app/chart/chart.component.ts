@@ -26,12 +26,12 @@ let topStratergy_colors = [
     window.am4core.color('#C60519')
 ];
 let stratergy_colors = [
-    window.am4core.color("#845EC2"),
-    window.am4core.color("#D65DB1"),
-    window.am4core.color("#FF6F91"),
-    window.am4core.color("#FF9671"),
-    window.am4core.color("#FFC75F"),
-    window.am4core.color("#F9F871")
+    window.am4core.color("#DFE0E2"),
+    window.am4core.color("#DFE0E2"),
+    window.am4core.color("#DFE0E2"),
+    window.am4core.color("#DFE0E2"),
+    window.am4core.color("#DFE0E2"),
+    window.am4core.color("#DFE0E2")
 ];
 import {
     getAccelarators,
@@ -150,15 +150,20 @@ export class ChartComponent implements OnInit {
         acceleratorsSeries.alignLabels = false;
         let acceleratorsLabelTemplate = acceleratorsSeries.labels.template;
         acceleratorsLabelTemplate.text = '{category}';
-        // acceleratorsLabelTemplate.bent = true;
-        acceleratorsLabelTemplate.radius = -2;
-        // acceleratorsLabelTemplate.inside = true;
+        acceleratorsLabelTemplate.bent = true;
+        acceleratorsLabelTemplate.radius = 15;
+        acceleratorsLabelTemplate.inside = true;
+        acceleratorsLabelTemplate.fill = new window.am4core.color("#FFFFFF");
         acceleratorsLabelTemplate.padding(0, 0, 0, 0);
         acceleratorsLabelTemplate.wrap = true;
-        acceleratorsLabelTemplate.fontSize = 10;
+        acceleratorsLabelTemplate.fontSize = 6;
         acceleratorsLabelTemplate.maxWidth = 80;
         acceleratorsLabelTemplate.verticalCenter = 'center';
         acceleratorsLabelTemplate.horizontalCenter = 'left';
+        acceleratorsLabelTemplate.adapter.add("textOutput", function(text) {
+            return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
+          });
+        
 
         // acceleratorsLabelTemplate.rotation = 180;
 
@@ -194,10 +199,10 @@ export class ChartComponent implements OnInit {
 
         topStrategiesSeries.colors.list = topStratergy_colors
 
-        topStrategiesSeries.radius = window.am4core.percent(22);
+        topStrategiesSeries.radius = window.am4core.percent(18);
         topStrategiesSeries.verticalCenter = "middle";
         topStrategiesSeries.alignLabels = false;
-        topStrategiesSeries.innerRadius = window.am4core.percent(28);
+        topStrategiesSeries.innerRadius = window.am4core.percent(24);
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
@@ -210,23 +215,21 @@ export class ChartComponent implements OnInit {
         topStrategiesSeries.ticks.template.disabled = true;
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
         topStrategyLabelsTemplate.text = '{category}';
-        //topStrategyLabelsTemplate.bent = true;
+        topStrategyLabelsTemplate.bent = true;
 
 
-        topStrategyLabelsTemplate.radius = 2;
-        topStrategyLabelsTemplate.inside = true;
+        topStrategyLabelsTemplate.radius = 15;
+        topStrategyLabelsTemplate.inside = false;
         topStrategyLabelsTemplate.padding(0, 0, 0, 0);
         topStrategyLabelsTemplate.wrap = true;
         //topStrategyLabelsTemplate.truncate = true;
-        topStrategyLabelsTemplate.fontSize = 10;
+        topStrategyLabelsTemplate.fill = new window.am4core.color("#FFFFFF");
+        topStrategyLabelsTemplate.fontSize = 6;
         topStrategyLabelsTemplate.maxWidth = 70;
         topStrategyLabelsTemplate.strictMinMax = true;
-        // topStrategyLabelsTemplate.verticalCenter = 'center';
-        // topStrategyLabelsTemplate.horizontalCenter = 'middle';
-        // topStrategyLabelsTemplate.rotation = -360;
-
-        // topStrategyLabelsTemplate.relativeRotation = 180;
-        //topStrategyLabelsTemplate.relativeRotation = 90;
+        topStrategyLabelsTemplate.adapter.add("textOutput", function(text) {
+            return window.am4core.utils.truncateWithEllipsis(text, 25, "...");
+          });
 
 
         //Tooltip
@@ -243,31 +246,29 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
         strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
         strategySeries.slices.template.states.getKey("active").properties.scale = 1;
-        strategySeries.radius = window.am4core.percent(34);
-        strategySeries.innerRadius = window.am4core.percent(40);
+        strategySeries.radius = window.am4core.percent(27);
+        strategySeries.innerRadius = window.am4core.percent(33);
         strategySeries.colors.list = stratergy_colors;
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
         // pieSeries3.ticks.template.disabled = true;
         strategySeries.alignLabels = false;
+        strategySeries.ticks.template.disabled = true;
         let strategyLabelsTemplate = strategySeries.labels.template;
         strategyLabelsTemplate.text = '{category}';
-        // strategyLabelsTemplate.bent = true;
-        //strategyLabelsTemplate.radius = 10;
-        //strategyLabelsTemplate.bent = true;
-        strategyLabelsTemplate.radius = 5;
+        strategyLabelsTemplate.bent = true;
+        strategyLabelsTemplate.radius = -15;
         strategyLabelsTemplate.inside = true;
-        strategyLabelsTemplate.padding(0, 0, 0, 0);
-        strategyLabelsTemplate.wrap = true;
-        strategyLabelsTemplate.fontSize = 10;
+        strategyLabelsTemplate.padding(0, 0, 0, 0);        
+        strategyLabelsTemplate.fontSize = 6;
+        strategyLabelsTemplate.strictMinMax = true;
         strategyLabelsTemplate.maxWidth = 100;
-        strategyLabelsTemplate.rotation = -360;
-        strategyLabelsTemplate.valign = 'center';
-        strategyLabelsTemplate.align = 'right';
-        strategyLabelsTemplate.maxWidth = 65;
-        strategyLabelsTemplate.verticalCenter = 'center';
-        strategyLabelsTemplate.horizontalCenter = 'middle';
+        strategyLabelsTemplate.fill = new window.am4core.color("#000000");
+        strategyLabelsTemplate.adapter.add("textOutput", function(text) {
+            return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
+          });
+       
 
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects ";
@@ -290,11 +291,12 @@ export class ChartComponent implements OnInit {
 
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
-        radialChart.dy = -300;
+        radialChart.dy = -320;
+        radialChart.dx = 17;
         // radialChart.padding(20, 20, 20, 20);
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
-        radialChart.innerRadius = window.am4core.percent(48);
+        radialChart.innerRadius = window.am4core.percent(44);
 
 
 
@@ -417,10 +419,10 @@ export class ChartComponent implements OnInit {
             console.log("Clicked on", ownerValue + ":" + enabled);
             let finalData: any = [];
 
-            radialChart.legend.dataItems.values.forEach((item: any) => {
-                console.log(item.name + ":" + item.hasProperties);
-                console.log(item.name + ":" + item.hasProperties);
-            });
+            // radialChart.legend.dataItems.values.forEach((item: any) => {
+            //     console.log(item.name + ":" + item.hasProperties);
+            //     console.log(item.name + ":" + item.hasProperties);
+            // });
             radialChart.legend.dataItems.values.forEach((element: any) => {
                 if (!element.hasProperties) {
                     let filteredData = chartSeries.filter(function (item: any) {
@@ -459,15 +461,21 @@ export class ChartComponent implements OnInit {
 
         // Zoom Controls
         radialChart.scrollbarX = new window.am4core.Scrollbar();
+        //radialChart.scrollbarX.parent = chart.bottomAxesContainer;
         radialChart.scrollbarX.exportable = false;
         radialChart.scrollbarY = new window.am4core.Scrollbar();
         radialChart.scrollbarY.exportable = false;
 
         var zoomOutButton = radialChart.zoomOutButton;
-        zoomOutButton.dx = 0;
-        zoomOutButton.dy = 0;
-        zoomOutButton.marginBottom = 15;
-        zoomOutButton.parent = radialChart.xAxesContainer;
+        zoomOutButton.dx = -12;
+        zoomOutButton.dy = -3;
+        zoomOutButton.parent = radialChart.tooltipContainer;
+
+        zoomOutButton.background.cornerRadius(5, 5, 5, 5);
+        zoomOutButton.background.fill = new window.am4core.color("#25283D");
+        zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
+        zoomOutButton.icon.strokeWidth = 2;
+        zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
 
         radialChart.data = chartSeries;
 
