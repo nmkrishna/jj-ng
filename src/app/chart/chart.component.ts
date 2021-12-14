@@ -124,10 +124,10 @@ export class ChartComponent implements OnInit {
         acceleratorsLabelTemplate.maxWidth = 80;
         acceleratorsLabelTemplate.verticalCenter = 'center';
         acceleratorsLabelTemplate.horizontalCenter = 'left';
-        acceleratorsLabelTemplate.adapter.add("textOutput", function(text) {
+        acceleratorsLabelTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
-          });
-        
+        });
+
 
         // acceleratorsLabelTemplate.rotation = 180;
 
@@ -191,9 +191,9 @@ export class ChartComponent implements OnInit {
         topStrategyLabelsTemplate.fontSize = 6;
         topStrategyLabelsTemplate.maxWidth = 70;
         topStrategyLabelsTemplate.strictMinMax = true;
-        topStrategyLabelsTemplate.adapter.add("textOutput", function(text) {
+        topStrategyLabelsTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 25, "...");
-          });
+        });
 
 
         //Tooltip
@@ -207,9 +207,11 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.stroke = new window.am4core.InterfaceColorSet().getFor("background");
         strategySeries.slices.template.strokeWidth = 1;
         strategySeries.slices.template.strokeOpacity = 1;
+        strategySeries.slices.template.fillOpacity = 0.5;
         strategySeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+        strategySeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
         strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
-        strategySeries.slices.template.states.getKey("active").properties.scale = 1;
+        strategySeries.slices.template.states.getKey("active").properties.scale = 1.02;
         strategySeries.radius = window.am4core.percent(27);
         strategySeries.innerRadius = window.am4core.percent(33);
         strategySeries.colors.list = stratergy_colors;
@@ -224,15 +226,15 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.bent = true;
         strategyLabelsTemplate.radius = -15;
         strategyLabelsTemplate.inside = true;
-        strategyLabelsTemplate.padding(0, 0, 0, 0);        
+        strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.fontSize = 6;
         strategyLabelsTemplate.strictMinMax = true;
         strategyLabelsTemplate.maxWidth = 100;
         strategyLabelsTemplate.fill = new window.am4core.color("#000000");
-        strategyLabelsTemplate.adapter.add("textOutput", function(text) {
+        strategyLabelsTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
-          });
-       
+        });
+
 
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects ";
