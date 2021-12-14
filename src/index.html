@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="icon" type="image/x-icon" href="favicon.ico" />
     <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <script type="text/javascript" src="./assets/html2canvas.min.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/core.js"></script>
     <script src="https://cdn.amcharts.com/lib/4/charts.js"></script>
@@ -19,15 +20,18 @@
             position: absolute;
             right: 160px;
             margin: 20px;
-            padding: 5px;
-            cursor: pointer;
+            padding: 5px;            
             z-index: 5;
+            font-size: 12px;
+        }
+        #export_button {
+            border: none;
         }
     </style>
 </head>
 
 <body>
-    <button id="export" onclick="screenshot();">Export</button>
+    <div id="export">Export <button id="export_button" onclick="screenshot();"><i class="fa fa-download"></i></button></div>
     <app-root></app-root>
     <script type="text/javascript">
         function saveAs(uri, filename) {
