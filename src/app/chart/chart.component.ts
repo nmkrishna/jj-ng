@@ -244,12 +244,14 @@ export class ChartComponent implements OnInit {
     renderRadialChart(radialChart) { // configuring radial chart
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
-        radialChart.dy = -320;
+        radialChart.dy = -280;
         radialChart.dx = 17;
         // radialChart.padding(20, 20, 20, 20);
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
         radialChart.innerRadius = window.am4core.percent(44);
+        radialChart.responsive.enabled = true;
+
 
 
 
@@ -346,8 +348,10 @@ export class ChartComponent implements OnInit {
             let ownerValue = ev.target.dataItem.name;
             let enabled = ev.target.dataItem.hasProperties;
             console.log("Clicked on", ownerValue + ":" + enabled);
-            let finalData: any = [];
+            radialChart.legend.markers.template.children.getIndex(0);
 
+
+            let finalData: any = [];
             // radialChart.legend.dataItems.values.forEach((item: any) => {
             //     console.log(item.name + ":" + item.hasProperties);
             //     console.log(item.name + ":" + item.hasProperties);
@@ -383,14 +387,22 @@ export class ChartComponent implements OnInit {
         marker.cornerRadius(12, 12, 12, 12);
         marker.strokeWidth = 0;
         marker.strokeOpacity = 1;
-        marker.events.on("hit", function (ev: any) {
-            alert("sdw");
-        });
+        radialChart.legend.labels.template.textDecoration = "none";
+        radialChart.legend.labels.template.fillOpacity = 0.5;
+
+        radialChart.legend.valueLabels.template.textDecoration = "none";
+        radialChart.legend.valueLabels.template.fillOpacity = 0.5;
+
+        let as = radialChart.legend.labels.template.states.getKey("active");
+        as.properties.fillOpacity = 1;
+
+        radialChart.legend.markers.template.children.getIndex(0);
+        radialChart.legend.markers.template.fillOpacity = 1;
         radialChart.legend.data = OWNERS_COLORS;
 
         // Zoom Controls
         radialChart.scrollbarX = new window.am4core.Scrollbar();
-        //radialChart.scrollbarX.parent = chart.bottomAxesContainer;
+        radialChart.scrollbarX.parent = radialChart.bottomAxesContainer;
         radialChart.scrollbarX.exportable = false;
         radialChart.scrollbarY = new window.am4core.Scrollbar();
         radialChart.scrollbarY.exportable = false;
