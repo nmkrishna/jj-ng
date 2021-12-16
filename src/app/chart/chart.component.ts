@@ -480,6 +480,7 @@ export class ChartComponent implements OnInit {
         //radial chart
         let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
         this.renderRadialChart(radialChart);
+        let categoryAxis = null;
 
         var button = chartcontainer.createChild(window.am4core.Button);
         button.label.text = "Reset";
@@ -490,11 +491,12 @@ export class ChartComponent implements OnInit {
         button.fontSize = 12;
         // button.x = 100;
         button.y = -3;
-        button.zIndex = "12"
-        button.events.on("hit", ()  => {
+        button.zIndex = "12";
+        button.events.on("hit", () => {
             radialChart.data = this.chartSeries;
             strategySeries.slices.each((item) => {
                 item.isActive = false;
+                item.fillOpacity = 0.5;
             })
         });
 
