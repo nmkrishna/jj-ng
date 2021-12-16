@@ -338,7 +338,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
         //chart.legend.x = 150;
-        radialChart.legend.y = 150;
+        radialChart.legend.y = 100;
         radialChart.legend.itemContainers.template.paddingTop = 250;
         radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "center";
@@ -480,6 +480,23 @@ export class ChartComponent implements OnInit {
         //radial chart
         let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
         this.renderRadialChart(radialChart);
+
+        var button = chartcontainer.createChild(window.am4core.Button);
+        button.label.text = "Reset";
+        button.padding(5, 5, 5, 5);
+        button.width = 50;
+        button.align = "right";
+        button.marginRight = 180;
+        button.fontSize = 12;
+        // button.x = 100;
+        button.y = -3;
+        button.zIndex = "12"
+        button.events.on("hit", ()  => {
+            radialChart.data = this.chartSeries;
+            strategySeries.slices.each((item) => {
+                item.isActive = false;
+            })
+        });
 
         chart.toFront();
 
