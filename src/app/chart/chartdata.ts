@@ -72,6 +72,8 @@ export const rawData = [
         description: 'Define a new fit-for-purpose operating model adjusted to new modalities such as COVID-19, CAR-T (personalized products), cell & gene therapy, radiopharmaceuticals etc. Align operating model to key partners across PQ, Value Chain Management (VCM), DPDS, and Vaccines.',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Huimin Yuan',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -90,6 +92,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen PQM,JSCQ,BRQC',
         projectLead: 'Huimin Yuan',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -109,6 +113,8 @@ export const rawData = [
         description: 'With digital health solutions increasing within Janssen in recent years, and with the regulatory environment becoming more complex, we have an opportunity to support our business partners in navigating the digital health landscape with agility to drive quality and compliance in our solutions. The goal of our multi-phase program is to enable business and technology innovation by empowering teams to move with agility in delivering compliant digital health solutions through a simplified and clearly defined framework.',
         functionalOwnership: 'Janssen PQS',
         projectLead: 'R. Famiglietti',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -122,6 +128,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Brenda Van Assche',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -135,6 +143,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Angela Costantino',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -152,6 +162,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Huimin Yuan/Amit Khaolkar/Lisa Forian',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -169,6 +181,8 @@ export const rawData = [
         description: 'Global cross-segment (MD, Pharm, Consumer) innovation initiative to combine products and developt across sectors. xSector QMS is needed to further advance.',
         functionalOwnership: 'Janssen BRQC',
         projectLead: 'R. Famiglietti',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -182,6 +196,8 @@ export const rawData = [
         description: 'Global cross-segment (MD, Pharm, Consumer) innovation initiative to combine products and developt across sectors. xSector QMS is needed to further advance.',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Lisa Forian / Huimin Yuan',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -197,6 +213,8 @@ export const rawData = [
         description: 'Global cross-segment (MD, Pharm, Consumer) innovation initiative to combine products and developt across sectors. xSector QMS is needed to further advance.',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Matt Matuszewski',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -215,6 +233,8 @@ export const rawData = [
         description: "Develop patient centricity mindset to focus all activities on the patient. In this initiative, tools and technologies are linked to serve as an 'inventory'. A playbook is available online on how to get access to the inventory.",
         functionalOwnership: 'Janssen BQ',
         projectLead: 'Yuderki Tejada-Flotta',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -233,6 +253,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen BQ',
         projectLead: 'Renee Nester',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -252,6 +274,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Enterprise Q&C',
         projectLead: 'Art Caruso',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -270,6 +294,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen PQM',
         projectLead: 'Amit Khanolkar',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -288,6 +314,8 @@ export const rawData = [
         description: 'Implement process automation for the Central PV HUB verification processes and an integrated intake and workflow solution for end-to-end management of PSP and RWE activities.  Once fully deployed, the solutions will enable more efficient verification processes and a consistent approach to PSP/RWE activities set up and oversight by providing insights on individual RRA risk and overall compliance.',
         functionalOwnership: 'Janssen BQ',
         projectLead: 'Yuderki Tejada-Flotta',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -306,6 +334,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'Janssen BQ',
         projectLead: 'Kate Gillespie',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -318,6 +348,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'TBD',
         projectLead: '',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -330,6 +362,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'TBD',
         projectLead: '',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -342,6 +376,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'TBD',
         projectLead: '',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -354,6 +390,8 @@ export const rawData = [
         description: '',
         functionalOwnership: 'TBD',
         projectLead: '',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -367,6 +405,8 @@ export const rawData = [
         description: 'Data and Analytics initiative that deals with identifying the right way to use and collect data in order to make quality decisions. Uses cases have been identified in NC reduction, Speed to market increase and a higher reliability. Primary goal is to prevent issues from arising instead of applying corrective actions.',
         functionalOwnership: 'Janssen SCQ',
         projectLead: 'Borke Van Belle',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -380,6 +420,8 @@ export const rawData = [
         description: 'Build internal capability to create and deploy technology and automation solutions, and to evolve from descriptive analytics to advanced analytics',
         functionalOwnership: 'Janssen SCQ',
         projectLead: 'Borke Van Belle',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -398,6 +440,8 @@ export const rawData = [
         description: 'Identify, support and promote intelligent automation by developing a framework, coordinating across segments and functions and establishing an organic process to learn and leverage as we increase deployment and adoption across Q&C.',
         functionalOwnership: 'Enterprise Q&C',
         projectLead: '',
+        totalProjectCost: 310000,
+        totalProjectValue: 723000,
 
     },
     {
@@ -512,8 +556,10 @@ const getStratergies = (rawData: any) => {
     });
     strategies = [...new Set(strategies)];
     strategies.forEach(element => {
-        let initiativeCount = rawData.filter(item => item.strategies.includes(element)).length
-        result.push({ "name": element, "value": 1, "initiatives": initiativeCount });
+        let initiatives = rawData.filter(item => item.strategies.includes(element));
+        let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + obj.totalProjectCost ? obj.totalProjectCost : 0; }, 0);
+        result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": totalProjectsCost });
+
     });
     return result;
 };
@@ -586,6 +632,8 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.rpaValueScore = [
                 "0.2"
             ];
+            seriesObj.totalProjectCost = 34000;
+            seriesObj.totalProjectValue = 334000;
             seriesObj.resourceRequired = "2 FTE";
             chartDataSeries.push(seriesObj);
         });

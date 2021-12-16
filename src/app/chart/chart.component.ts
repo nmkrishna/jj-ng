@@ -237,7 +237,7 @@ export class ChartComponent implements OnInit {
 
 
         //Tooltip
-        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects ";
+        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, TotalProjectsCost=${totalProjectsCost} ";
         strategySeries.data = this.strategies;
     }
 
@@ -346,38 +346,48 @@ export class ChartComponent implements OnInit {
         radialChart.legend.itemContainers.template.focusable = true;
         radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
-            let enabled = ev.target.dataItem.hasProperties;
-            console.log("Clicked on", ownerValue + ":" + enabled);
+            let selected = ev.target.dataItem.properties.color;
+            console.log("Clicked on", ownerValue + ":" + selected);
             radialChart.legend.markers.template.children.getIndex(0);
 
-
             let finalData: any = [];
-            // radialChart.legend.dataItems.values.forEach((item: any) => {
-            //     console.log(item.name + ":" + item.hasProperties);
-            //     console.log(item.name + ":" + item.hasProperties);
-            // });
-            radialChart.legend.dataItems.values.forEach((element: any) => {
-                if (!element.hasProperties) {
-                    let filteredData = this.chartSeries.filter(function (item: any) {
-                        return item.owner === element.name;
-                    });
-                    finalData = finalData.concat(filteredData);
-                    //console.log("adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
-                }
-            });
-            if (enabled) {
+            if (!selected) {
                 let filteredData = this.chartSeries.filter(function (item: any) {
                     return item.owner === ownerValue;
                 });
                 finalData = finalData.concat(filteredData);
-                //console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
+                console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
+                radialChart.legend.dataItems.values.forEach((element: any) => {
+                    if (element.properties.color) {
+                        let filteredData = this.chartSeries.filter(function (item: any) {
+                            return item.owner === element.name;
+                        });
+                        finalData = finalData.concat(filteredData);
+                        console.log("1-final adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
+                    }
+                });
+
             } else {
+
+                radialChart.legend.dataItems.values.forEach((element: any) => {
+                    if (element.properties.color) {
+                        let filteredData = this.chartSeries.filter(function (item: any) {
+                            return item.owner === element.name;
+                        });
+                        finalData = finalData.concat(filteredData);
+                        console.log("2-final adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
+                    }
+                });
                 finalData = finalData.filter(function (item: any) {
                     return item.owner != ownerValue;
                 });
-                //console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
+                console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
+
             }
             //console.log("final filtered size:" + finalData.length);
+            if (finalData.length == 0) {
+                finalData = this.chartSeries;
+            }
             radialChart.data = finalData;
             categoryAxis.data = finalData;
             //console.log("filtered chart.data", radialChart.data.length);
@@ -393,8 +403,9 @@ export class ChartComponent implements OnInit {
         radialChart.legend.valueLabels.template.textDecoration = "none";
         radialChart.legend.valueLabels.template.fillOpacity = 0.5;
 
+
         let as = radialChart.legend.labels.template.states.getKey("active");
-        as.properties.fillOpacity = 1;
+        // as.properties.fillOpacity = 1;
 
         radialChart.legend.markers.template.children.getIndex(0);
         radialChart.legend.markers.template.fillOpacity = 1;
@@ -501,6 +512,9 @@ export class ChartComponent implements OnInit {
 
         document
             .getElementById('export')
+            ?.setAttribute('style', 'visibility: visible');
+        document
+            .getElementById('clear')
             ?.setAttribute('style', 'visibility: visible');
     }
 
