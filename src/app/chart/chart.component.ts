@@ -470,6 +470,23 @@ export class ChartComponent implements OnInit {
         let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
         this.renderRadialChart(radialChart);
 
+        var button = chartcontainer.createChild(window.am4core.Button);
+        button.label.text = "Reset";
+        button.padding(5, 5, 5, 5);
+        button.width = 50;
+        button.align = "right";
+        button.marginRight = 180;
+        button.fontSize = 12;
+        // button.x = 100;
+        button.y = -3;
+        button.zIndex = "12"
+        button.events.on("hit", ()  => {
+            radialChart.data = this.chartSeries;
+            strategySeries.slices.each((item) => {
+                item.isActive = false;
+            })
+        });
+
         chart.toFront();
 
         //events
