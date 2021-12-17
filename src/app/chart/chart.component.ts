@@ -494,6 +494,8 @@ export class ChartComponent implements OnInit {
         button.zIndex = "12";
         button.events.on("hit", () => {
             radialChart.data = this.chartSeries;
+            radialChart.yAxes.values[0].data = this.chartSeries;
+            radialChart.legend.data = OWNERS_COLORS;
             strategySeries.slices.each((item) => {
                 item.isActive = false;
                 item.fillOpacity = 0.5;
