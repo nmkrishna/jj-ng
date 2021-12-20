@@ -1,44 +1,8 @@
 #chartdiv {
-  width: 1400px;
-  height: 1200px;
+  width: 100%;
+  height: 100%;
   position: absolute;
   z-index: 1;
   padding: 50px;
   padding-top: 20px;  
-}
-
-#chartdiv2 {
-  position: absolute;
-  top: 420px;
-  left: calc(50% - 155px);
-  width: 310px;
-  height: 300px;
-  z-index: 2;
-}
-
-#gaugeChart1 {
-  position: absolute;
-  top: 455px;
-  left: calc(50% - 220px);
-  width: 440px;
-  height: 400px;
-}
-
-#gaugeChart2 {
-  position: absolute;
-  top: 430px;
-  left: calc(50% - 340px);
-  width: 660px;
-  height: 540px;
-}
-
-#container {
-  // display: flex;
-  // justify-content: center;
-  // flex-direction: row;
-  // align-items: center;
-  // position: absolute;
-  // width: 100vw;
-  // height: 100vh;
-  // padding-top: 20px;
 }

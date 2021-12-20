@@ -3,7 +3,7 @@ import { Component, Input, OnInit, TemplateRef, ViewChild, ElementRef } from '@a
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
-import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore, OWNERS_COLORS } from "./chartdata";
+import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore } from "./chartdata";
 import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
@@ -67,7 +67,7 @@ export class ChartComponent implements OnInit {
     data = rawData;
     categories = getCategories(this.data);
     accelerators = getAccelarators(this.data);
-    owners = getOwners(this.data, this.categories);
+    owners = getOwners(this.data);
     strategies = getStratergies(this.data);
     chartSeries = getInitiativesSeries(this.data);
     initiatives = getInitiatives(this.data);
@@ -96,7 +96,7 @@ export class ChartComponent implements OnInit {
     renderAcceleratorChart(chart) {
         // Add and configure Series
         var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
-        acceleratorsSeries.radius = window.am4core.percent(15);
+        acceleratorsSeries.radius = window.am4core.percent(8);
         acceleratorsSeries.innerRadius = window.am4core.percent(1);
         acceleratorsSeries.startAngle = 360;
         acceleratorsSeries.endAngle = 0;
@@ -127,11 +127,6 @@ export class ChartComponent implements OnInit {
         acceleratorsLabelTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
         });
-
-
-        // acceleratorsLabelTemplate.rotation = 180;
-
-
         // Disable sliding out of slices
         acceleratorsSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
         acceleratorsSeries.slices.template.states.getKey("hover").properties.scale = 1;
@@ -163,26 +158,25 @@ export class ChartComponent implements OnInit {
 
         topStrategiesSeries.colors.list = topStratergy_colors
 
-        topStrategiesSeries.radius = window.am4core.percent(18);
+        topStrategiesSeries.radius = window.am4core.percent(14);
         topStrategiesSeries.verticalCenter = "middle";
         topStrategiesSeries.alignLabels = false;
-        topStrategiesSeries.innerRadius = window.am4core.percent(24);
+        topStrategiesSeries.innerRadius = window.am4core.percent(9);
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
-        // pieSeries2.bent = true;
-        topStrategiesSeries.slices.template.interactionsEnabled = false;
+        topStrategiesSeries.slices.template.interactionsEnabled = true;
 
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
-        topStrategiesSeries.ticks.template.disabled = true;
+        // topStrategiesSeries.ticks.template.disabled = true;
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
         topStrategyLabelsTemplate.text = '{category}';
         topStrategyLabelsTemplate.bent = true;
 
 
-        topStrategyLabelsTemplate.radius = 15;
+        topStrategyLabelsTemplate.radius = window.am4core.percent(10);
         topStrategyLabelsTemplate.inside = false;
         topStrategyLabelsTemplate.padding(0, 0, 0, 0);
         topStrategyLabelsTemplate.wrap = true;
@@ -195,9 +189,11 @@ export class ChartComponent implements OnInit {
             return window.am4core.utils.truncateWithEllipsis(text, 25, "...");
         });
 
+        topStrategiesSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+        topStrategiesSeries.slices.template.states.getKey("hover").properties.scale = 1;
+        topStrategiesSeries.slices.template.tooltipText = "{category} ";
 
         //Tooltip
-        topStrategiesSeries.slices.template.tooltipText = "{category}";
         topStrategiesSeries.data = this.gaugeData;
     }
 
@@ -212,8 +208,8 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
         strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
         strategySeries.slices.template.states.getKey("active").properties.scale = 1.02;
-        strategySeries.radius = window.am4core.percent(27);
-        strategySeries.innerRadius = window.am4core.percent(33);
+        strategySeries.radius = window.am4core.percent(22);
+        strategySeries.innerRadius = window.am4core.percent(18);
         strategySeries.colors.list = stratergy_colors;
         // Labels
         // Disabling labels and ticks on inner circle
@@ -224,7 +220,7 @@ export class ChartComponent implements OnInit {
         let strategyLabelsTemplate = strategySeries.labels.template;
         strategyLabelsTemplate.text = '{category}';
         strategyLabelsTemplate.bent = true;
-        strategyLabelsTemplate.radius = -15;
+        strategyLabelsTemplate.radius = window.am4core.percent(30);
         strategyLabelsTemplate.inside = true;
         strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.fontSize = 6;
@@ -244,16 +240,13 @@ export class ChartComponent implements OnInit {
     renderRadialChart(radialChart) { // configuring radial chart
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
-        radialChart.dy = -280;
-        radialChart.dx = 17;
-        // radialChart.padding(20, 20, 20, 20);
+        radialChart.dy = -250;
+        radialChart.dx = 5;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
-        radialChart.innerRadius = window.am4core.percent(44);
+        radialChart.innerRadius = window.am4core.percent(28);
+        radialChart.radius = window.am4core.percent(90);
         radialChart.responsive.enabled = true;
-
-
-
 
         // Category Axis
         var categoryAxis = radialChart.yAxes.push(new window.am4charts.CategoryAxis());
@@ -289,7 +282,7 @@ export class ChartComponent implements OnInit {
             </tr>
                 <tr>
               <th align="left" style="font-size:8px">Lead</th>
-              <td style="font-size:8px">{projectLead}</td>
+              <td style="font-size:8px">{projectManager}</td>
             </tr>
             <tr>
               <th align="left" style="font-size:8px">Ownership</th>
@@ -314,15 +307,15 @@ export class ChartComponent implements OnInit {
               <td style="font-size:8px">{investmentType}</td>
             </tr>
                 <th align="left" style="font-size:8px">Planned Start</th>
-              <td style="font-size:8px"></td>
+              <td style="font-size:8px">{startDate}</td>
             </tr>
             <tr>
             <th align="left" style="font-size:8px">Planned End</th>
-              <td style="font-size:8px"></td>
+              <td style="font-size:8px">{endDate}</td>
             </tr>
             <tr>
             <th align="left" style="font-size:8px">BAM Alignmnent</th>
-              <td style="font-size:8px"></td>
+              <td style="font-size:8px">{bamAllignment}</td>
             </tr>
             </body>`;
             initiativesSeries.zIndex = -1;
@@ -339,7 +332,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.strokeWidth = 0;
         //chart.legend.x = 150;
         radialChart.legend.y = 100;
-        radialChart.legend.itemContainers.template.paddingTop = 250;
+        radialChart.legend.itemContainers.template.paddingTop = 150;
         radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
@@ -349,7 +342,10 @@ export class ChartComponent implements OnInit {
             let selected = ev.target.dataItem.properties.color;
             console.log("Clicked on", ownerValue + ":" + selected);
             radialChart.legend.markers.template.children.getIndex(0);
-
+            radialChart.legend.children.values.forEach(element => {
+                console.log(element.isActive);
+                element.isActive = false;
+            });
             let finalData: any = [];
             if (!selected) {
                 let filteredData = this.chartSeries.filter(function (item: any) {
@@ -359,7 +355,7 @@ export class ChartComponent implements OnInit {
                 console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
                 radialChart.legend.dataItems.values.forEach((element: any) => {
                     if (element.properties.color) {
-                        let filteredData = this.chartSeries.filter(function (item: any) {
+                        filteredData = this.chartSeries.filter(function (item: any) {
                             return item.owner === element.name;
                         });
                         finalData = finalData.concat(filteredData);
@@ -409,38 +405,14 @@ export class ChartComponent implements OnInit {
 
         radialChart.legend.markers.template.children.getIndex(0);
         radialChart.legend.markers.template.fillOpacity = 1;
-        radialChart.legend.data = OWNERS_COLORS;
-
-        // Zoom Controls
-        radialChart.scrollbarX = new window.am4core.Scrollbar();
-        radialChart.scrollbarX.parent = radialChart.bottomAxesContainer;
-        radialChart.scrollbarX.exportable = false;
-        radialChart.scrollbarY = new window.am4core.Scrollbar();
-        radialChart.scrollbarY.exportable = false;
-
-        var zoomOutButton = radialChart.zoomOutButton;
-        zoomOutButton.dx = -12;
-        zoomOutButton.dy = -3;
-        zoomOutButton.parent = radialChart.tooltipContainer;
-
-        zoomOutButton.background.cornerRadius(5, 5, 5, 5);
-        zoomOutButton.background.fill = new window.am4core.color("#25283D");
-        zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
-        zoomOutButton.icon.strokeWidth = 2;
-        zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
-
+        radialChart.legend.data = this.owners;
         radialChart.data = this.chartSeries;
     }
 
     ngOnInit(): void {
         // Themes begin
 
-        // console.log('owners', this.owners);
-        // console.log('accelerators', this.accelerators);
-        // console.log('categorie', this.categories);
-        // console.log('strategies', this.strategies);
-        // console.log('chartSeries', this.chartSeries);
-
+        console.log('owners', this.owners);
         window.am4core.addLicense('CH300383565');
         //enable class names for custom styling
         window.am4core.options.autoSetClassName = true;
@@ -458,7 +430,7 @@ export class ChartComponent implements OnInit {
         // var chart = window.am4core.create("chartdiv", window.am4charts.PieChart);
         chart.startAngle = 180;
         chart.endAngle = 0;
-        chart.dy = -300;
+        chart.dy = -250;
         // Let's cut a hole in our Pie chart
         chart.innerRadius = window.am4core.percent(3);
 
@@ -466,7 +438,7 @@ export class ChartComponent implements OnInit {
         janssonLabel.text = "Janssen One";
         janssonLabel.fontSize = 7;
         janssonLabel.minWidth = "5px";
-        janssonLabel.y = 260;
+        janssonLabel.y = 100;
         janssonLabel.align = "center"
         janssonLabel.zIndex = "10"
 
@@ -482,6 +454,7 @@ export class ChartComponent implements OnInit {
         this.renderRadialChart(radialChart);
         let categoryAxis = null;
 
+        //Reset Button
         var button = chartcontainer.createChild(window.am4core.Button);
         button.label.text = "Reset";
         button.padding(5, 5, 5, 5);
@@ -495,16 +468,24 @@ export class ChartComponent implements OnInit {
         button.events.on("hit", () => {
             radialChart.data = this.chartSeries;
             radialChart.yAxes.values[0].data = this.chartSeries;
-            radialChart.legend.data = OWNERS_COLORS;
+            radialChart.legend.data = this.owners;
             strategySeries.slices.each((item) => {
                 item.isActive = false;
                 item.fillOpacity = 0.5;
             })
+            radialChart.legend.children.each((item) => {
+                item.isActive = true;
+            });
+            radialChart.legend.markers.each((item) => {
+                item.isActive = true;
+            });
         });
+
 
         chart.toFront();
 
-        //events
+        // //events
+        strategySeries.interactionsEnabled = true;
         strategySeries.slices.template.events.on("hit", (ev: any) => {
             let finalData: any = [];
             //console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + this.chartSeries.length);
@@ -530,13 +511,67 @@ export class ChartComponent implements OnInit {
             radialChart.data = finalData;
         });
 
+        // strategySeries.interactionsEnabled = true;
+        // strategySeries.columns.template.events.on("hit", (ev: any) => {
+        //     let finalData: any = [];
+        //     console.log(ev.target);
+        //     console.log(ev.target.dataItem.dataContext);
+        //     // console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + this.chartSeries.length);
+        //     var allOff = true;
+        //     strategySeries.slices.values.forEach((element: any) => {
+        //         if (element.isActive) {
+        //             element.fillOpacity = 1;
+        //             let filteredData = this.chartSeries.filter(function (item: any) {
+        //                 return item.strategy === element.dataItem.dataContext.name;
+        //             });
+        //             finalData = finalData.concat(filteredData);
+        //             allOff = false;
+        //             //console.log("adding items for strategy:" + element.dataItem.dataContext.name + ":" + filteredData.length);
+        //         } else {
+        //             element.fillOpacity = 0.5;
+        //         }
 
-        document
-            .getElementById('export')
-            ?.setAttribute('style', 'visibility: visible');
-        document
-            .getElementById('clear')
-            ?.setAttribute('style', 'visibility: visible');
+        //     });
+        //     if (allOff) {
+        //         finalData = this.chartSeries;
+        //     }
+        //     //console.log("final filtered size:" + finalData.length);
+        //     radialChart.data = finalData;
+        // });
+
+
+        // document
+        //     .getElementById('export')
+        //     ?.setAttribute('style', 'visibility: visible');
+        // document
+        //     .getElementById('clear')
+        //     ?.setAttribute('style', 'visibility: visible');
+
+        // Zoom Controls
+        radialChart.scrollbarX = new window.am4core.Scrollbar();
+        radialChart.scrollbarX.parent = chartcontainer;
+        radialChart.scrollbarX.exportable = false;
+        radialChart.scrollbarX.valign = "bottom";
+        radialChart.scrollbarX.align = "left";
+        radialChart.scrollbarX.marginBottom = "2";
+
+        radialChart.scrollbarY = new window.am4core.Scrollbar();
+        radialChart.scrollbarY.parent = chartcontainer;
+        radialChart.scrollbarY.exportable = false;
+        radialChart.scrollbarY.align = "right";
+        radialChart.scrollbarY.valign = "bottom";
+        radialChart.scrollbarX.marginRight = "2";
+
+        var zoomOutButton = radialChart.zoomOutButton;
+        zoomOutButton.dx = -12;
+        zoomOutButton.dy = -3;
+        zoomOutButton.parent = radialChart.tooltipContainer;
+        zoomOutButton.background.cornerRadius(5, 5, 5, 5);
+        zoomOutButton.background.fill = new window.am4core.color("#25283D");
+        zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
+        zoomOutButton.icon.strokeWidth = 2;
+        zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
+
     }
 
     onCloseModal() {
