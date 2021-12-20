@@ -42,7 +42,7 @@ const strategiesMap = [
         name: "Quality as a differentiator",
         children: [
             "Internal Quality Support",
-            "Patient & Consumer QMS"
+            "Patient & Consumer Q"
         ]
     },
     {

@@ -18,20 +18,24 @@
         #export {
             visibility: hidden;
             position: absolute;
-            right: 160px;
-            margin: 20px;
-            padding: 5px;            
+            margin-top: 2.1em;
+            right: 15%;
+            margin: 1.2500;
+            padding: 0.2125em;
             z-index: 5;
             font-size: 12px;
+            background-color: lightgray;
         }
+
         #export_button {
             border: none;
+            background-color: lightgray;
         }
     </style>
 </head>
 
 <body>
-    <div id="export">Export <button id="export_button" onclick="screenshot();"><i class="fa fa-download"></i></button></div>
+    <div id="export">Export<button id="export_button" onclick="screenshot();"><i class="fa fa-download"></i></button></div>
     <app-root></app-root>
     <script type="text/javascript">
         function saveAs(uri, filename) {

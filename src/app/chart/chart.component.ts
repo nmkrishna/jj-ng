@@ -170,13 +170,12 @@ export class ChartComponent implements OnInit {
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
-        // pieSeries2.bent = true;
-        topStrategiesSeries.slices.template.interactionsEnabled = false;
+        topStrategiesSeries.slices.template.interactionsEnabled = true;
 
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
-        topStrategiesSeries.ticks.template.disabled = true;
+        // topStrategiesSeries.ticks.template.disabled = true;
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
         topStrategyLabelsTemplate.text = '{category}';
         topStrategyLabelsTemplate.bent = true;
@@ -195,9 +194,11 @@ export class ChartComponent implements OnInit {
             return window.am4core.utils.truncateWithEllipsis(text, 25, "...");
         });
 
+        topStrategiesSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
+        topStrategiesSeries.slices.template.states.getKey("hover").properties.scale = 1;
+        topStrategiesSeries.slices.template.tooltipText = "{category} ";
 
         //Tooltip
-        topStrategiesSeries.slices.template.tooltipText = "{category}";
         topStrategiesSeries.data = this.gaugeData;
     }
 
@@ -349,7 +350,10 @@ export class ChartComponent implements OnInit {
             let selected = ev.target.dataItem.properties.color;
             console.log("Clicked on", ownerValue + ":" + selected);
             radialChart.legend.markers.template.children.getIndex(0);
-
+            radialChart.legend.children.values.forEach(element => {
+                console.log(element.isActive);
+                element.isActive = false;
+            });
             let finalData: any = [];
             if (!selected) {
                 let filteredData = this.chartSeries.filter(function (item: any) {
@@ -359,7 +363,7 @@ export class ChartComponent implements OnInit {
                 console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
                 radialChart.legend.dataItems.values.forEach((element: any) => {
                     if (element.properties.color) {
-                        let filteredData = this.chartSeries.filter(function (item: any) {
+                        filteredData = this.chartSeries.filter(function (item: any) {
                             return item.owner === element.name;
                         });
                         finalData = finalData.concat(filteredData);
@@ -482,6 +486,7 @@ export class ChartComponent implements OnInit {
         this.renderRadialChart(radialChart);
         let categoryAxis = null;
 
+        //Reset Button
         var button = chartcontainer.createChild(window.am4core.Button);
         button.label.text = "Reset";
         button.padding(5, 5, 5, 5);
@@ -500,12 +505,20 @@ export class ChartComponent implements OnInit {
                 item.isActive = false;
                 item.fillOpacity = 0.5;
             })
+            radialChart.legend.children.each((item) => {
+                item.isActive = true;
+            });
+            radialChart.legend.markers.each((item) => {
+                item.isActive = true;
+            });
         });
+
 
         chart.toFront();
 
-        //events
-        strategySeries.slices.template.events.on("hit", (ev: any) => {
+        // //events
+        strategySeries.interactionsEnabled = true;
+        strategySeries.slices.events.on("hit", (ev: any) => {
             let finalData: any = [];
             //console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + this.chartSeries.length);
             var allOff = true;
@@ -529,6 +542,34 @@ export class ChartComponent implements OnInit {
             //console.log("final filtered size:" + finalData.length);
             radialChart.data = finalData;
         });
+
+        // strategySeries.interactionsEnabled = true;
+        // strategySeries.columns.template.events.on("hit", (ev: any) => {
+        //     let finalData: any = [];
+        //     console.log(ev.target);
+        //     console.log(ev.target.dataItem.dataContext);
+        //     // console.log("strategy:" + ev.target.dataItem.dataContext.name + ":" + this.chartSeries.length);
+        //     var allOff = true;
+        //     strategySeries.slices.values.forEach((element: any) => {
+        //         if (element.isActive) {
+        //             element.fillOpacity = 1;
+        //             let filteredData = this.chartSeries.filter(function (item: any) {
+        //                 return item.strategy === element.dataItem.dataContext.name;
+        //             });
+        //             finalData = finalData.concat(filteredData);
+        //             allOff = false;
+        //             //console.log("adding items for strategy:" + element.dataItem.dataContext.name + ":" + filteredData.length);
+        //         } else {
+        //             element.fillOpacity = 0.5;
+        //         }
+
+        //     });
+        //     if (allOff) {
+        //         finalData = this.chartSeries;
+        //     }
+        //     //console.log("final filtered size:" + finalData.length);
+        //     radialChart.data = finalData;
+        // });
 
 
         document
