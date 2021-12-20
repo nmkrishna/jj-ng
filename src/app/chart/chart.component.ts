@@ -72,6 +72,8 @@ export class ChartComponent implements OnInit {
     chartSeries = getInitiativesSeries(this.data);
     initiatives = getInitiatives(this.data);
 
+
+
     gaugeData = [
         {
             value: 1,
@@ -244,8 +246,8 @@ export class ChartComponent implements OnInit {
         radialChart.dx = 5;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
-        radialChart.innerRadius = window.am4core.percent(28);
-        radialChart.radius = window.am4core.percent(90);
+        radialChart.innerRadius = window.am4core.percent(26);
+        radialChart.radius = window.am4core.percent(83);
         radialChart.responsive.enabled = true;
 
         // Category Axis
@@ -297,11 +299,11 @@ export class ChartComponent implements OnInit {
               <td style="font-size:8px">{qualityEnabler}</td>
             </tr>
             <tr>
-              <th align="left" style="font-size:8px">Strategy</th>
+              <th align="left" style="font-size:8px">Pillar</th>
               <td style="font-size:8px">{topStrategy}</td>
             </tr>
               <th align="left" style="font-size:8px">Accelerator</th>
-              <td style="font-size:8px">{topStrategy}</td>
+              <td style="font-size:8px">{janssenOneAccelerator}</td>
             </tr>
               <th align="left" style="font-size:8px">Investment Type</th>
               <td style="font-size:8px">{investmentType}</td>

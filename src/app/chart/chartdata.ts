@@ -69,6 +69,7 @@ export const rawData = [
         "strategies": [
             "Skillset",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics",
             "Intelligent Automation"
@@ -99,6 +100,7 @@ export const rawData = [
             "Skillset",
             "Culture of innovation",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Patient & Consumer Q",
             "Data & Analytics"
@@ -128,6 +130,7 @@ export const rawData = [
         "strategies": [
             "Culture of innovation",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Patient & Consumer Q",
             "Data & Analytics"
@@ -182,6 +185,7 @@ export const rawData = [
         "strategies": [
             "Culture of innovation",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Patient & Consumer Q",
             "Data & Analytics",
@@ -287,6 +291,7 @@ export const rawData = [
         "totalProjectValue": 0,
         "strategies": [
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Patient & Consumer Q",
             "Data & Analytics"
@@ -390,6 +395,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 0,
         "strategies": [
+            "Operational Efficiencies",
             "Patient & Consumer Q"
         ],
         "endDate": "10/31/23",
@@ -568,6 +574,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "APQR",
         "totalProjectValue": 333000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -697,6 +704,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 148000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support"
         ],
         "endDate": "1/31/24",
@@ -825,6 +833,7 @@ export const rawData = [
         "strategies": [
             "Culture of innovation",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Patient & Consumer Q",
             "Data & Analytics"
@@ -879,6 +888,7 @@ export const rawData = [
         "strategies": [
             "Culture of innovation",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Patient & Consumer Q",
             "Data & Analytics"
@@ -906,6 +916,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 189000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -983,6 +994,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 170000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -1060,6 +1072,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 77000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -1086,6 +1099,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 5274210,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -1114,6 +1128,7 @@ export const rawData = [
         "strategies": [
             "Culture of innovation",
             "Partner Ecosystem",
+            "Operational Efficiencies",
             "Internal Quality Support"
         ],
         "endDate": "9/15/24",
@@ -1139,6 +1154,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TruTools",
         "totalProjectValue": 0,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -1190,6 +1206,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 38000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -1216,6 +1233,7 @@ export const rawData = [
         "involvedTechnologyOrSystem": "TBD",
         "totalProjectValue": 19000,
         "strategies": [
+            "Operational Efficiencies",
             "Internal Quality Support",
             "Data & Analytics"
         ],
@@ -1344,7 +1362,7 @@ const getInitiatives = (rawData: any) => {
 const lookupTopStrategy = (strategy: any) => {
     let topStrategy = "n/a";
     strategiesMap.forEach((obj: any) => {
-        if (obj.children.indexOf(strategy) > 0) {
+        if (obj.children.indexOf(strategy) >= 0) {
             topStrategy = obj.name;
         }
     });
@@ -1356,6 +1374,7 @@ const getInitiativesSeries = (rawData: any) => {
     rawData.forEach((entry: any, initIndex: number) => {
         entry.strategies.forEach((strategy: any, index: any) => {
             let seriesObj: any = {};
+            seriesObj.id = entry.initIndex;
             seriesObj.initiative = entry.initiative;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.strategy = strategy;
@@ -1371,9 +1390,6 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.investmentType = entry.investmentType;
             seriesObj.projectManager = entry.projectManager;
             seriesObj.projectSponsor = entry.projectSponsor;
-            seriesObj.colorSettings = getInitiativeColor(entry.initiative);
-
-            //Placeholders
             seriesObj.projectName = entry.projectName;
             seriesObj.businessObjectivesRelational = entry.businessObjectivesOrExpectations,
                 seriesObj.function = [];
@@ -1386,12 +1402,7 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.endDate = entry.endDate;
             seriesObj.carStatus = entry.carStatus;
             seriesObj.involvedTechnologyOrSystem = entry.involvedTechnologyOrSystem;
-            seriesObj.primaryJanssenOneAccesslerator = [
-                "Complete For Patients"
-            ];
-            seriesObj.affectedQCDimensions = [
-                "Next Generation Quality"
-            ];
+            seriesObj.janssenOneAccelerator = entry.janssenOneAccelerator;
             seriesObj.bamAllignment = entry.bamAllignment;
             seriesObj.rpaValueScore = entry.rpaValueScore;
             seriesObj.resourceRequired = entry.resourceRequired;
@@ -1399,7 +1410,7 @@ const getInitiativesSeries = (rawData: any) => {
         });
 
     });
-    return chartDataSeries.splice(0, 100);
+    return chartDataSeries;
 };
 
 
