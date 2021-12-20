@@ -42,7 +42,7 @@ const strategiesMap = [
         name: "Quality as a differentiator",
         children: [
             "Internal Quality Support",
-            "Patient & Consumer QMS"
+            "Patient & Consumer Q"
         ]
     },
     {
@@ -1297,23 +1297,12 @@ const getCategories = (rawData: any) => {
 };
 
 const getAccelarators = (rawData: any) => {
-
     return ["Select for Success",
         "Design for Access",
         "Drive the Debate",
         "Analyze and Disrupt",
         "Compete for Patients",
         "Across Accelerators"];
-
-    // return [
-    //     ...new Set(
-    //         rawData.reduce((acc: any, i: any) => {
-    //             const qE = i.janssenOneAccelerator;
-    //             acc.push(qE);
-    //             return acc;
-    //         }, [])
-    //     ),
-    // ];
 };
 
 const getOwners = (rawData: any) => {
@@ -1335,12 +1324,7 @@ const getOwners = (rawData: any) => {
 
 const getStratergies = (rawData: any) => {
     let result: any = [];
-    let strategies: any = [];
-    rawData.map((i: any) => {
-        strategies = strategies.concat(i.strategies);
-    });
-    strategies = [...new Set(strategies)];
-    strategies.forEach(element => {
+    allStrategies.forEach(element => {
         let initiatives = rawData.filter(item => item.strategies.includes(element));
         let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + obj.totalProjectCost ? obj.totalProjectCost : 0; }, 0);
         result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": totalProjectsCost });

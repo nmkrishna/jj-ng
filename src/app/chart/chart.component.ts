@@ -209,7 +209,7 @@ export class ChartComponent implements OnInit {
         strategySeries.slices.template.states.getKey("hover").properties.scale = 1;
         strategySeries.slices.template.states.getKey("active").properties.scale = 1.02;
         strategySeries.radius = window.am4core.percent(22);
-        strategySeries.innerRadius = window.am4core.percent(18);
+        strategySeries.innerRadius = window.am4core.percent(17);
         strategySeries.colors.list = stratergy_colors;
         // Labels
         // Disabling labels and ticks on inner circle
@@ -220,7 +220,7 @@ export class ChartComponent implements OnInit {
         let strategyLabelsTemplate = strategySeries.labels.template;
         strategyLabelsTemplate.text = '{category}';
         strategyLabelsTemplate.bent = true;
-        strategyLabelsTemplate.radius = window.am4core.percent(30);
+        strategyLabelsTemplate.radius = window.am4core.percent(25);
         strategyLabelsTemplate.inside = true;
         strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.fontSize = 6;
