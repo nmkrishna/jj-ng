@@ -1392,7 +1392,8 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.projectSponsor = entry.projectSponsor;
             seriesObj.projectName = entry.projectName;
             seriesObj.businessObjectivesRelational = entry.businessObjectivesOrExpectations,
-                seriesObj.function = [];
+            //seriesObj.function = [];
+            seriesObj.functionalOwnership = entry.functionalOwnership;
             seriesObj.projectId = entry.projectId;
             seriesObj.totalProjectValue = entry.totalProjectValue;
             seriesObj.totalProjectCost = entry.totalProjectCost;

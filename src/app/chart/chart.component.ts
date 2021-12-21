@@ -95,6 +95,34 @@ export class ChartComponent implements OnInit {
 
     constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
+
+    screenshot() {
+        Array.from(document
+            .getElementsByClassName("amcharts-Scrollbar-group"))
+            .forEach((element) => { console.log(element);
+                element.setAttribute("style", "display: none");
+            });
+        Array.from(document
+            .getElementsByClassName("amcharts-Button-group"))
+            .forEach((element) => { console.log(element);
+                element.setAttribute("style", "display: none");
+            });
+        window
+            .html2canvas(document.getElementById("chartdiv"), {
+                height: window.outerHeight + 600,
+                windowHeight: window.outerHeight + 700,
+            })
+            .then((canvas) => {
+                //document.body.appendChild(canvas);
+                this.saveAs(canvas.toDataURL(), `jjchart${Date.now()}.png`);
+                Array.from(document
+                    .getElementsByClassName("amcharts-Scrollbar-group"))
+                    .forEach((element) => {
+                        element.setAttribute("style", "display: block");
+                    });
+            });
+    }
+
     renderAcceleratorChart(chart) {
         // Add and configure Series
         var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
@@ -102,6 +130,7 @@ export class ChartComponent implements OnInit {
         acceleratorsSeries.innerRadius = window.am4core.percent(1);
         acceleratorsSeries.startAngle = 360;
         acceleratorsSeries.endAngle = 0;
+        acceleratorsSeries.dy = 50;
 
         acceleratorsSeries.dataFields.value = "value";
         acceleratorsSeries.dataFields.category = "name";
@@ -122,16 +151,17 @@ export class ChartComponent implements OnInit {
         acceleratorsLabelTemplate.fill = new window.am4core.color("#FFFFFF");
         acceleratorsLabelTemplate.padding(0, 0, 0, 0);
         acceleratorsLabelTemplate.wrap = true;
-        acceleratorsLabelTemplate.fontSize = 6;
+        acceleratorsLabelTemplate.fontSize = 5;
         acceleratorsLabelTemplate.maxWidth = 80;
         acceleratorsLabelTemplate.verticalCenter = 'center';
         acceleratorsLabelTemplate.horizontalCenter = 'left';
         acceleratorsLabelTemplate.adapter.add("textOutput", function (text) {
-            return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
+            return window.am4core.utils.truncateWithEllipsis(text, 15, "...");
         });
         // Disable sliding out of slices
         acceleratorsSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
         acceleratorsSeries.slices.template.states.getKey("hover").properties.scale = 1;
+        acceleratorsSeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
 
         //Tooltip
         acceleratorsSeries.slices.template.tooltipText = "{category}";
@@ -160,13 +190,14 @@ export class ChartComponent implements OnInit {
 
         topStrategiesSeries.colors.list = topStratergy_colors
 
-        topStrategiesSeries.radius = window.am4core.percent(14);
+        topStrategiesSeries.radius = window.am4core.percent(15);
         topStrategiesSeries.verticalCenter = "middle";
         topStrategiesSeries.alignLabels = false;
-        topStrategiesSeries.innerRadius = window.am4core.percent(9);
+        topStrategiesSeries.innerRadius = window.am4core.percent(10);
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
+        topStrategiesSeries.dy = 50;
         topStrategiesSeries.slices.template.interactionsEnabled = true;
 
         // Labels
@@ -178,7 +209,7 @@ export class ChartComponent implements OnInit {
         topStrategyLabelsTemplate.bent = true;
 
 
-        topStrategyLabelsTemplate.radius = window.am4core.percent(10);
+        topStrategyLabelsTemplate.radius = window.am4core.percent(-15);
         topStrategyLabelsTemplate.inside = false;
         topStrategyLabelsTemplate.padding(0, 0, 0, 0);
         topStrategyLabelsTemplate.wrap = true;
@@ -188,11 +219,12 @@ export class ChartComponent implements OnInit {
         topStrategyLabelsTemplate.maxWidth = 70;
         topStrategyLabelsTemplate.strictMinMax = true;
         topStrategyLabelsTemplate.adapter.add("textOutput", function (text) {
-            return window.am4core.utils.truncateWithEllipsis(text, 25, "...");
+            return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
         });
 
         topStrategiesSeries.slices.template.states.getKey("hover").properties.shiftRadius = 0;
         topStrategiesSeries.slices.template.states.getKey("hover").properties.scale = 1;
+        topStrategiesSeries.slices.template.states.getKey("active").properties.shiftRadius = 0;
         topStrategiesSeries.slices.template.tooltipText = "{category} ";
 
         //Tooltip
@@ -213,6 +245,7 @@ export class ChartComponent implements OnInit {
         strategySeries.radius = window.am4core.percent(22);
         strategySeries.innerRadius = window.am4core.percent(17);
         strategySeries.colors.list = stratergy_colors;
+        strategySeries.dy = 50;
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
@@ -222,7 +255,7 @@ export class ChartComponent implements OnInit {
         let strategyLabelsTemplate = strategySeries.labels.template;
         strategyLabelsTemplate.text = '{category}';
         strategyLabelsTemplate.bent = true;
-        strategyLabelsTemplate.radius = window.am4core.percent(25);
+        strategyLabelsTemplate.radius = window.am4core.percent(10);
         strategyLabelsTemplate.inside = true;
         strategyLabelsTemplate.padding(0, 0, 0, 0);
         strategyLabelsTemplate.fontSize = 6;
@@ -230,7 +263,7 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.maxWidth = 100;
         strategyLabelsTemplate.fill = new window.am4core.color("#000000");
         strategyLabelsTemplate.adapter.add("textOutput", function (text) {
-            return window.am4core.utils.truncateWithEllipsis(text, 20, "...");
+            return window.am4core.utils.truncateWithEllipsis(text, 15, "...");
         });
 
 
@@ -242,8 +275,8 @@ export class ChartComponent implements OnInit {
     renderRadialChart(radialChart) { // configuring radial chart
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
-        radialChart.dy = -250;
-        radialChart.dx = 5;
+        radialChart.dy = -200;
+        radialChart.dx = 0;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
         radialChart.innerRadius = window.am4core.percent(26);
@@ -332,10 +365,10 @@ export class ChartComponent implements OnInit {
         radialChart.legend.maxWidth = 100;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        //chart.legend.x = 150;
-        radialChart.legend.y = 100;
+        radialChart.legend.x = 0;
+        radialChart.legend.y = 80;
         radialChart.legend.itemContainers.template.paddingTop = 150;
-        radialChart.legend.fontSize = 10;
+        radialChart.legend.fontSize = 8;
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
         radialChart.legend.itemContainers.template.focusable = true;
@@ -440,7 +473,8 @@ export class ChartComponent implements OnInit {
         janssonLabel.text = "Janssen One";
         janssonLabel.fontSize = 7;
         janssonLabel.minWidth = "5px";
-        janssonLabel.y = 100;
+        janssonLabel.y = 155;
+        janssonLabel.dx = -6;
         janssonLabel.align = "center"
         janssonLabel.zIndex = "10"
 
@@ -483,6 +517,20 @@ export class ChartComponent implements OnInit {
             });
         });
 
+        // Export Button
+        var ExportButton = chartcontainer.createChild(window.am4core.Button);
+        ExportButton.label.text = 'Export';
+        ExportButton.padding(5, 5, 5, 5);
+        ExportButton.width = 50;
+        ExportButton.align = "right";
+        ExportButton.marginRight = 100;
+        ExportButton.fontSize = 12;
+        ExportButton.y = -3;
+        ExportButton.zIndex = "12";
+        ExportButton.events.on("hit", () => {
+            console.log("jiiii");
+            this.screenshot();
+        });
 
         chart.toFront();
 
