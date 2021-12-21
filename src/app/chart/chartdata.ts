@@ -1470,7 +1470,7 @@ const accelerators = [...new Set(rawData.map((i) => i.janssenOneAccelerator))];
 
 
 function getInitiativeColor(init: string) {
-    let entry = rawData.find(element => element.initiative === init) || { functionalOwnership: "n/a" };
+    let entry = rawData.find((element, index) => element.initiative === init) || { functionalOwnership: "n/a" };
     let match = owners.find(t => t.name === entry.functionalOwnership);
     if (match) {
         return match.fill;
