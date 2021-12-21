@@ -310,6 +310,7 @@ export class ChartComponent implements OnInit {
             initiativesSeries.dataFields.openValueX = "start" + i;
             initiativesSeries.clustered = false;
             initiativesSeries.fill = getInitiativeColor(this.initiatives[i]);
+            initiativesSeries.stroke = getInitiativeColor(this.initiatives[i]);
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
             <hr/>
