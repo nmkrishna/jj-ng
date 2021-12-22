@@ -230,6 +230,7 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 15, "...");
         });
+
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, TotalProjectsCost ${totalProjectsCost} ";
         strategySeries.data = strategies;
@@ -319,9 +320,6 @@ export class ChartComponent implements OnInit {
             <th align="left" style="font-size:8px">BAM Alignmnent</th>
               <td style="font-size:8px">{bamAllignment}</td>
             </tr>
-            <th align="left" style="font-size:8px">Color</th>
-              <td style="font-size:8px">{color}</td>
-            </tr>
             </body>`;
             initiativesSeries.zIndex = -1;
             initiativesSeries.columns.template.events.on("hit", this.onClickChartItem, this);
@@ -342,10 +340,12 @@ export class ChartComponent implements OnInit {
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
         radialChart.legend.itemContainers.template.focusable = true;
+
         radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
             let selected = ev.target.dataItem.properties.color;
             console.log("Clicked on", ownerValue + ":" + selected);
+            console.log("Default ", radialChart.legend.defaultState);
             radialChart.legend.markers.template.children.getIndex(0);
             radialChart.legend.children.values.forEach(element => {
                 console.log(element.isActive);
@@ -406,12 +406,13 @@ export class ChartComponent implements OnInit {
 
 
         let as = radialChart.legend.labels.template.states.getKey("active");
-        // as.properties.fillOpacity = 1;
+        as.properties.textDecoration = "strike-through";
 
         radialChart.legend.markers.template.children.getIndex(0);
         radialChart.legend.markers.template.fillOpacity = 1;
         radialChart.legend.data = owners;
         radialChart.data = chartSeries;
+
     }
 
     screenshot() {
@@ -534,6 +535,7 @@ export class ChartComponent implements OnInit {
                     item.isActive = true;
                 });
                 radialChart.legend.markers.each((item) => {
+                    console.log("marker" + item);
                     item.isActive = true;
 
                 });
@@ -582,6 +584,8 @@ export class ChartComponent implements OnInit {
                 }
                 //console.log("final filtered size:" + finalData.length);
                 radialChart.data = finalData;
+                radialChart.yAxes.values[0].data = finalData;
+                radialChart.legend.data = owners;
             });
 
             // Zoom Controls
