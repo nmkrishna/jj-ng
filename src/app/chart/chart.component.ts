@@ -101,6 +101,12 @@ export class ChartComponent implements OnInit {
         acceleratorsSeries.slices.template.strokeWidth = 1;
         acceleratorsSeries.slices.template.strokeOpacity = 1;
 
+        var janssonLabel = acceleratorsSeries.createChild(window.am4core.Label);
+        janssonLabel.text = "Janssen One";
+        janssonLabel.fontSize = 7;
+        janssonLabel.horizontalCenter = "middle";
+        janssonLabel.verticalCenter = "middle";
+
         // Labels
         // Disabling labels and ticks on inner circle
         // pieSeries.labels.template.disabled = true;
@@ -235,10 +241,7 @@ export class ChartComponent implements OnInit {
         strategySeries.data = strategies;
     }
 
-    renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart
-        console.log(initiatives);
-        console.log(data);
-        console.log(chartSeries);
+    renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart   
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
         radialChart.dy = -200;
@@ -331,13 +334,15 @@ export class ChartComponent implements OnInit {
         radialChart.cursor.lineX.disabled = true;
         radialChart.legend = new window.am4charts.Legend();
         radialChart.legend.useDefaultMarker = true;
-        radialChart.legend.position = 'absolute';
-        radialChart.legend.maxWidth = 100;
+        radialChart.legend.position = 'bottom';
+        radialChart.legend.maxHeight = 0;
+        radialChart.legend.marginTop = 120;
+        // radialChart.legend.maxWidth = 50;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
         radialChart.legend.x = 0;
         radialChart.legend.y = 80;
-        radialChart.legend.itemContainers.template.paddingTop = 150;
+        radialChart.legend.itemContainers.template.paddingTop = 40;
         radialChart.legend.fontSize = 8;
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
@@ -490,15 +495,6 @@ export class ChartComponent implements OnInit {
             chart.dy = -250;
             // Let's cut a hole in our Pie chart
             chart.innerRadius = window.am4core.percent(3);
-
-            var janssonLabel = chartcontainer.createChild(window.am4core.Label);
-            janssonLabel.text = "Janssen One";
-            janssonLabel.fontSize = 7;
-            janssonLabel.minWidth = "0.3125em";
-            janssonLabel.y = 175;
-            janssonLabel.dx = -6;
-            janssonLabel.align = "center"
-            janssonLabel.zIndex = "10"
 
             //accelerator chart
             this.renderAcceleratorChart(chart, accelerators);
