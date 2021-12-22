@@ -111,8 +111,8 @@ const getStratergies = (rawData: any) => {
 
 const getInitiatives = (rawData: any) => {
     let result: Array<string> = [];
-    rawData.map((i: any) => {
-        result = result.concat(i.initiative);
+    rawData.forEach((element, index) => {
+        result = result.concat((index + 1) + "." + element.initiative);
     });
     return [...new Set(result)];
 };
@@ -166,7 +166,7 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.bamAllignment = entry.bamAllignment;
             seriesObj.rpaValueScore = entry.rpaValueScore;
             seriesObj.resourceRequired = entry.resourceRequired;
-            seriesObj.color = getInitiativeColor(entry.initiative, rawData);
+            // seriesObj.color = getInitiativeColor(entry.initiative, chartSeries);
             chartDataSeries.push(seriesObj);
         });
 
@@ -176,8 +176,8 @@ const getInitiativesSeries = (rawData: any) => {
 
 let chartDataSeries: any = [];
 
-function getInitiativeColor(init: string, rawData) {
-    let entry = rawData.find((element, index) => element.initiative === init) || { functionalOwnership: "n/a" };
+function getInitiativeColor(init: string, chartSeries) {
+    let entry = chartSeries.find((element, index) => element.initiative === init) || { functionalOwnership: "n/a" };
     let match = owners.find(t => t.name === entry.functionalOwnership);
     console.log("init:" + init + "matched?" + match.name + "color :" + match.fill);
 

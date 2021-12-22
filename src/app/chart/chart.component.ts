@@ -235,7 +235,10 @@ export class ChartComponent implements OnInit {
         strategySeries.data = strategies;
     }
 
-    renderRadialChart(radialChart, initiatives, strategies, owners, rawData, chartSeries) { // configuring radial chart
+    renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart
+        console.log(initiatives);
+        console.log(data);
+        console.log(chartSeries);
         radialChart.startAngle = 180;
         radialChart.endAngle = 0;
         radialChart.dy = -200;
@@ -271,7 +274,7 @@ export class ChartComponent implements OnInit {
             initiativesSeries.dataFields.valueX = "end" + i;
             initiativesSeries.dataFields.openValueX = "start" + i;
             initiativesSeries.clustered = false;
-            let initiativeColor = getInitiativeColor(initiatives[i], rawData);
+            let initiativeColor = getInitiativeColor(initiatives[i], chartSeries);
             initiativesSeries.fill = initiativeColor;
             initiativesSeries.stroke = initiativeColor;
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
@@ -535,6 +538,8 @@ export class ChartComponent implements OnInit {
 
                 });
             });
+
+
             // Export Button
             var ExportButton = chartcontainer.createChild(window.am4core.Button);
             ExportButton.label.text = 'Export';
