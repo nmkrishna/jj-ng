@@ -152,9 +152,8 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.projectManager = entry.projectManager;
             seriesObj.projectSponsor = entry.projectSponsor;
             seriesObj.projectName = entry.projectName;
-            seriesObj.businessObjectivesRelational = entry.businessObjectivesOrExpectations,
-                //seriesObj.function = [];
-                seriesObj.functionalOwnership = entry.functionalOwnership;
+            seriesObj.businessObjectivesRelational = entry.businessObjectivesOrExpectations;
+            seriesObj.functionalOwnership = entry.functionalOwnership;
             seriesObj.projectId = entry.projectId;
             seriesObj.totalProjectValue = entry.totalProjectValue;
             seriesObj.totalProjectCost = entry.totalProjectCost;
@@ -169,8 +168,6 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.rpaValueScore = entry.rpaValueScore;
             seriesObj.resourceRequired = entry.resourceRequired;
             seriesObj.roi = entry.roi;
-            seriesObj.affectedQCDimensions = entry.affectedQCDimensions;
-            // seriesObj.color = getInitiativeColor(entry.initiative, chartSeries);
             chartDataSeries.push(seriesObj);
         });
 

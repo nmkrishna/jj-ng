@@ -338,7 +338,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.position = 'absolute';
         // radialChart.legend.maxWidth = 100;
         radialChart.legend.maxHeight = 30;
-        radialChart.legend.scrollable = true;
+        // radialChart.legend.scrollable = true;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
         //chart.legend.x = 150;
@@ -585,6 +585,10 @@ export class ChartComponent implements OnInit {
                 radialChart.data = finalData;
                 radialChart.yAxes.values[0].data = finalData;
                 radialChart.legend.data = owners;
+                radialChart.legend.reinit();
+                radialChart.legend.children.each((item) => {
+                    item.isActive = false;
+                });
             });
 
             // Zoom Controls
