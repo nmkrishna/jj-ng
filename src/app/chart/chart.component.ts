@@ -249,7 +249,7 @@ export class ChartComponent implements OnInit {
         radialChart.dx = 0;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
-        radialChart.innerRadius = window.am4core.percent(28);
+        radialChart.innerRadius = window.am4core.percent(29);
         radialChart.radius = window.am4core.percent(75);
         radialChart.responsive.enabled = true;
 
@@ -335,28 +335,23 @@ export class ChartComponent implements OnInit {
         radialChart.cursor.lineX.disabled = true;
         radialChart.legend = new window.am4charts.Legend();
         radialChart.legend.useDefaultMarker = true;
-        radialChart.legend.position = 'bottom';
-        radialChart.legend.maxHeight = 0;
-        radialChart.legend.marginTop = 120;
-        radialChart.legend.minWidth = 50;
+        radialChart.legend.position = 'absolute';
+        // radialChart.legend.maxWidth = 100;
+        radialChart.legend.maxHeight = 100;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        radialChart.legend.x = 0;
-        radialChart.legend.y = 80;
-        radialChart.legend.itemContainers.template.paddingTop = 40;
-        radialChart.legend.fontSize = 8;
+        //chart.legend.x = 150;
+        radialChart.legend.y = 230;
+        // radialChart.legend.itemContainers.template.paddingTop = 250;
+        radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
         radialChart.legend.itemContainers.template.focusable = true;
+
         radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
             let selected = ev.target.dataItem.properties.color;
             console.log("Clicked on", ownerValue + ":" + selected);
-            radialChart.legend.markers.template.children.getIndex(0);
-            radialChart.legend.children.values.forEach(element => {
-                console.log(element.isActive);
-                // element.isActive = false;
-            });
             let finalData: any = [];
             if (!selected) {
                 let filteredData = chartSeries.filter(function (item: any) {
@@ -400,22 +395,31 @@ export class ChartComponent implements OnInit {
             //console.log("filtered chart.data", radialChart.data.length);
         });
 
-        let marker = radialChart.legend.markers.template.children.getIndex(0);
-        marker.cornerRadius(12, 12, 12, 12);
-        marker.strokeWidth = 0;
-        marker.strokeOpacity = 1;
-        radialChart.legend.labels.template.textDecoration = "none";
-        radialChart.legend.labels.template.fillOpacity = 0.5;
+        //
 
-        radialChart.legend.valueLabels.template.textDecoration = "none";
-        radialChart.legend.valueLabels.template.fillOpacity = 0.5;
+        // const marker = radialChart.legend.markers.template;
+        // const markerColumn = marker.children.getIndex(0);
+        // const markerColumnActiveState = markerColumn.states.getKey("active");
+        // markerColumnActiveState.adapter.add("fill", function () {
+        //     return window.am4core.color("green");
+        // });
+
+        // let marker = radialChart.legend.markers.template.children.getIndex(0);
+        // marker.cornerRadius(12, 12, 12, 12);
+        // marker.strokeWidth = 0;
+        // marker.strokeOpacity = 1;
+        // radialChart.legend.labels.template.textDecoration = "none";
+        // radialChart.legend.labels.template.fillOpacity = 0.5;
+
+        // radialChart.legend.valueLabels.template.textDecoration = "none";
+        // radialChart.legend.valueLabels.template.fillOpacity = 0.5;
 
 
-        let as = radialChart.legend.labels.template.states.getKey("active");
+        // let as = radialChart.legend.labels.template.states.getKey("active");
         // as.properties.fillOpacity = 1;
 
-        radialChart.legend.markers.template.children.getIndex(0);
-        radialChart.legend.markers.template.fillOpacity = 1;
+        // radialChart.legend.markers.template.children.getIndex(0);
+        // radialChart.legend.markers.template.fillOpacity = 1;
         radialChart.legend.data = owners;
         radialChart.data = chartSeries;
     }
@@ -424,13 +428,13 @@ export class ChartComponent implements OnInit {
         Array.from(document
             .getElementsByClassName("amcharts-Scrollbar-group"))
             .forEach((element) => {
-                console.log(element);
+                // console.log(element);
                 element.setAttribute("style", "display: none");
             });
         Array.from(document
             .getElementsByClassName("amcharts-Button-group"))
             .forEach((element) => {
-                console.log(element);
+                // console.log(element);
                 element.setAttribute("style", "display: none");
             });
         window
@@ -524,11 +528,12 @@ export class ChartComponent implements OnInit {
             button.events.on("hit", () => {
                 radialChart.data = chartSeries;
                 radialChart.yAxes.values[0].data = chartSeries;
-                radialChart.legend.data = owners;
+                // radialChart.legend.data = owners;
                 strategySeries.slices.each((item) => {
                     item.isActive = false;
                     item.fillOpacity = 0.5;
                 })
+                chart.legend.reinit();
                 radialChart.legend.children.each((item) => {
                     item.isActive = false;
                 });
@@ -546,7 +551,7 @@ export class ChartComponent implements OnInit {
             ExportButton.y = -3;
             ExportButton.zIndex = "12";
             ExportButton.events.on("hit", () => {
-                console.log("jiiii");
+                // console.log("jiiii");
                 this.screenshot();
             });
 

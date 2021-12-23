@@ -152,7 +152,7 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.projectName = entry.projectName;
             seriesObj.businessObjectivesRelational = entry.businessObjectivesOrExpectations,
                 //seriesObj.function = [];
-            seriesObj.functionalOwnership = entry.functionalOwnership;
+                seriesObj.functionalOwnership = entry.functionalOwnership;
             seriesObj.projectId = entry.projectId;
             seriesObj.totalProjectValue = entry.totalProjectValue;
             seriesObj.totalProjectCost = entry.totalProjectCost;
@@ -181,7 +181,7 @@ let chartDataSeries: any = [];
 function getInitiativeColor(init: string, chartSeries) {
     let entry = chartSeries.find((element, index) => element.initiative === init) || { functionalOwnership: "n/a" };
     let match = owners.find(t => t.name === entry.functionalOwnership);
-    console.log("init:" + init + "matched?" + match.name + "color :" + match.fill);
+    // console.log("init:" + init + "matched?" + match.name + "color :" + match.fill);
 
     if (match) {
         return match.fill;
