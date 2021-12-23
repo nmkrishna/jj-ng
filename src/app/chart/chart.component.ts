@@ -473,6 +473,14 @@ export class ChartComponent implements OnInit {
         }
     }
 
+    amountFormat(val) {
+        return Math.abs(Number(val)) >= 1.0e+9
+        ? (Math.abs(Number(val)) / 1.0e+9).toFixed(2) + "B"
+        : Math.abs(Number(val)) >= 1.0e+6
+        ? (Math.abs(Number(val)) / 1.0e+6).toFixed(2) + "M"
+        : Math.abs(Number(val));
+    }
+
 
     ngOnInit(): void {
         // Themes begin
