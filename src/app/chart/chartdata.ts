@@ -61,15 +61,16 @@ let owners: any = [];
 
 
 const ownerColors = [
-    'blue',
-    'red',
-    'purple',
-    'green',
-    'pink',
-    'cyan',
-    'yellow',
-    'orange',
-    'grey'
+    '#3366CC',
+    '#22AA99',
+    '#AAAA11',
+    '#E67300',
+    '#5574A6',
+    '#B82E2E',
+    '#00A9E8',
+    '#FF9900',
+    '#DD4477',
+    "#8B0707"
 ]
 
 const getAccelarators = (rawData: any) => {

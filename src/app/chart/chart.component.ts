@@ -337,7 +337,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.useDefaultMarker = true;
         radialChart.legend.position = 'absolute';
         // radialChart.legend.maxWidth = 100;
-        radialChart.legend.maxHeight = 25;
+        radialChart.legend.maxHeight = 30;
         radialChart.legend.scrollable = true;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
