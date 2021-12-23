@@ -582,6 +582,8 @@ export class ChartComponent implements OnInit {
                 }
                 //console.log("final filtered size:" + finalData.length);
                 radialChart.data = finalData;
+                radialChart.yAxes.values[0].data = finalData;
+                radialChart.legend.data = owners;
             });
 
             // Zoom Controls
