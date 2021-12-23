@@ -140,6 +140,7 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj[`start${initIndex}`] = allStrategies.indexOf(strategy);
             seriesObj[`end${initIndex}`] = allStrategies.indexOf(strategy) + 1;
             seriesObj.topStrategy = lookupTopStrategy(strategy);
+            seriesObj.affectedQCDimensions = seriesObj.topStrategy;
             seriesObj.owner = entry.functionalOwnership;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.investmentType = entry.investmentType;
