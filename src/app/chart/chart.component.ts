@@ -252,7 +252,7 @@ export class ChartComponent implements OnInit {
         radialChart.innerRadius = window.am4core.percent(28);
         radialChart.radius = window.am4core.percent(75);
         radialChart.responsive.enabled = true;
-        
+
         // Category Axis
         var categoryAxis = radialChart.yAxes.push(new window.am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "initiative";
@@ -530,11 +530,7 @@ export class ChartComponent implements OnInit {
                     item.fillOpacity = 0.5;
                 })
                 radialChart.legend.children.each((item) => {
-                    item.isActive = true;
-                });
-                radialChart.legend.markers.each((item) => {
-                    item.isActive = true;
-
+                    item.isActive = false;
                 });
             });
 
