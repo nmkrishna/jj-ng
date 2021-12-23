@@ -1,3 +1,5 @@
+import { formatNumber } from "@angular/common";
+
 const allStrategies = [
     'Skillset',
     'Culture of innovation',
@@ -42,7 +44,7 @@ const strategiesMap = [
         name: "Quality as a differentiator",
         children: [
             "Internal Quality Support",
-            "Patient & Consumer QMS"
+            "Patient & Consumer Q"
         ]
     },
     {
@@ -55,463 +57,34 @@ const strategiesMap = [
     }
 ];
 
-export const rawData = [
-    {
-        janssenOneAccelerator: 'Select for Success',
-        qualityEnabler: 'Upgrade operating model',
-        initiative: 'Quality operating model, process, and quality system (for BCMA CAR-T)',
-        strategies: [
-            'Skillset',
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
+let owners: any = [];
 
-        ],
-        description: 'Define a new fit-for-purpose operating model adjusted to new modalities such as COVID-19, CAR-T (personalized products), cell & gene therapy, radiopharmaceuticals etc. Align operating model to key partners across PQ, Value Chain Management (VCM), DPDS, and Vaccines.',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Huimin Yuan',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Select for Success',
-        qualityEnabler: 'Upgrade operating model',
-        initiative: 'Quality operating model, process, and quality system (for Vaccines)',
-        strategies: [
-            'Skillset',
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-
-        ],
-        description: '',
-        functionalOwnership: 'Janssen PQM,JSCQ,BRQC',
-        projectLead: 'Huimin Yuan',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Select for Success',
-        qualityEnabler: 'Upgrade operating model',
-        initiative: 'Quality operating model upgrade Digital Health',
-        strategies: [
-            'Skillset',
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-            'Data & Analytics',
-
-        ],
-        description: 'With digital health solutions increasing within Janssen in recent years, and with the regulatory environment becoming more complex, we have an opportunity to support our business partners in navigating the digital health landscape with agility to drive quality and compliance in our solutions. The goal of our multi-phase program is to enable business and technology innovation by empowering teams to move with agility in delivering compliant digital health solutions through a simplified and clearly defined framework.',
-        functionalOwnership: 'Janssen PQS',
-        projectLead: 'R. Famiglietti',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Select for Success',
-        qualityEnabler: 'Upgrade operating model',
-        initiative: 'Quality Frame Work, operating model, quality system and phase appropriate GMP supporting DPDS',
-        strategies: [
-            'Operational Efficiencies',
-            'Internal Quality Support'
-        ],
-        description: '',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Brenda Van Assche',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Select for Success',
-        qualityEnabler: 'Upgrade operating model',
-        initiative: 'Support Product Segmentation by driving Fit for purpose quality framework design and implementation (e.g. POLO, Risk management for late stage products, Delist/divest processes, etc.)',
-        strategies: [
-            'Operational Efficiencies',
-            'Internal Quality Support'
-        ],
-        description: '',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Angela Costantino',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Select for Success',
-        qualityEnabler: 'Q&C expertise specific to new modalities',
-        initiative: 'Quality framework and capability for new modalities development (e.g. cell & gene therapy and radiopharmaceuticals) and New Device Techonlogies (e.g. Patch, Pump/OBDS, TARIS) ',
-        strategies: [
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-
-        ],
-        description: '',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Huimin Yuan/Amit Khaolkar/Lisa Forian',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Faster innovation speed and approvals',
-        initiative: 'xSector R&D operating model (Fit for purpose QMS)',
-        strategies: [
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-
-        ],
-        description: 'Global cross-segment (MD, Pharm, Consumer) innovation initiative to combine products and developt across sectors. xSector QMS is needed to further advance.',
-        functionalOwnership: 'Janssen BRQC',
-        projectLead: 'R. Famiglietti',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Faster innovation speed and approvals',
-        initiative: 'Support Best product at launch (BPAL) by driving quality framework to strike the balance of speed, cost, and long term LCM needs',
-        strategies: [
-            'Operational Efficiencies',
-            'Internal Quality Support'
-        ],
-        description: 'Global cross-segment (MD, Pharm, Consumer) innovation initiative to combine products and developt across sectors. xSector QMS is needed to further advance.',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Lisa Forian / Huimin Yuan',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Faster innovation speed and approvals',
-        initiative: 'Lead Pharma Proactive Risk Management to advance pipeline product and effective LCM',
-        strategies: [
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Data & Analytics',
-
-        ],
-        description: 'Global cross-segment (MD, Pharm, Consumer) innovation initiative to combine products and developt across sectors. xSector QMS is needed to further advance.',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Matt Matuszewski',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Contribute with integrated customer insights',
-        initiative: 'Patient consumer quality',
-        strategies: [
-            'Skillset',
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-
-        ],
-        description: "Develop patient centricity mindset to focus all activities on the patient. In this initiative, tools and technologies are linked to serve as an 'inventory'. A playbook is available online on how to get access to the inventory.",
-        functionalOwnership: 'Janssen BQ',
-        projectLead: 'Yuderki Tejada-Flotta',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Contribute with integrated customer insights',
-        initiative: 'Develop insights to enhance Customer Experience and integrate into product development (to replace Voice of the customer)',
-        strategies: [
-            'Skillset',
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-
-        ],
-        description: '',
-        functionalOwnership: 'Janssen BQ',
-        projectLead: 'Renee Nester',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Contribute with integrated customer insights',
-        initiative: 'CXE',
-        strategies: [
-            'Skillset',
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-            'Data & Analytics',
-
-        ],
-        description: '',
-        functionalOwnership: 'Enterprise Q&C',
-        projectLead: 'Art Caruso',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Contribute with integrated customer insights',
-        initiative: 'Combination Product Process Improvements',
-        strategies: [
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-            'Data & Analytics',
-
-        ],
-        description: '',
-        functionalOwnership: 'Janssen PQM',
-        projectLead: 'Amit Khanolkar',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Contribute with integrated customer insights',
-        initiative: 'AcceleRRAte',
-        strategies: [
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-            'Data & Analytics',
-
-        ],
-        description: 'Implement process automation for the Central PV HUB verification processes and an integrated intake and workflow solution for end-to-end management of PSP and RWE activities.  Once fully deployed, the solutions will enable more efficient verification processes and a consistent approach to PSP/RWE activities set up and oversight by providing insights on individual RRA risk and overall compliance.',
-        functionalOwnership: 'Janssen BQ',
-        projectLead: 'Yuderki Tejada-Flotta',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Design for Access',
-        qualityEnabler: 'Contribute with integrated customer insights',
-        initiative: 'Real World Evidence: Complaints Insights / Escalation',
-        strategies: [
-            'Culture of innovation',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Patient & Consumer Q',
-            'Data & Analytics',
-
-        ],
-        description: '',
-        functionalOwnership: 'Janssen BQ',
-        projectLead: 'Kate Gillespie',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Drive the Debate',
-        qualityEnabler: 'Lead and enable proactive dialogue',
-        initiative: 'Ongoing dialogue',
-        strategies: [
-            'Partner Ecosystem'
-        ],
-        description: '',
-        functionalOwnership: 'TBD',
-        projectLead: '',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Drive the Debate',
-        qualityEnabler: 'Lead and enable proactive dialogue',
-        initiative: 'Systematic and holistic orchestration of dialogues with external stakeholders (e.g. industry and regulatory forums)',
-        strategies: [
-            'Partner Ecosystem'
-        ],
-        description: '',
-        functionalOwnership: 'TBD',
-        projectLead: '',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Drive the Debate',
-        qualityEnabler: 'Particpate in flagship collaborations',
-        initiative: 'Design and lead flagship collaboration projects ',
-        strategies: [
-            'Partner Ecosystem'
-        ],
-        description: '',
-        functionalOwnership: 'TBD',
-        projectLead: '',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Drive the Debate',
-        qualityEnabler: 'Particpate in flagship collaborations',
-        initiative: 'Systematic orchestration of new collaboration types tailored to stakeholder groups and purpose',
-        strategies: [
-            'Partner Ecosystem'
-        ],
-        description: '',
-        functionalOwnership: 'TBD',
-        projectLead: '',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Analyze and Disrupt',
-        qualityEnabler: 'Build expertise in analytics use cases',
-        initiative: 'SCAN',
-        strategies: [
-            'Data & Analytics',
-            'Intelligent Automation'
-        ],
-        description: 'Data and Analytics initiative that deals with identifying the right way to use and collect data in order to make quality decisions. Uses cases have been identified in NC reduction, Speed to market increase and a higher reliability. Primary goal is to prevent issues from arising instead of applying corrective actions.',
-        functionalOwnership: 'Janssen SCQ',
-        projectLead: 'Borke Van Belle',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Analyze and Disrupt',
-        qualityEnabler: 'Build expertise in analytics use cases',
-        initiative: 'Technology & Data Savviness in Quality DnA',
-        strategies: [
-            'Skillset',
-            'Culture of innovation'
-        ],
-        description: 'Build internal capability to create and deploy technology and automation solutions, and to evolve from descriptive analytics to advanced analytics',
-        functionalOwnership: 'Janssen SCQ',
-        projectLead: 'Borke Van Belle',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Compete for Patients',
-        qualityEnabler: 'Smart quality assurance processes',
-        initiative: 'Quality Systems Automation',
-        strategies: [
-            'Skillset',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Data & Analytics',
-            'Intelligent Automation',
-
-        ],
-        description: 'Identify, support and promote intelligent automation by developing a framework, coordinating across segments and functions and establishing an organic process to learn and leverage as we increase deployment and adoption across Q&C.',
-        functionalOwnership: 'Enterprise Q&C',
-        projectLead: '',
-        totalProjectCost: 310000,
-        totalProjectValue: 723000,
-
-    },
-    {
-        janssenOneAccelerator: 'Across Accelerators',
-        qualityEnabler: 'Capability building & Change Mgmt',
-        initiative: 'People',
-        strategies: [
-            'Skillset',
-            'Partner Ecosystem',
-            'Operational Efficiencies',
-            'Internal Quality Support',
-            'Data & Analytics',
-            'Intelligent Automation',
-
-        ],
-        description: 'Create a bold and transformed Q&C organization that focuses on the capabilities, development and the culture needed for a prepared and inspired future workforce.',
-        functionalOwnership: 'Enterprise Q&C',
-        projectLead: '',
-
-    }
-];
 
 const ownerColors = [
-    '#4285F4',
-    '#DB4437',
-    '#F4B400',
-    '#0F9D58',
-    '#3700B3',
-    '#018786',
-    '#FF0266',
-    '#4CAF50',
-    '#EF6C00'
+    '#3366CC',
+    '#22AA99',
+    '#AAAA11',
+    '#E67300',
+    '#5574A6',
+    '#B82E2E',
+    '#00A9E8',
+    '#FF9900',
+    '#DD4477',
+    "#8B0707"
 ]
 
-const categories = [
-    ...new Set(
-        rawData.reduce((acc: any, i, e) => {
-            const qE = i.qualityEnabler;
-            acc.push(qE);
-            return acc;
-        }, [])
-    ),
-];
-
-const getCategories = (rawData: any) => {
-    return [
-        ...new Set(
-            rawData.reduce((acc: any, i: any) => {
-                const qE = i.qualityEnabler;
-                acc.push(qE);
-                return acc;
-            }, [])
-        ),
-    ];
-};
-
 const getAccelarators = (rawData: any) => {
-    return [
-        ...new Set(
-            rawData.reduce((acc: any, i: any) => {
-                const qE = i.janssenOneAccelerator;
-                acc.push(qE);
-                return acc;
-            }, [])
-        ),
-    ];
+    return ["Select for Success",
+        "Design for Access",
+        "Drive the Debate",
+        "Analyze and Disrupt",
+        "Compete for Patients",
+        "Across Accelerators"];
 };
 
-const listOwners = (rawData: any) => {
-    return [
+const getOwners = (rawData: any) => {
+    let entries: any = [];
+    entries = [
         ...new Set(
             rawData.reduce((acc: any, i: any) => {
                 const qE = i.functionalOwnership;
@@ -520,45 +93,18 @@ const listOwners = (rawData: any) => {
             }, [])
         ),
     ];
+    entries.forEach((element, index) => {
+        owners.push({ "name": element, "fill": ownerColors[index] })
+    });
+    return owners;
 };
-
-const OWNERS_COLORS = [{
-    "name": "Enterprise Q&C",
-    "fill": "blue"
-}, {
-    "name": "Janssen BRQC",
-    "fill": "red"
-}, {
-    "name": "Janssen PQM",
-    "fill": "green"
-}, {
-    "name": "Janssen PQS",
-    "fill": "purple"
-}, {
-    "name": "Janssen BQ",
-    "fill": "pink"
-}, {
-    "name": "Janssen SCQ",
-    "fill": "cyan"
-}, {
-    "name": "Janssen PQM,JSCQ,BRQC",
-    "fill": "yellow"
-}, {
-    "name": "TBD",
-    "fill": "orange"
-}];
 
 const getStratergies = (rawData: any) => {
     let result: any = [];
-    let strategies: any = [];
-    rawData.map((i: any) => {
-        strategies = strategies.concat(i.strategies);
-    });
-    strategies = [...new Set(strategies)];
-    strategies.forEach(element => {
+    allStrategies.forEach(element => {
         let initiatives = rawData.filter(item => item.strategies.includes(element));
-        let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + obj.totalProjectCost ? obj.totalProjectCost : 0; }, 0);
-        result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": totalProjectsCost });
+        let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + (obj.totalProjectCost ? obj.totalProjectCost : 0) }, 0);
+        result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": totalProjectsCost.toFixed(2) });
 
     });
     return result;
@@ -566,8 +112,8 @@ const getStratergies = (rawData: any) => {
 
 const getInitiatives = (rawData: any) => {
     let result: Array<string> = [];
-    rawData.map((i: any) => {
-        result = result.concat(i.initiative);
+    rawData.forEach((element, index) => {
+        result = result.concat((index + 1) + "." + element.initiative);
     });
     return [...new Set(result)];
 };
@@ -575,7 +121,7 @@ const getInitiatives = (rawData: any) => {
 const lookupTopStrategy = (strategy: any) => {
     let topStrategy = "n/a";
     strategiesMap.forEach((obj: any) => {
-        if (obj.children.indexOf(strategy) > 0) {
+        if (obj.children.indexOf(strategy) >= 0) {
             topStrategy = obj.name;
         }
     });
@@ -587,12 +133,15 @@ const getInitiativesSeries = (rawData: any) => {
     rawData.forEach((entry: any, initIndex: number) => {
         entry.strategies.forEach((strategy: any, index: any) => {
             let seriesObj: any = {};
-            seriesObj.initiative = entry.initiative;
+            var id = initIndex + 1;
+            seriesObj.id = id;
+            seriesObj.initiative = id + "." + entry.initiative;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.strategy = strategy;
             seriesObj[`start${initIndex}`] = allStrategies.indexOf(strategy);
             seriesObj[`end${initIndex}`] = allStrategies.indexOf(strategy) + 1;
             seriesObj.topStrategy = lookupTopStrategy(strategy);
+            seriesObj.affectedQCDimensions = seriesObj.topStrategy;
             seriesObj.owner = entry.functionalOwnership;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.investmentType = entry.investmentType;
@@ -600,106 +149,49 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.description = entry.description;
             seriesObj.potentialRisk = entry.potentialRisk;
             seriesObj.investmentType = entry.investmentType;
-            seriesObj.projectLead = entry.projectLead;
-            seriesObj.colorSettings = getInitiativeColor(entry.initiative);
-
-            //Placeholders
-            seriesObj.projectName = "Integrated Quality";
-            seriesObj.businessObjectivesRelational = "I must explain to you how all this mistaken idea of denouncing pleasure and praising pain was born and I will give you a complete account of the system, and expound the actual teachings of the great explorer of the truth, the master-builder of human happiness.",
-                seriesObj.benfitsAndRationale = "";
-            seriesObj.function = [];
-            seriesObj.projectId = "JSC-0056633";
-            seriesObj.financials = {
-                "capital": "$0",
-                "expense": "$774,000"
-            };
-            seriesObj.plannedStartDate = "01/Jan/22";
-            seriesObj.expireDate = "31/Jan/22";
-            seriesObj.carStatus = [
-                "Not Yet Started",
-                "Draft"
-            ];
-            seriesObj.primaryJanssenOneAccesslerator = [
-                "Complete For Patients"
-            ];
-            seriesObj.affectedQCDimensions = [
-                "Next Generation Quality"
-            ];
-            seriesObj.bamAllignment = [
-                "100% Digital QMS",
-                "80% Automated QC and Product Release"
-            ];
-            seriesObj.rpaValueScore = [
-                "0.2"
-            ];
-            seriesObj.totalProjectCost = 34000;
-            seriesObj.totalProjectValue = 334000;
-            seriesObj.resourceRequired = "2 FTE";
+            seriesObj.projectManager = entry.projectManager;
+            seriesObj.projectSponsor = entry.projectSponsor;
+            seriesObj.projectName = entry.projectName;
+            seriesObj.businessObjectivesRelational = entry.businessObjectivesOrExpectations;
+            seriesObj.functionalOwnership = entry.functionalOwnership;
+            seriesObj.projectId = entry.projectId;
+            seriesObj.totalProjectValue = entry.totalProjectValue;
+            seriesObj.totalProjectCost = entry.totalProjectCost;
+            seriesObj.expense = entry.expense;
+            seriesObj.capital = entry.capital;
+            seriesObj.startDate = entry.startDate;
+            seriesObj.endDate = entry.endDate;
+            seriesObj.carStatus = entry.carStatus;
+            seriesObj.involvedTechnologyOrSystem = entry.involvedTechnologyOrSystem;
+            seriesObj.janssenOneAccelerator = entry.janssenOneAccelerator;
+            seriesObj.bamAllignment = entry.bamAllignment;
+            seriesObj.rpaValueScore = entry.rpaValueScore;
+            seriesObj.resourceRequired = entry.resourceRequired;
+            seriesObj.roi = entry.roi;
             chartDataSeries.push(seriesObj);
         });
 
     });
-    return chartDataSeries.splice(0, 100);
+    return chartDataSeries;
 };
 
-
-const getOwners = (rawData: any, categories: any) => {
-    let owners: any = [];
-    categories.forEach((cat: any) => {
-        let count = 1;
-        rawData.forEach((row: any, index: number) => {
-            if (row.qualityEnabler === cat) {
-                owners.push(row.functionalOwnership);
-                count++;
-            }
-        });
-        count = 1;
-    });
-
-    return [...new Set(owners)];
-};
-
-console.log('qualityEnabler categories', categories);
 let chartDataSeries: any = [];
 
-let series: any = [];
-let owners: any = [];
-categories.forEach((cat) => {
-    let seriesObj: any = { val: [] };
-    let count = 1;
-    seriesObj.category = cat;
-    rawData.forEach((row, index) => {
-        if (row.qualityEnabler === cat) {
-            seriesObj[`value${count}Label`] = row.functionalOwnership;
-            owners.push(row.functionalOwnership);
-            seriesObj[`value${count}`] = 1; //row.functionalOwnership;
-            count++;
-        }
-    });
-    count = 1;
-    series.push(seriesObj);
-});
+function getInitiativeColor(init: string, chartSeries) {
+    let entry = chartSeries.find((element, index) => element.initiative === init) || { functionalOwnership: "n/a" };
+    let match = owners.find(t => t.name === entry.functionalOwnership);
+    // console.log("init:" + init + "matched?" + match.name + "color :" + match.fill);
 
-const categoryData = series;
-owners = [...new Set(owners)];
-const accelerators = [...new Set(rawData.map((i) => i.janssenOneAccelerator))];
-
-
-function getInitiativeColor(init: string) {
-    let entry = rawData.find(element => element.initiative === init) || { functionalOwnership: "n/a" };
-    let match = OWNERS_COLORS.find(t => t.name === entry.functionalOwnership);
     if (match) {
         return match.fill;
     } else {
-        return "blue";
+        return "grey";
     }
+
 }
 
 export {
-    series,
     owners,
-    accelerators,
-    getCategories,
     getAccelarators,
     getStratergies,
     getOwners,
@@ -712,6 +204,5 @@ export {
     primary_accelerators,
     primary_dimensions,
     primary_allignment,
-    primary_valuescore,
-    OWNERS_COLORS
+    primary_valuescore
 };
