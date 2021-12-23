@@ -5,6 +5,7 @@ import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
 import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore } from "./chartdata";
 import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
+import { NgxSpinnerService } from 'ngx-spinner';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -61,7 +62,7 @@ export class ChartComponent implements OnInit {
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
-    constructor(private chartService: ChartService, private modalService: NgbModal) { }
+    constructor(private chartService: ChartService, private modalService: NgbModal, private spinner: NgxSpinnerService) { }
 
 
 
@@ -236,7 +237,6 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 15, "...");
         });
-
         //Tooltip
         strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, TotalProjectsCost ${totalProjectsCost} ";
         strategySeries.data = strategies;
@@ -252,7 +252,7 @@ export class ChartComponent implements OnInit {
         radialChart.innerRadius = window.am4core.percent(28);
         radialChart.radius = window.am4core.percent(75);
         radialChart.responsive.enabled = true;
-
+        
         // Category Axis
         var categoryAxis = radialChart.yAxes.push(new window.am4charts.CategoryAxis());
         categoryAxis.dataFields.category = "initiative";
@@ -323,6 +323,9 @@ export class ChartComponent implements OnInit {
             <th align="left" style="font-size:8px">BAM Alignmnent</th>
               <td style="font-size:8px">{bamAllignment}</td>
             </tr>
+            <th align="left" style="font-size:8px">Color</th>
+              <td style="font-size:8px">{color}</td>
+            </tr>
             </body>`;
             initiativesSeries.zIndex = -1;
             initiativesSeries.columns.template.events.on("hit", this.onClickChartItem, this);
@@ -335,7 +338,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.position = 'bottom';
         radialChart.legend.maxHeight = 0;
         radialChart.legend.marginTop = 120;
-        // radialChart.legend.maxWidth = 50;
+        radialChart.legend.minWidth = 50;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
         radialChart.legend.x = 0;
@@ -345,12 +348,10 @@ export class ChartComponent implements OnInit {
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
         radialChart.legend.itemContainers.template.focusable = true;
-
         radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
             let selected = ev.target.dataItem.properties.color;
             console.log("Clicked on", ownerValue + ":" + selected);
-            console.log("Default ", radialChart.legend.defaultState);
             radialChart.legend.markers.template.children.getIndex(0);
             radialChart.legend.children.values.forEach(element => {
                 console.log(element.isActive);
@@ -411,13 +412,12 @@ export class ChartComponent implements OnInit {
 
 
         let as = radialChart.legend.labels.template.states.getKey("active");
-        as.properties.textDecoration = "strike-through";
+        // as.properties.fillOpacity = 1;
 
         radialChart.legend.markers.template.children.getIndex(0);
         radialChart.legend.markers.template.fillOpacity = 1;
         radialChart.legend.data = owners;
         radialChart.data = chartSeries;
-
     }
 
     screenshot() {
@@ -471,8 +471,10 @@ export class ChartComponent implements OnInit {
 
     ngOnInit(): void {
         // Themes begin
+        this.spinner.show();
         this.chartService.getChartData().then((data) => {
             console.log('chart api successfull', data);
+            this.spinner.hide();
             var accelerators = getAccelarators(data);
             var owners = getOwners(data);
             var strategies = getStratergies(data);
@@ -531,7 +533,6 @@ export class ChartComponent implements OnInit {
                     item.isActive = true;
                 });
                 radialChart.legend.markers.each((item) => {
-                    console.log("marker" + item);
                     item.isActive = true;
 
                 });
@@ -580,8 +581,6 @@ export class ChartComponent implements OnInit {
                 }
                 //console.log("final filtered size:" + finalData.length);
                 radialChart.data = finalData;
-                radialChart.yAxes.values[0].data = finalData;
-                radialChart.legend.data = owners;
             });
 
             // Zoom Controls

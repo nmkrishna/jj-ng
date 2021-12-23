@@ -1,5 +1,6 @@
 <div id="chartdiv"></div>
 
+<ngx-spinner></ngx-spinner>
 <ng-template #dataModal let-modal>
     <!-- Modal Header -->
     <div class="modal-header">
@@ -193,51 +194,29 @@
 
             </div>
         </div>
-        <div class="row row-cols-1 row-cols-md-4">
+        <div class="row row-cols-1 row-cols-md-5">
             <ng-container *ngFor="let obj of objectKeys(modalContent)">
                 <div class="col px-1"
-                    *ngIf="obj === 'janssenOneAccelerator' || obj === 'affectedQCDimensions' || obj === 'bamAllignment' || obj === 'rpaValueScore'">
+                    *ngIf="obj === 'janssenOneAccelerator' || obj === 'affectedQCDimensions' || obj === 'bamAllignment'">
+                    <div class="card card-container primary-cards p-2">
+                        <b class="primary-cards-title">{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} :</b>
+                        <ng-container>                           
+                                <p class="mb-0 primary-cards-list">
+                                    {{modalContent[obj]}}
+                                    <fa-icon *ngIf="modalContent[obj] != undefined"
+                                        [icon]="faCheckSquare"
+                                        class="float-right mt-1"></fa-icon>
+                                </p>                         
+                        </ng-container>
+                    </div>
+                </div>
+                <div class="col px-1" *ngIf="obj === 'rpaValueScore' || obj === 'roi'">
                     <div class="card card-container primary-cards p-2">
                         <b class="primary-cards-title">{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}}</b>
-                        <ng-container *ngIf="obj === 'janssenOneAccelerator'">
-                            <!-- <ng-container *ngFor="let type of modalContent[obj]"> -->
+                        <ng-container>                           
                                 <p class="mb-0 primary-cards-list">
                                     {{modalContent[obj]}}
-                                    <fa-icon
-                                        [icon]="faCheckSquare"
-                                        class="float-right mt-1"></fa-icon>
-                                </p>
-                            <!-- </ng-container> -->
-                        </ng-container>
-                        <ng-container *ngIf="obj === 'affectedQCDimensions'">
-                            <ng-container *ngFor="let type of modalContent[obj]">
-                                <p class="mb-0 primary-cards-list">
-                                    {{type}}
-                                    <fa-icon
-                                        [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
-                                        class="float-right mt-1"></fa-icon>
-                                </p>
-                            </ng-container>
-                        </ng-container>
-                        <ng-container *ngIf="obj === 'bamAllignment'">
-                            <!-- <ng-container *ngFor="let type of modalContent[obj]"> -->
-                                <p class="mb-0 primary-cards-list">
-                                    {{modalContent[obj]}}
-                                    <fa-icon
-                                        [icon]="faCheckSquare"
-                                        class="float-right mt-1"></fa-icon>
-                                </p>
-                            <!-- </ng-container> -->
-                        </ng-container>
-                        <ng-container *ngIf="obj === 'rpaValueScore'">
-                            <!-- <ng-container *ngFor="let type of modalContent[obj]"> -->
-                                <p class="mb-0 primary-cards-list">
-                                    {{modalContent[obj]}}
-                                    <fa-icon
-                                        [icon]="faCheckSquare"
-                                        class="float-right mt-1"></fa-icon>
-                                </p>
-                            <!-- </ng-container> -->
+                                </p>                         
                         </ng-container>
                     </div>
                 </div>
