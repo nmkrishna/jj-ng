@@ -145,7 +145,6 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.owner = entry.functionalOwnership;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.investmentType = entry.investmentType;
-            seriesObj.potentialRisk = entry.potentialRisk;
             seriesObj.description = entry.description;
             seriesObj.potentialRisk = entry.potentialRisk;
             seriesObj.investmentType = entry.investmentType;

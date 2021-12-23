@@ -125,16 +125,16 @@
                                     <div class="col" style="display: flex; justify-content: space-around;">
                                         <!-- <ng-container *ngFor="let category of objectKeys(modalContent[obj])"> -->
                                             <small>
-                                                <b class="pl-2">Capital :
-                                                    ${{amountFormat(modalContent['capital'])}}</b>
+                                                <b class="pl-2">Capital : </b>
+                                                    ${{amountFormat(modalContent['capital'])}}
                                             </small>
                                             <small>
-                                                <b class="pl-2">Expense :
-                                                    ${{amountFormat(modalContent['expense'])}}</b>
+                                                <b class="pl-2">Expense : </b>
+                                                    ${{amountFormat(modalContent['expense'])}}
                                             </small>
                                             <small>
-                                                <b class="pl-2">Total Project Value :
-                                                    ${{amountFormat(modalContent['totalProjectValue'])}}</b>
+                                                <b class="pl-2">Total Project Value : </b>
+                                                    ${{amountFormat(modalContent['totalProjectValue'])}}
                                             </small>
                                         <!-- </ng-container> -->
                                     </div>
@@ -183,7 +183,7 @@
                 </div>
                 <div class="row row-cols-1">
                     <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                        <div class="col" *ngIf="obj === 'potentialRisksOrRoadblocks'">
+                        <div class="col" *ngIf="obj === 'potentialRisk'">
                             <div class="card card-container {{obj}}-card p-2">
                                 <div><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} :</b></div>
                                 <div><small>{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
