@@ -533,7 +533,7 @@ export class ChartComponent implements OnInit {
                     item.isActive = false;
                     item.fillOpacity = 0.5;
                 })
-                chart.legend.reinit();
+                radialChart.legend.reinit();
                 radialChart.legend.children.each((item) => {
                     item.isActive = false;
                 });
