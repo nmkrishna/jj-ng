@@ -53,15 +53,13 @@
                             <div class="card-container px-2 py-1 card">
                                 <div class="row">
                                     <div class="pr-2 col-auto"><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
-                                    <div class="col">
-                                        <!-- <ng-container *ngFor="let owner of modalContent[obj]"> -->
+                                    <div class="col">                                       
                                             <small class="mb-0">
                                                 {{modalContent[obj]}}
                                                 <fa-icon class="ml-2 mr-3"
                                                     [icon]="faCheckSquare">
                                                 </fa-icon>
-                                            </small>
-                                        <!-- </ng-container> -->
+                                            </small>                                        
                                     </div>
                                 </div>
                             </div>
@@ -98,32 +96,24 @@
                             <div class="card-container px-2 py-1 card">
                                 <div class="row">
                                     <div class="pr-2 col-auto"><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
-                                    <div class="col">
-                                        <!-- <ng-container *ngFor="let type of modalContent[obj]"> -->
+                                    <div class="col">                                       
                                             <small class="mb-0"> {{modalContent[obj]}}
                                                 <fa-icon
                                                     [icon]="faCheckSquare"
-                                                    class="ml-2 mr-3"></fa-icon>
-                                                <!-- {{type}}
-                                                <fa-icon
-                                                    [icon]="modalContent[obj] && modalContent[obj].indexOf(type) < 0 ? faMinusSquare : faCheckSquare"
-                                                    class="ml-2 mr-3"></fa-icon> -->
-                                            </small>
-                                        <!-- </ng-container> -->
+                                                    class="ml-2 mr-3"></fa-icon>                                               
+                                            </small>                                        
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </ng-container>
                 </div>
-                <div class="row row-cols-1">
-                    <!-- <ng-container *ngFor="let obj of objectKeys(modalContent)"> -->
+                <div class="row row-cols-1">                   
                         <div class="col">
                             <div class="card-container px-2 py-1 card">
                                 <div class="col">
                                     <div class="pr-2 col-auto"><b>Financials :</b></div>
-                                    <div class="col" style="display: flex; justify-content: space-around;">
-                                        <!-- <ng-container *ngFor="let category of objectKeys(modalContent[obj])"> -->
+                                    <div class="col" style="display: flex; justify-content: space-around;">                                
                                             <small>
                                                 <b class="pl-2">Capital : </b>
                                                     ${{amountFormat(modalContent['capital'])}}
@@ -135,13 +125,11 @@
                                             <small>
                                                 <b class="pl-2">Total Project Value : </b>
                                                     ${{amountFormat(modalContent['totalProjectValue'])}}
-                                            </small>
-                                        <!-- </ng-container> -->
+                                            </small>                                        
                                     </div>
                                 </div>
                             </div>
-                        </div>
-                    <!-- </ng-container> -->
+                        </div>                   
                 </div>
                 <div class="row row-cols-1">
                     <div class="col">
@@ -178,7 +166,6 @@
                                 </div>
                             </div>
                         </div>
-                        <!--     -->
                     </ng-container>
                 </div>
                 <div class="row row-cols-1">
