@@ -226,9 +226,9 @@ export class ChartComponent implements OnInit {
         strategyLabelsTemplate.adapter.add("textOutput", function (text) {
             return window.am4core.utils.truncateWithEllipsis(text, 15, "...");
         });
-        strategyLabelsTemplate.interactionsEnabled = true;        
+        strategyLabelsTemplate.interactionsEnabled = true;
         //Tooltip
-        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, TotalProjectsCost ${totalProjectsCost} ";
+        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, TotalProjectsCost {totalProjectsCost} ";
         strategySeries.data = strategies;
     }
 
@@ -329,7 +329,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.maxHeight = 30;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        radialChart.legend.y = 210;        
+        radialChart.legend.y = 210;
         radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "center";
         radialChart.legend.itemContainers.template.clickable = true;
@@ -435,35 +435,35 @@ export class ChartComponent implements OnInit {
 
     amountFormat(val) {
         return Math.abs(Number(val)) >= 1.0e+9
-        ? (Math.abs(Number(val)) / 1.0e+9).toFixed(2) + "B"
-        : Math.abs(Number(val)) >= 1.0e+6
-        ? (Math.abs(Number(val)) / 1.0e+6).toFixed(2) + "M"
-        : Math.abs(Number(val));
+            ? (Math.abs(Number(val)) / 1.0e+9).toFixed(2) + "B"
+            : Math.abs(Number(val)) >= 1.0e+6
+                ? (Math.abs(Number(val)) / 1.0e+6).toFixed(2) + "M"
+                : Math.abs(Number(val));
     }
 
     renderResetButton(chartcontainer, radialChart, strategySeries, chartSeries) {
         var button = chartcontainer.createChild(window.am4core.Button);
-            button.label.text = "Reset";
-            button.padding(5, 5, 5, 5);
-            button.width = 50;
-            button.align = "right";
-            button.marginRight = 180;
-            button.fontSize = 12;
-            button.y = -3;
-            button.zIndex = "12";
-            button.events.on("hit", () => {
-                radialChart.data = chartSeries;
-                radialChart.yAxes.values[0].data = chartSeries;
-                // radialChart.legend.data = owners;
-                strategySeries.slices.each((item) => {
-                    item.isActive = false;
-                    item.fillOpacity = 0.5;
-                })
-                radialChart.legend.reinit();
-                radialChart.legend.children.each((item) => {
-                    item.isActive = false;
-                });
+        button.label.text = "Reset";
+        button.padding(5, 5, 5, 5);
+        button.width = 50;
+        button.align = "right";
+        button.marginRight = 180;
+        button.fontSize = 12;
+        button.y = -3;
+        button.zIndex = "12";
+        button.events.on("hit", () => {
+            radialChart.data = chartSeries;
+            radialChart.yAxes.values[0].data = chartSeries;
+            // radialChart.legend.data = owners;
+            strategySeries.slices.each((item) => {
+                item.isActive = false;
+                item.fillOpacity = 0.5;
+            })
+            radialChart.legend.reinit();
+            radialChart.legend.children.each((item) => {
+                item.isActive = false;
             });
+        });
     }
 
     renderExportButton(chartcontainer) {
@@ -537,7 +537,7 @@ export class ChartComponent implements OnInit {
             // //events
             strategySeries.interactionsEnabled = true;
             strategySeries.slices.template.events.on("hit", (ev: any) => {
-                let finalData: any = [];                
+                let finalData: any = [];
                 var allOff = true;
                 strategySeries.slices.values.forEach((element: any) => {
                     if (element.isActive) {
@@ -546,7 +546,7 @@ export class ChartComponent implements OnInit {
                             return item.strategy === element.dataItem.dataContext.name;
                         });
                         finalData = finalData.concat(filteredData);
-                        allOff = false;                       
+                        allOff = false;
                     } else {
                         element.fillOpacity = 0.5;
                     }
@@ -554,7 +554,7 @@ export class ChartComponent implements OnInit {
                 });
                 if (allOff) {
                     finalData = chartSeries;
-                }               
+                }
                 radialChart.data = finalData;
                 radialChart.yAxes.values[0].data = finalData;
                 radialChart.legend.data = owners;
@@ -597,7 +597,7 @@ export class ChartComponent implements OnInit {
 
     onClickChartItem(event: any) {
         this.modalService.open(this.dataModal, { size: 'xl' });
-        this.modalContent = event.target.dataItem.dataContext;        
+        this.modalContent = event.target.dataItem.dataContext;
     }
 
 

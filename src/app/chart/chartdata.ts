@@ -101,10 +101,16 @@ const getOwners = (rawData: any) => {
 
 const getStratergies = (rawData: any) => {
     let result: any = [];
+    var nf = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
     allStrategies.forEach(element => {
         let initiatives = rawData.filter(item => item.strategies.includes(element));
         let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + (obj.totalProjectCost ? obj.totalProjectCost : 0) }, 0);
-        result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": totalProjectsCost.toFixed(2) });
+        result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": nf.format(totalProjectsCost) });
 
     });
     return result;
