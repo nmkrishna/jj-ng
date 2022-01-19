@@ -119,7 +119,7 @@ const getStratergies = (rawData: any) => {
 const getInitiatives = (rawData: any) => {
     let result: Array<string> = [];
     rawData.forEach((element, index) => {
-        result = result.concat((index + 1) + "." + element.initiative);
+        result = result.concat(element.initiative);
     });
     return [...new Set(result)];
 };
@@ -141,7 +141,7 @@ const getInitiativesSeries = (rawData: any) => {
             let seriesObj: any = {};
             var id = initIndex + 1;
             seriesObj.id = id;
-            seriesObj.initiative = id + "." + entry.initiative;
+            seriesObj.initiative = entry.initiative;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.strategy = strategy;
             seriesObj[`start${initIndex}`] = allStrategies.indexOf(strategy);

@@ -92,9 +92,9 @@ export class ChartComponent implements OnInit {
         var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
         acceleratorsSeries.radius = window.am4core.percent(8);
         acceleratorsSeries.innerRadius = window.am4core.percent(1);
-        acceleratorsSeries.startAngle = 360;
-        acceleratorsSeries.endAngle = 0;
-        acceleratorsSeries.dy = 50;
+        acceleratorsSeries.startAngle = 0;
+        acceleratorsSeries.endAngle = 360;
+        acceleratorsSeries.dy = 150;
 
         acceleratorsSeries.dataFields.value = "value";
         acceleratorsSeries.dataFields.category = "name";
@@ -164,7 +164,7 @@ export class ChartComponent implements OnInit {
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
-        topStrategiesSeries.dy = 50;
+        topStrategiesSeries.dy = 150;
         topStrategiesSeries.slices.template.interactionsEnabled = true;
 
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
@@ -210,7 +210,7 @@ export class ChartComponent implements OnInit {
         strategySeries.radius = window.am4core.percent(22);
         strategySeries.innerRadius = window.am4core.percent(17);
         strategySeries.colors.list = stratergy_colors;
-        strategySeries.dy = 50;
+        strategySeries.dy = 150;
         strategySeries.alignLabels = false;
         strategySeries.ticks.template.disabled = true;
         let strategyLabelsTemplate = strategySeries.labels.template;
@@ -228,14 +228,14 @@ export class ChartComponent implements OnInit {
         });
         strategyLabelsTemplate.interactionsEnabled = true;
         //Tooltip
-        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, TotalProjectsCost {totalProjectsCost} ";
+        strategySeries.slices.template.tooltipText = "{category}, {initiatives} projects, Total Projects Cost {totalProjectsCost} ";
         strategySeries.data = strategies;
     }
 
     renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart   
-        radialChart.startAngle = 180;
-        radialChart.endAngle = 0;
-        radialChart.dy = -200;
+        radialChart.startAngle = 0;
+        radialChart.endAngle = -180;
+        radialChart.dy = 300;
         radialChart.dx = 0;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
@@ -313,8 +313,12 @@ export class ChartComponent implements OnInit {
             <th align="left" style="font-size:8px">BAM Alignmnent</th>
               <td style="font-size:8px">{bamAllignment}</td>
             </tr>
-            <th align="left" style="font-size:8px">Color</th>
-              <td style="font-size:8px">{color}</td>
+            <th align="left" style="font-size:8px">Total Project Cost</th>
+              <td style="font-size:8px">$ {totalProjectCost}</td>
+            </tr>
+            <tr>
+              <th align="left" style="font-size:8px"></th>
+              <td style="font-size:8px"></td>
             </tr>
             </body>`;
             initiativesSeries.zIndex = -1;
@@ -329,9 +333,9 @@ export class ChartComponent implements OnInit {
         radialChart.legend.maxHeight = 30;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        radialChart.legend.y = 210;
+        radialChart.legend.y = -320;
         radialChart.legend.fontSize = 10;
-        radialChart.legend.contentAlign = "center";
+        radialChart.legend.contentAlign = "top";
         radialChart.legend.itemContainers.template.clickable = true;
         radialChart.legend.itemContainers.template.focusable = true;
 
@@ -411,6 +415,13 @@ export class ChartComponent implements OnInit {
                     .forEach((element) => {
                         element.setAttribute("style", "display: block");
                     });
+                Array.from(document
+                    .getElementsByClassName("amcharts-Button-group"))
+                    .forEach((element) => {
+                        // console.log(element);
+                        element.setAttribute("style", "display: block");
+                    });
+
             });
     }
 
@@ -479,7 +490,6 @@ export class ChartComponent implements OnInit {
         ExportButton.y = -3;
         ExportButton.zIndex = "12";
         ExportButton.events.on("hit", () => {
-            // console.log("jiiii");
             this.screenshot();
         });
     }
@@ -509,9 +519,9 @@ export class ChartComponent implements OnInit {
 
             // Create chart instance
             var chart = chartcontainer.createChild(window.am4charts.PieChart)
-            chart.startAngle = 180;
-            chart.endAngle = 0;
-            chart.dy = -250;
+            chart.startAngle = 0;
+            chart.endAngle = -180;
+            chart.dy = 150;
             // Let's cut a hole in our Pie chart
             chart.innerRadius = window.am4core.percent(3);
 
@@ -572,14 +582,16 @@ export class ChartComponent implements OnInit {
             radialChart.scrollbarX.exportable = false;
             radialChart.scrollbarX.valign = "bottom";
             radialChart.scrollbarX.align = "left";
-            radialChart.scrollbarX.marginBottom = 4;
+            radialChart.scrollbarX.marginBottom = 10;
+            radialChart.scrollbarX.marginRight = 10;
 
             radialChart.scrollbarY = new window.am4core.Scrollbar();
             radialChart.scrollbarY.parent = chartcontainer;
             radialChart.scrollbarY.exportable = false;
             radialChart.scrollbarY.align = "right";
             radialChart.scrollbarY.valign = "bottom";
-            radialChart.scrollbarX.marginRight = 4;
+            radialChart.scrollbarX.marginBottom = 10;
+            radialChart.scrollbarY.marginRight = 10;
 
             var zoomOutButton = radialChart.zoomOutButton;
             zoomOutButton.dx = -12;
