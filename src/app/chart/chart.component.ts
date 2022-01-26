@@ -235,7 +235,7 @@ export class ChartComponent implements OnInit {
     renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart   
         radialChart.startAngle = 0;
         radialChart.endAngle = -180;
-        radialChart.dy = 280;
+        radialChart.dy = 300;
         radialChart.dx = 0;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
@@ -333,7 +333,7 @@ export class ChartComponent implements OnInit {
         radialChart.legend.maxHeight = 30;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        radialChart.legend.y = -260;
+        radialChart.legend.y = -320;
         radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "top";
         radialChart.legend.itemContainers.template.clickable = true;
@@ -525,7 +525,7 @@ export class ChartComponent implements OnInit {
             var chart = chartcontainer.createChild(window.am4charts.PieChart)
             chart.startAngle = 0;
             chart.endAngle = -180;
-            chart.dy = 130;
+            chart.dy = 150;
             // Let's cut a hole in our Pie chart
             chart.innerRadius = window.am4core.percent(3);
 
@@ -595,9 +595,9 @@ export class ChartComponent implements OnInit {
             radialChart.scrollbarY.exportable = false;
             radialChart.scrollbarY.align = "right";
             radialChart.scrollbarY.valign = "bottom";
-            radialChart.scrollbarY.marginBottom = 50;
+            radialChart.scrollbarY.marginBottom = 30;
             radialChart.scrollbarY.marginRight = 10;
-            radialChart.scrollbarY.height = window.am4core.percent(90);
+            radialChart.scrollbarY.height = window.am4core.percent(95);
 
             var zoomOutButton = radialChart.zoomOutButton;
             zoomOutButton.dx = -12;
