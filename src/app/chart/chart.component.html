@@ -25,7 +25,7 @@
                 <div class="col px-1" *ngIf="obj === 'projectName' || obj === 'projectId'">
                     <div class="card-container p-2">
                         <div>
-                            <b>{{keyFormat(obj)}} : </b>
+                            <b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b>
                             <span>{{modalContent[obj]}}</span>
                         </div>
                     </div>
@@ -39,7 +39,7 @@
                         <div class="col"
                             *ngIf="obj === 'description' || obj === 'businessObjectivesRelational' || obj === 'benfitsAndRationale'">
                             <div class="card card-container {{obj}}-card p-2">
-                                <div><b>{{keyFormat(obj)}} : </b></div>
+                                <div><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
                                 <div><small>{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
                             </div>
                         </div>
@@ -52,7 +52,7 @@
                         <div class="col" *ngIf="obj === 'functionalOwnership'">
                             <div class="card-container px-2 py-1 card">
                                 <div class="row">
-                                    <div class="pr-2 col-auto"><b>{{keyFormat(obj)}} : </b></div>
+                                    <div class="pr-2 col-auto"><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
                                     <div class="col">
                                         <small class="mb-0">
                                             {{modalContent[obj]}}
@@ -94,7 +94,7 @@
                         <div class="col" *ngIf="obj === 'investmentType'">
                             <div class="card-container px-2 py-1 card">
                                 <div class="row">
-                                    <div class="pr-2 col-auto"><b>{{keyFormat(obj)}} : </b></div>
+                                    <div class="pr-2 col-auto"><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
                                     <div class="col">
                                         <small class="mb-0"> {{modalContent[obj]}}
                                             <fa-icon [icon]="faCheckSquare" class="ml-2 mr-3"></fa-icon>
@@ -134,7 +134,7 @@
                             <div class="row row-cols-2">
                                 <ng-container *ngFor="let obj of objectKeys(modalContent)">
                                     <div class="col pr-2" *ngIf="obj === 'startDate' || obj == 'endDate'">
-                                        <b>{{keyFormat(obj)}} :</b>
+                                        <b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} :</b>
                                         <p class="mb-0"><small>{{modalContent[obj]}}</small></p>
                                     </div>
                                 </ng-container>
@@ -147,7 +147,7 @@
                         <div class="col" *ngIf="obj === 'carStatus'">
                             <div class="card-container px-2 py-1 card">
                                 <div class="row">
-                                    <div class="col pr-2 col-auto"><b>{{keyFormat(obj)}} : </b></div>
+                                    <div class="col pr-2 col-auto"><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
                                 </div>
                                 <div class="row">
                                     <div class="col">
@@ -169,7 +169,7 @@
                     <ng-container *ngFor="let obj of objectKeys(modalContent)">
                         <div class="col" *ngIf="obj === 'potentialRisk'">
                             <div class="card card-container {{obj}}-card p-2">
-                                <div><b>{{keyFormat(obj)}} :</b></div>
+                                <div><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} :</b></div>
                                 <div><small>{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
                             </div>
                         </div>
@@ -182,7 +182,7 @@
             <ng-container *ngFor="let obj of objectKeys(modalContent)">
                 <div class="col px-1" *ngIf="obj === 'janssenOneAccelerator' || obj === 'affectedQCDimensions' || obj === 'bamAllignment'">
                     <div class="card card-container primary-cards p-2">
-                        <b class="primary-cards-title">{{keyFormat(obj)}} :</b>
+                        <b class="primary-cards-title">{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} :</b>
                         <ng-container>
                             <p class="mb-0 primary-cards-list">
                                 {{modalContent[obj]}}
@@ -193,7 +193,7 @@
                 </div>
                 <div class="col px-1" *ngIf="obj === 'rpaValueScore' || obj === 'roi'">
                     <div class="card card-container primary-cards p-2">
-                        <b class="primary-cards-title">{{keyFormat(obj)}} :</b>
+                        <b class="primary-cards-title">{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} :</b>
                         <ng-container>
                             <p class="mb-0 primary-cards-list">
                                 {{modalContent[obj]}}
@@ -208,7 +208,7 @@
                 <ng-container *ngFor="let obj of objectKeys(modalContent)">
                     <div class="card card-container tech-resrc-cards p-2" *ngIf="obj === 'involvedTechnologyOrSystem'">
                         <div class="row">
-                            <div class="col col-auto pr-2"><b>{{keyFormat(obj)}} : </b></div>
+                            <div class="col col-auto pr-2"><b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b></div>
                         </div>
                         <div class="col"><small class="mb-0">{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
                     </div>
@@ -219,7 +219,7 @@
                     <div class="card card-container tech-resrc-cards p-2" *ngIf="obj === 'resourceRequired'">
                         <div class="row">
                             <div class="col col-auto pr-2">
-                                <b>{{keyFormat(obj)}} : </b>
+                                <b>{{obj.slice(0, 1).toUpperCase()}}{{obj.slice(1)}} : </b>
                             </div>
                             <div class="col">
                                 <p class="mb-0">{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</p>
