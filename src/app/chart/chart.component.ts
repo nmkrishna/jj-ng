@@ -615,6 +615,9 @@ export class ChartComponent implements OnInit {
     }
 
 
+    keyFormat(str) {
+        return str.slice(0, 1).toUpperCase().concat(str.slice(1)).split(/(?=[A-Z])/).join(" ");
+    }
 
     downloadAsPNG() {
         const modalBody = document.getElementById("modal-body") as HTMLElement;
