@@ -597,7 +597,7 @@ export class ChartComponent implements OnInit {
             radialChart.scrollbarY.valign = "bottom";
             radialChart.scrollbarY.marginBottom = 30;
             radialChart.scrollbarY.marginRight = 10;
-            // radialChart.scrollbarY.height = window.am4core.percent(95);
+            radialChart.scrollbarY.height = window.am4core.percent(95);
 
             var zoomOutButton = radialChart.zoomOutButton;
             zoomOutButton.dx = -12;
@@ -618,10 +618,6 @@ export class ChartComponent implements OnInit {
     onClickChartItem(event: any) {
         this.modalService.open(this.dataModal, { size: 'xl' });
         this.modalContent = event.target.dataItem.dataContext;
-    }
-
-    keyFormat(str) {
-        return str.slice(0, 1).toUpperCase().concat(str.slice(1)).split(/(?=[A-Z])/).join(" ");
     }
 
 
