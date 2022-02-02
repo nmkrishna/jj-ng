@@ -9,7 +9,7 @@ declare const window: any;
 })
 export class Chart2Component implements OnInit {
 
-    quadrants =  [
+    quadrants = [
         {
             value: 1,
             name: 'Our People',
@@ -32,29 +32,32 @@ export class Chart2Component implements OnInit {
 
     constructor() { }
 
-    getColor(bamAllignment){
-        if(bamAllignment == "100% Digital QMS"){
-            return "blue";
-        }else if(bamAllignment == "98% Satisfaction in Customer Facing KPIs"){
-            return "green";
-        }else if(bamAllignment == "80% Automated QC and Product Release"){
-            return "yellow";
-        }else if(bamAllignment == "100% Integrated Data"){
-            return "purple";
-        }else if(bamAllignment == "75% Focused on Patient, Consumer & Customer Exp"){
-            return "pink";
+    getColor(bamAllignment) {
+        if (bamAllignment == "100% Digital QMS") {
+            return "#de4c4f";
+        } else if (bamAllignment == "98% Satisfaction in Customer Facing KPIs") {
+            return "#eea638";
+        } else if (bamAllignment == "80% Automated QC and Product Release") {
+            return "#86a965";
+        } else if (bamAllignment == "100% Integrated Data") {
+            return "#a7a737";
+        } else if (bamAllignment == "75% Focused on Patient, Consumer & Customer Exp") {
+            return "#d8854f";
+        } else if (bamAllignment == "N/A") {
+            return "grey";
         }
     }
 
-    ngOnInit() : void {
+    ngOnInit(): void {
 
         var chart = window.am4core.create("chartdiv", window.am4charts.RadarChart);
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
         chart.startAngle = -170;
         chart.endAngle = -10;
         chart.innerRadius = window.am4core.percent(20);
-        chart.dateFormatter.dateFormat = "MM/dd/yyyy"
+        chart.dateFormatter.dateFormat = "MM/dd/yy"
 
+        // chart.legend = new window.am4charts.Legend();
 
         // var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
         var categoryAxis = chart.xAxes.push(new window.am4charts.CategoryAxis());
@@ -71,8 +74,14 @@ export class Chart2Component implements OnInit {
         // });
 
         //static
+        //static
         valueAxis.min = new Date(2019, 1, 1).getTime()
         valueAxis.max = new Date(2022, 12, 31).getTime();
+        valueAxis.baseInterval = {
+            "timeUnit": "year",
+            "count": 1
+        }
+        categoryAxis.renderer.labels.template.location = 0.5;
 
         var series = chart.series.push(new window.am4charts.LineSeries());
         series.dataFields.categoryX = "bamAllignment";
@@ -80,6 +89,8 @@ export class Chart2Component implements OnInit {
         series.dataFields.value = "totalProjectCost";
         series.strokeOpacity = 0;
         series.sequencedInterpolation = true;
+        series.legendSettings.labelText = "{bamAllignment}";
+
 
         var bullet = series.bullets.push(new window.am4core.Circle());
         bullet.fill = window.am4core.color("#ff0000");
@@ -88,7 +99,7 @@ export class Chart2Component implements OnInit {
         bullet.radius = 5;
         bullet.strokeWidth = 2;
         bullet.fillOpacity = 0.7;
-        bullet.stroke = window.am4core.color("#ffffff");
+        bullet.stroke = window.am4core.color("#C0C0C0");
 
         bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
@@ -144,26 +155,26 @@ export class Chart2Component implements OnInit {
         var hoverState = bullet.states.create("hover");
         hoverState.properties.fillOpacity = 1;
         hoverState.properties.strokeOpacity = 1;
-        
+
         series.heatRules.push({ target: bullet, min: 4, max: 30, property: "radius" });
-        
+
         bullet.adapter.add("tooltipY", function (tooltipY, target) {
             return -target.radius;
         })
-        
+
         chart.cursor = new window.am4charts.XYCursor();
         chart.cursor.behavior = "zoomXY";
-        
+
         chart.scrollbarX = new window.am4core.Scrollbar();
         chart.scrollbarY = new window.am4core.Scrollbar();
 
-        for(let i = 0; i < this.rawdata.length; i++){
-            this.rawdata[i]['color'] = this.getColor(this.rawdata[i].bamAllignment); 
+        for (let i = 0; i < this.rawdata.length; i++) {
+            this.rawdata[i]['color'] = this.getColor(this.rawdata[i].bamAllignment);
         };
 
         chart.data = this.rawdata;
 
-        
+
     }
 
 
