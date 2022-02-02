@@ -7,11 +7,13 @@ import { ChartComponent } from './chart/chart.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
 import { NgxSpinnerModule } from 'ngx-spinner';
 import { FontAwesomeModule } from '@fortawesome/angular-fontawesome';
+import { Chart2Component } from './chart2/chart2.component';
 
 @NgModule({
     declarations: [
         AppComponent,
-        ChartComponent
+        ChartComponent,
+        Chart2Component
     ],
     imports: [
         NgbModule,
