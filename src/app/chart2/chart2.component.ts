@@ -78,7 +78,7 @@ export class Chart2Component implements OnInit {
 
     ngOnInit(): void {
 
-        var chart = window.am4core.create("chartdiv", window.am4charts.RadarChart);
+        var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
         chart.startAngle = -170;
         chart.endAngle = -10;
