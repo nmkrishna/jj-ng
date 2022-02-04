@@ -78,6 +78,9 @@ export class Chart2Component implements OnInit {
 
     ngOnInit(): void {
 
+        window.am4core.useTheme(window.am4themes_animated);
+        window.am4core.addLicense('CH300383565');
+
         var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
         chart.startAngle = -170;
@@ -122,6 +125,9 @@ export class Chart2Component implements OnInit {
         series.dataFields.value = "totalProjectCost";
         series.strokeOpacity = 0;
         series.sequencedInterpolation = true;
+        series.sequencedInterpolationDelay = 100;
+
+
         series.legendSettings.labelText = "{bamAllignment}";
         series.interactionsEnabled = true;
         series.clickable = true;
