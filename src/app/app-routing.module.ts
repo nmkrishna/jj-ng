@@ -4,13 +4,13 @@ import { ChartComponent } from "./chart/chart.component"
 import { Chart2Component } from "./chart2/chart2.component"
 
 const routes: Routes = [
-  // { path: '', redirectTo: '/chart1', pathMatch: 'full' },
-  { path: '', component: ChartComponent },
-  { path: 'chart2', component: Chart2Component },
+    { path: 'chart1', component: ChartComponent },
+    { path: 'chart2', component: Chart2Component },
+    { path: '',   redirectTo: '/chart1', pathMatch: 'full' }
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
-  exports: [RouterModule]
+    imports: [RouterModule.forRoot(routes)],
+    exports: [RouterModule]
 })
 export class AppRoutingModule { }
