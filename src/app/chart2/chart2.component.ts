@@ -79,6 +79,9 @@ export class Chart2Component implements OnInit, OnDestroy {
 
     ngOnInit(): void {
 
+        window.am4core.useTheme(window.am4themes_animated);
+        window.am4core.addLicense('CH300383565');
+
         var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
         this.chartInstance = chart;
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
@@ -113,6 +116,8 @@ export class Chart2Component implements OnInit, OnDestroy {
             "timeUnit": "month",
             "count": 1
         }
+        valueAxis.renderer.grid.template.stroke = window.am4core.color("blue");
+        valueAxis.renderer.grid.template.strokeWidth = 2;
         valueAxis.interactionsEnabled = true;
 
         categoryAxis.renderer.labels.template.location = 0.5;
@@ -124,7 +129,8 @@ export class Chart2Component implements OnInit, OnDestroy {
         series.dataFields.value = "totalProjectCost";
         series.strokeOpacity = 0;
         series.sequencedInterpolation = true;
-        series.legendSettings.labelText = "{bamAllignment}";
+        series.sequencedInterpolationDelay = 100;
+        // series.legendSettings.labelText = "{bamAllignment}";
         series.interactionsEnabled = true;
         series.clickable = true;
 
@@ -138,9 +144,21 @@ export class Chart2Component implements OnInit, OnDestroy {
         bullet.fillOpacity = 0.7;
         bullet.stroke = window.am4core.color("#C0C0C0");
         bullet.clickable = true;
-        bullet.adapter.add("locationY", function (label, target, key) {
-            return Math.random();
+        bullet.horizontalCenter = "left";
+        bullet.verticalCenter = "top";
+        series.bullets.template.horizontalCenter = "left";
+        series.bullets.template.verticalCenter = "top";
+        bullet.adapter.add("dx", function (val, target, key) {
+            // console.log(target.width);
+            // console.log(target.height);
+            // console.log(target.baseSprite);
+            // console.log(target.measuredWidth);
+            return val - (new Date(target.dataItem.values.dateY.value).getDate() / 31) * 50;
         });
+        // bullet.adapter.add("dy", function (val, target, key) {
+        //     return val + (new Date(target.dataItem.values.dateY.value).getMonth() / 12) * target.measuredWidth;
+        // });
+
 
         bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
