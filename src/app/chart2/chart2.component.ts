@@ -1,4 +1,4 @@
-import { Component, Input, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import chart2data from "./chart2data"
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
@@ -9,13 +9,14 @@ declare const window: any;
     templateUrl: './chart2.component.html',
     styleUrls: ['./chart2.component.scss'],
 })
-export class Chart2Component implements OnInit {
+export class Chart2Component implements OnInit, OnDestroy {
     modalContent: any = {}
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
     objectKeys = Object.keys
     faMinusSquare = faMinusSquare;
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
+    chartInstance :  any;
     quadrants = [
         {
             value: 1,
@@ -79,6 +80,7 @@ export class Chart2Component implements OnInit {
     ngOnInit(): void {
 
         var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
+        this.chartInstance = chart;
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
         chart.startAngle = -170;
         chart.endAngle = -10;
@@ -213,7 +215,7 @@ export class Chart2Component implements OnInit {
             this.rawdata[i]['color'] = this.getColor(this.rawdata[i].bamAllignment);
         };
         chart.data = this.rawdata;
-
+        
     }
 
     onCloseModal() {
@@ -229,6 +231,12 @@ export class Chart2Component implements OnInit {
 
     keyFormat(str) {
         return str.slice(0, 1).toUpperCase().concat(str.slice(1)).split(/(?=[A-Z])/).join(" ");
+    }
+
+    ngOnDestroy() {
+        //this.chartInstance = null;
+        this.chartInstance.dispose();
+        window.am4core.disposeAllCharts();
     }
 
 

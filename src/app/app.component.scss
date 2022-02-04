@@ -1,0 +1,15 @@
+.navbar {
+    max-height: 3rem;
+}
+.navbar-toggler {
+    font-size: 1em;
+    margin-bottom: 0.5em;
+}
+.navbar-collapse {
+    z-index: 10000000;
+    background-color: #f8f9fa!important;
+    height: 3rem;
+    .nav-item.active {
+        font-weight: bold;
+    }
+}
