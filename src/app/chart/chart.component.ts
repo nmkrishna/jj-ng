@@ -43,6 +43,7 @@ import {
     getInitiativeColor
 } from '../chart/chartdata';
 import chart2data from '../chart2/chart2data';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-chart',
@@ -502,12 +503,14 @@ export class ChartComponent implements OnInit, OnDestroy {
         });
     }
 
+    obs : Subscription;
 
     ngOnInit(): void {
         // Themes begin
         this.spinner.show();
-        this.chartService.getChartData().then((data) => {
-            console.log('chart api successfull', data);
+        this.obs = this.chartService.chartResponse.subscribe((data) => {
+            if(data.length > 0) {
+                console.log('chart api successfull', data);
             this.spinner.hide();            
             var accelerators = getAccelarators(data);
             var owners = getOwners(data);
@@ -616,6 +619,7 @@ export class ChartComponent implements OnInit, OnDestroy {
             zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
             zoomOutButton.icon.strokeWidth = 2;
             zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
+            }            
 
             // window.am4core.options.autoDispose = true;  
             //this.radialChartInstance.dispose();
@@ -646,6 +650,7 @@ export class ChartComponent implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         console.log(this.chartInstance);
+        this.obs.unsubscribe();
         // this.radialChartInstance.dispose();
         window.am4core.disposeAllCharts();
     }
