@@ -16,7 +16,7 @@ export class Chart2Component implements OnInit, OnDestroy {
     faMinusSquare = faMinusSquare;
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
-    chartInstance :  any;
+    chartInstance: any;
     quadrants = [
         {
             value: 1,
@@ -37,7 +37,12 @@ export class Chart2Component implements OnInit, OnDestroy {
     ];
 
     rawdata = chart2data;
-
+    cats = [{ "category": "100% Digital QMS" },
+    { "category": "98% Satisfaction in Customer Facing KPIs" },
+    { "category": "80% Automated QC and Product Release" },
+    { "category": "100% Integrated Data" },
+    { "category": "75% Focused on Patient, Consumer & Customer Exp" },
+    { "category": "N/A" }];
 
     constructor(private modalService: NgbModal) { }
 
@@ -85,9 +90,11 @@ export class Chart2Component implements OnInit, OnDestroy {
         var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
         this.chartInstance = chart;
         chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
-        chart.startAngle = -170;
-        chart.endAngle = -10;
-        chart.innerRadius = window.am4core.percent(20);
+        chart.startAngle = 270 - 180;
+        chart.endAngle = 270 + 180;
+        // chart.startAngle = -170;
+        // chart.endAngle = -10;
+        chart.innerRadius = window.am4core.percent(30);
         chart.dateFormatter.dateFormat = "M/d/yy";
         chart.interactionsEnabled = true;
 
@@ -96,44 +103,55 @@ export class Chart2Component implements OnInit, OnDestroy {
 
         // var valueAxisX = chart.xAxes.push(new am4charts.ValueAxis());
         var categoryAxis = chart.xAxes.push(new window.am4charts.CategoryAxis());
-        categoryAxis.dataFields.category = "bamAllignment";
+        categoryAxis.dataFields.category = "category";
         // categoryAxis.renderer.grid.template.location = 0;
-
+        categoryAxis.data = this.cats;
         // var valueAxisY = chart.yAxes.push(new am4charts.ValueAxis());
         var valueAxis = chart.yAxes.push(new window.am4charts.DateAxis());
 
         //dynamic date range
-        // chart.events.on("ready", function(ev) {
-        //   valueAxis.min = valueAxis.minZoomed;
-        //   valueAxis.max = valueAxis.maxZoomed;
-        // });
+        chart.events.on("ready", function (ev) {
+            valueAxis.min = valueAxis.minZoomed;
+            valueAxis.max = valueAxis.maxZoomed;
+        });
 
         //static
         //static
-        valueAxis.min = new Date(2019, 1, 1).getTime()
-        valueAxis.max = new Date(2022, 12, 31).getTime();
+        // valueAxis.min = new Date(2019, 0, 1).getTime()
+        // valueAxis.max = new Date(2023, 11, 31).getTime();
         valueAxis.baseInterval = {
-            "timeUnit": "month",
+            "timeUnit": "year",
             "count": 1
         }
         valueAxis.renderer.grid.template.stroke = window.am4core.color("blue");
         valueAxis.renderer.grid.template.strokeWidth = 2;
         valueAxis.interactionsEnabled = true;
 
-        categoryAxis.renderer.labels.template.location = 0.5;
+        categoryAxis.renderer.labels.template.location = 0;
         categoryAxis.interactionsEnabled = true;
+        categoryAxis.renderer.axisFills.template.disabled = false;
+        categoryAxis.renderer.fixedWidthGrid = false;
+        categoryAxis.renderer.interactionsEnabled = true;
+        categoryAxis.renderer.layout = "grid";
+        categoryAxis.renderer.ticks.template.disabled = false;
+        categoryAxis.renderer.ticks.template.strokeOpacity = 0.5;
+
+        // categoryAxis.renderer.grid gridContainer
+
 
         var series = chart.series.push(new window.am4charts.LineSeries());
         series.dataFields.categoryX = "bamAllignment";
         series.dataFields.dateY = "startDate";
         series.dataFields.value = "totalProjectCost";
         series.strokeOpacity = 0;
-        series.sequencedInterpolation = true;
-        series.sequencedInterpolationDelay = 100;
+        // series.sequencedInterpolation = true;
+        // series.sequencedInterpolationDelay = 100;
         // series.legendSettings.labelText = "{bamAllignment}";
         series.interactionsEnabled = true;
         series.clickable = true;
-
+        series.events.on("hit", function (ev) {
+            console.log("clicked on:", ev);
+        });
 
         var bullet = series.bullets.push(new window.am4core.Circle());
         bullet.fill = window.am4core.color("#ff0000");
@@ -144,16 +162,33 @@ export class Chart2Component implements OnInit, OnDestroy {
         bullet.fillOpacity = 0.7;
         bullet.stroke = window.am4core.color("#C0C0C0");
         bullet.clickable = true;
-        bullet.horizontalCenter = "left";
-        bullet.verticalCenter = "top";
-        series.bullets.template.horizontalCenter = "left";
-        series.bullets.template.verticalCenter = "top";
+        // bullet.horizontalCenter = "left";
+        // bullet.verticalCenter = "top";
+        // series.bullets.template.horizontalCenter = "left";
+        // series.bullets.template.verticalCenter = "top";
+        // series.bullets.template.location = 0;
+
+        bullet.adapter.add("dy", function (val, target, key) {
+            console.log(target.dataItem);
+            var month = new Date(target.dataItem.values.dateY.value).getMonth();
+            var offset = 0.0;
+            if (month > 6) {
+                offset = - (month / 12) * 40;
+            } else {
+                offset = (month / 12) * 40;
+            }
+            return val - offset;
+        });
+
         bullet.adapter.add("dx", function (val, target, key) {
-            // console.log(target.width);
-            // console.log(target.height);
-            // console.log(target.baseSprite);
-            // console.log(target.measuredWidth);
-            return val - (new Date(target.dataItem.values.dateY.value).getDate() / 31) * 50;
+            var dateOfMonth = new Date(target.dataItem.values.dateY.value).getDate();
+            var offset = 0.0;
+            if (dateOfMonth > 15) {
+                offset = - (dateOfMonth / 12) * 450;
+            } else {
+                offset = (dateOfMonth / 12) * 450;
+            }
+            return val - offset;
         });
         // bullet.adapter.add("dy", function (val, target, key) {
         //     return val + (new Date(target.dataItem.values.dateY.value).getMonth() / 12) * target.measuredWidth;
@@ -215,25 +250,34 @@ export class Chart2Component implements OnInit, OnDestroy {
         hoverState.properties.fillOpacity = 1;
         hoverState.properties.strokeOpacity = 1;
         series.bullets.template.interactionsEnabled = true;
-        series.bullets.template.events.on("hit", function (ev) {
-            console.log("clicked on:", ev);
-        });
+        // series.bullets.template.events.on("hit", function (ev) {
+        //     console.log("clicked on:", ev);
+        // });
         series.heatRules.push({ target: bullet, min: 4, max: 30, property: "radius" });
 
-        bullet.adapter.add("tooltipY", function (tooltipY, target) {
-            return -target.radius;
-        })
+        // bullet.adapter.add("tooltipY", function (tooltipY, target) {
+        //     return -target.radius;
+        // })
 
         chart.cursor = new window.am4charts.XYCursor();
         chart.cursor.behavior = "zoomXY";
         chart.scrollbarX = new window.am4core.Scrollbar();
         chart.scrollbarY = new window.am4core.Scrollbar();
 
+        var slider = chart.createChild(window.am4core.Slider);
+        slider.start = 0.5;
+        slider.events.on("rangechanged", () => {
+            var start = slider.start;
+            chart.startAngle = 270 - start * 179 - 1;
+            chart.endAngle = 270 + start * 179 + 1;
+            valueAxis.renderer.axisAngle = chart.startAngle;
+        });
+
         for (let i = 0; i < this.rawdata.length; i++) {
             this.rawdata[i]['color'] = this.getColor(this.rawdata[i].bamAllignment);
         };
         chart.data = this.rawdata;
-        
+
     }
 
     onCloseModal() {
