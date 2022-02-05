@@ -5,11 +5,15 @@
     font-size: 1em;
     margin-bottom: 0.5em;
 }
-.navbar-collapse {
-    z-index: 10000000;
+.navbar-collapse { 
+    z-index: 999 !important;   
     background-color: #f8f9fa!important;
     height: 3rem;
     .nav-item.active {
         font-weight: bold;
     }
 }
+.navbar-nav {
+    background-color: #f8f9fa!important;
+}
+

@@ -4,3 +4,83 @@
     max-width:100%;
     background-color:#ffffff;
   }
+
+  small{
+    font-size: 1rem !important;
+}
+
+.ml-2 {
+    margin-left: 0.5rem !important;
+}
+
+.mr-3 {
+    margin-right: 1rem !important;
+}
+
+.pl-2 {
+    padding-left: 0.5rem !important;
+}
+
+.mt-1 {
+    margin-top: 0.25 !important;
+}
+
+.float-right {
+    float: right !important;
+}
+
+.close {
+    background-color: transparent;
+    border: 0;
+    float: right;
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+    outline: none;
+}
+.download {
+    background-color: transparent;
+    border: 0;
+    float: right;
+    font-size: 1rem;
+    margin: 2px 15px 0 0;
+    font-weight: 700;
+    line-height: 1;
+    color: #000;
+    text-shadow: 0 1px 0 #fff;
+    opacity: 0.5;
+    outline: none;
+}
+
+.card-container{
+    border: 3px solid grey !important;
+    border-radius: 0px !important;
+    margin: .1rem;
+}
+.description-card{
+    overflow: hidden;
+}
+.businessObjectivesRelational-card{ 
+    overflow: hidden;
+}
+.benfitsAndRationale-card{
+    overflow: hidden;
+}
+.potentialRisk-card{ 
+    overflow: hidden;
+}
+.primary-cards-title{
+    font-size: .9rem !important;
+}
+.primary-cards{
+    height: 100%;
+}
+.primary-cards-list{
+    font-size: .8rem !important;
+}
+.tech-resrc-cards{   
+    overflow: hidden;
+}

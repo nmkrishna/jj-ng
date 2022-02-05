@@ -159,6 +159,7 @@ export class Chart2Component implements OnInit, OnDestroy {
         //     return val + (new Date(target.dataItem.values.dateY.value).getMonth() / 12) * target.measuredWidth;
         // });
 
+        bullet.events.on("hit", this.onClickChartItem,this)
 
         bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>

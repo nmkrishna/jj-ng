@@ -35,7 +35,7 @@
                 <div class="row row-cols-1">
                     <ng-container *ngFor="let obj of objectKeys(modalContent)">
                         <div class="col"
-                            *ngIf="obj === 'description' || obj === 'businessObjectivesRelational' || obj === 'benfitsAndRationale'">
+                            *ngIf="obj === 'description' || obj === 'businessObjectivesOrExpectations' || obj === 'benfitsAndRationale'">
                             <div class="card card-container {{obj}}-card p-2">
                                 <div><b>{{keyFormat(obj)}} : </b></div>
                                 <div><small>{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
@@ -165,7 +165,7 @@
                 </div>
                 <div class="row row-cols-1">
                     <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                        <div class="col" *ngIf="obj === 'potentialRisk'">
+                        <div class="col" *ngIf="obj === 'potentialRisksOrRoadblocks'">
                             <div class="card card-container {{obj}}-card p-2">
                                 <div><b>{{keyFormat(obj)}} :</b></div>
                                 <div><small>{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
