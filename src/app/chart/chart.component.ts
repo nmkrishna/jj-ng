@@ -5,7 +5,6 @@ import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
 import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore } from "./chartdata";
 import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
-import { NgxSpinnerService } from 'ngx-spinner';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -66,7 +65,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     chartInstance:any;
     radialChartInstance: any;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
-    constructor(private chartService: ChartService, private modalService: NgbModal, private spinner: NgxSpinnerService) { }
+    constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
 
 
@@ -503,33 +502,54 @@ export class ChartComponent implements OnInit, OnDestroy {
         });
     }
 
+    //loader code
+    indicator;
+    showIndicator() {
+        this.indicator = this.chartInstance.tooltipContainer.createChild(window.am4core.Container);
+        this.indicator.background.fill = window.am4core.color("#fff");
+        this.indicator.background.fillOpacity = 0.8;
+        this.indicator.width = window.am4core.percent(100);
+        this.indicator.height = window.am4core.percent(100);
+        let indicatorLabel = this.indicator.createChild(window.am4core.Label);
+        indicatorLabel.text = "Loading ...";
+        indicatorLabel.align = "center";
+        indicatorLabel.valign = "middle";
+        indicatorLabel.fontSize = 20;
+    }
+
+    hideIndicator() {
+        this.indicator.hide();
+    }
+
     obs : Subscription;
 
     ngOnInit(): void {
         // Themes begin
-        this.spinner.show();
+
+        // CONTAINER ///
+        var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
+        chartcontainer.width = window.am4core.percent(100);
+        chartcontainer.height = window.am4core.percent(100);
+        this.chartInstance = chartcontainer.createChild(window.am4charts.PieChart)
+
+        // this.spinner.show();
+        this.showIndicator();
         this.obs = this.chartService.chartResponse.subscribe((data) => {
             if(data.length > 0) {
                 console.log('chart api successfull', data);
-            this.spinner.hide();            
+            // this.spinner.hide();
+            this.hideIndicator();            
             var accelerators = getAccelarators(data);
-            var owners = getOwners(data);
+            let owners = getOwners(data);
             var strategies = getStratergies(data);
             var chartSeries = getInitiativesSeries(data);
-            var initiatives = getInitiatives(data);
-            console.log('owners', owners);
+            var initiatives = getInitiatives(data);            
             window.am4core.addLicense('CH300383565');
             //enable class names for custom styling
             window.am4core.options.autoSetClassName = true;
-            window.am4core.useTheme(window.am4themes_animated);
+            window.am4core.useTheme(window.am4themes_animated);            
 
-            // CONTAINER ///
-            var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
-            chartcontainer.width = window.am4core.percent(100);
-            chartcontainer.height = window.am4core.percent(100);
-
-            // Create chart instance
-            this.chartInstance = chartcontainer.createChild(window.am4charts.PieChart)
+            // Create chart instance            
             this.chartInstance.startAngle = 0;
             this.chartInstance.endAngle = -180;
             this.chartInstance.dy = 130;
@@ -558,7 +578,7 @@ export class ChartComponent implements OnInit, OnDestroy {
             // Export Button
             this.renderExportButton(chartcontainer);
 
-            //this.chartInstance.toFront();
+            this.chartInstance.toFront();
             
 
             // //events
@@ -585,7 +605,7 @@ export class ChartComponent implements OnInit, OnDestroy {
                 radialChart.data = finalData;
                 radialChart.yAxes.values[0].data = finalData;
                 radialChart.legend.data = owners;
-                //radialChart.legend.reinit();
+                radialChart.legend.reinit();
                 radialChart.legend.children.each((item) => {
                     item.isActive = false;
                 });
@@ -649,7 +669,6 @@ export class ChartComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        console.log(this.chartInstance);
         this.obs.unsubscribe();
         // this.radialChartInstance.dispose();
         window.am4core.disposeAllCharts();

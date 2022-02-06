@@ -84,6 +84,7 @@ const getAccelarators = (rawData: any) => {
 
 const getOwners = (rawData: any) => {
     let entries: any = [];
+    owners = [];
     entries = [
         ...new Set(
             rawData.reduce((acc: any, i: any) => {

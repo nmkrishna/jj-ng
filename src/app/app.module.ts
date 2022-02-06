@@ -19,7 +19,6 @@ import { Chart2Component } from './chart2/chart2.component';
         NgbModule,
         BrowserModule,
         AppRoutingModule,
-        NgxSpinnerModule,
         FontAwesomeModule
     ],
     providers: [],

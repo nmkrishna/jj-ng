@@ -64,6 +64,25 @@ export class Chart2Component implements OnInit, OnDestroy {
         }
     }
 
+    saveAs(uri, filename) {
+        var link = document.createElement("a");
+        if (typeof link.download === "string") {
+            link.href = uri;
+            link.download = filename;
+
+            //Firefox requires the link to be in the body
+            document.body.appendChild(link);
+
+            //simulate click
+            link.click();
+
+            //remove the link when done
+            document.body.removeChild(link);
+        } else {
+            window.open(uri);
+        }
+    }
+
     amountFormat(val) {
         var nf = new Intl.NumberFormat('en-US', {
             style: 'currency',
@@ -80,7 +99,7 @@ export class Chart2Component implements OnInit, OnDestroy {
             height: window.outerHeight,
             windowHeight: window.outerHeight + 700,
         }).then(canvas => {
-            // this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
+            this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
         })
     }
 
@@ -92,9 +111,8 @@ export class Chart2Component implements OnInit, OnDestroy {
         window.am4core.addLicense('CH300383565');
 
         this.obs = this.chartService.chartResponse.subscribe(data => {
-            this.rawdata = data ;         
+            this.rawdata = chart2data ;         
             if(this.rawdata.length > 0) {
-                console.log(this.rawdata);
                 var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
                  this.chartInstance = chart;
                  chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
@@ -292,7 +310,6 @@ export class Chart2Component implements OnInit, OnDestroy {
     }
 
     onClickChartItem(event: any) {
-        console.log(event);
         this.modalService.open(this.dataModal, { size: 'xl' });
         this.modalContent = event.target.dataItem.dataContext;
     }

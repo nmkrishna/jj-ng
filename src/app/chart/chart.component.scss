@@ -10,6 +10,10 @@ small{
     font-size: 1rem !important;
 }
 
+.flex-1 {
+    flex: 1;
+}
+
 .ml-2 {
     margin-left: 0.5rem !important;
 }
@@ -84,4 +88,11 @@ small{
 }
 .tech-resrc-cards{   
     overflow: hidden;
+}
+.project-manager {
+    margin-left: 0.8rem;
+}
+.project-name-id {
+    max-width: 35rem !important;
+    margin: 0.1rem 0.4rem 0.1rem 0.3rem;
 }
