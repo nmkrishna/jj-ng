@@ -1,11 +1,10 @@
 import { SelectorMatcher } from '@angular/compiler';
-import { Component, Input, OnInit, TemplateRef, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input, OnInit, OnDestroy, TemplateRef, ViewChild, ElementRef } from '@angular/core';
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { RangeValueAccessor } from '@angular/forms';
 import { ChartService } from '../chart.service';
 import { function_owners, investment_type, car_status, primary_accelerators, primary_dimensions, primary_allignment, primary_valuescore } from "./chartdata";
 import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
-import { NgxSpinnerService } from 'ngx-spinner';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
@@ -42,13 +41,15 @@ import {
     getInitiativesSeries,
     getInitiativeColor
 } from '../chart/chartdata';
+import chart2data from '../chart2/chart2data';
+import { Subscription } from 'rxjs';
 
 @Component({
     selector: 'app-chart',
     templateUrl: './chart.component.html',
     styleUrls: ['./chart.component.scss'],
 })
-export class ChartComponent implements OnInit {
+export class ChartComponent implements OnInit, OnDestroy {
     modalContent: any = {}
     FUNCTION_OWNERS: Array<string> = function_owners;
     INVESTMENT_TYPE: Array<string> = investment_type;
@@ -61,8 +62,10 @@ export class ChartComponent implements OnInit {
     faMinusSquare = faMinusSquare;
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
+    chartInstance:any;
+    radialChartInstance: any;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
-    constructor(private chartService: ChartService, private modalService: NgbModal, private spinner: NgxSpinnerService) { }
+    constructor(private chartService: ChartService, private modalService: NgbModal) { }
 
 
 
@@ -87,9 +90,9 @@ export class ChartComponent implements OnInit {
     ];
 
 
-    renderAcceleratorChart(chart, accelerators) {
+    renderAcceleratorChart( accelerators) {
         // Add and configure Series
-        var acceleratorsSeries = chart.series.push(new window.am4charts.PieSeries());
+        var acceleratorsSeries = this.chartInstance.series.push(new window.am4charts.PieSeries());
         acceleratorsSeries.radius = window.am4core.percent(8);
         acceleratorsSeries.innerRadius = window.am4core.percent(1);
         acceleratorsSeries.startAngle = 0;
@@ -144,9 +147,9 @@ export class ChartComponent implements OnInit {
         acceleratorsSeries.data = accelerators.map((name, index) => ({ "name": name, "value": 1 }))
     }
 
-    renderTopStratergiesChart(chart, gaugeData) { // configuring top stratergies pie chart
+    renderTopStratergiesChart(gaugeData) { // configuring top stratergies pie chart
         // Add second series
-        var topStrategiesSeries = chart.series.push(new window.am4charts.PieSeries());
+        var topStrategiesSeries = this.chartInstance.series.push(new window.am4charts.PieSeries());
         topStrategiesSeries.dataFields.value = "value";
         topStrategiesSeries.dataFields.category = "name";
         topStrategiesSeries.slices.template.stroke = new window.am4core.InterfaceColorSet().getFor("background");
@@ -235,13 +238,13 @@ export class ChartComponent implements OnInit {
     renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart   
         radialChart.startAngle = 0;
         radialChart.endAngle = -180;
-        radialChart.dy = 300;
+        radialChart.dy = 280;
         radialChart.dx = 0;
+        radialChart.responsive.enabled = true;
         radialChart.colors.step = 2;
         radialChart.dateFormatter.inputDateFormat = "YYYY-MM-dd";
         radialChart.innerRadius = window.am4core.percent(29);
         radialChart.radius = window.am4core.percent(75);
-        radialChart.responsive.enabled = true;
 
         // Category Axis
         var categoryAxis = radialChart.yAxes.push(new window.am4charts.CategoryAxis());
@@ -331,9 +334,10 @@ export class ChartComponent implements OnInit {
         radialChart.legend.useDefaultMarker = true;
         radialChart.legend.position = 'absolute';
         radialChart.legend.maxHeight = 30;
+        //radialChart.legend.width = 200;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        radialChart.legend.y = -320;
+        radialChart.legend.y = -250;
         radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "top";
         radialChart.legend.itemContainers.template.clickable = true;
@@ -454,15 +458,19 @@ export class ChartComponent implements OnInit {
         return nf.format(val);
     }
 
+    keyFormat(str) {
+        return str.slice(0, 1).toUpperCase().concat(str.slice(1)).split(/(?=[A-Z])/).join(" ");
+    }
+
     renderResetButton(chartcontainer, radialChart, strategySeries, chartSeries) {
         var button = chartcontainer.createChild(window.am4core.Button);
         button.label.text = "Reset";
         button.padding(5, 5, 5, 5);
         button.width = 50;
         button.align = "right";
-        button.marginRight = 180;
+        button.marginRight = 110;
         button.fontSize = 12;
-        button.y = -3;
+        button.y = -6;
         button.zIndex = "12";
         button.events.on("hit", () => {
             radialChart.data = chartSeries;
@@ -485,56 +493,82 @@ export class ChartComponent implements OnInit {
         ExportButton.padding(5, 5, 5, 5);
         ExportButton.width = 50;
         ExportButton.align = "right";
-        ExportButton.marginRight = 100;
+        ExportButton.marginRight = 40;
         ExportButton.fontSize = 12;
-        ExportButton.y = -3;
+        ExportButton.y = -6;
         ExportButton.zIndex = "12";
         ExportButton.events.on("hit", () => {
             this.screenshot();
         });
     }
 
+    //loader code
+    indicator;
+    showIndicator() {
+        this.indicator = this.chartInstance.tooltipContainer.createChild(window.am4core.Container);
+        this.indicator.background.fill = window.am4core.color("#fff");
+        this.indicator.background.fillOpacity = 0.8;
+        this.indicator.width = window.am4core.percent(100);
+        this.indicator.height = window.am4core.percent(100);
+        let indicatorLabel = this.indicator.createChild(window.am4core.Label);
+        indicatorLabel.text = "Loading ...";
+        indicatorLabel.align = "center";
+        indicatorLabel.valign = "middle";
+        indicatorLabel.fontSize = 20;
+    }
+
+    hideIndicator() {
+        this.indicator.hide();
+    }
+
+    obs : Subscription;
 
     ngOnInit(): void {
         // Themes begin
-        this.spinner.show();
-        this.chartService.getChartData().then((data) => {
-            console.log('chart api successfull', data);
-            this.spinner.hide();
+
+        // CONTAINER ///
+        var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
+        chartcontainer.width = window.am4core.percent(100);
+        chartcontainer.height = window.am4core.percent(100);
+        this.chartInstance = chartcontainer.createChild(window.am4charts.PieChart)
+
+        // this.spinner.show();
+        this.showIndicator();
+        this.obs = this.chartService.chartResponse.subscribe((data) => {
+            if(data.length > 0) {
+                console.log('chart api successfull', data);
+            // this.spinner.hide();
+            this.hideIndicator();            
             var accelerators = getAccelarators(data);
-            var owners = getOwners(data);
+            let owners = getOwners(data);
             var strategies = getStratergies(data);
             var chartSeries = getInitiativesSeries(data);
-            var initiatives = getInitiatives(data);
-            console.log('owners', owners);
+            var initiatives = getInitiatives(data);            
             window.am4core.addLicense('CH300383565');
             //enable class names for custom styling
             window.am4core.options.autoSetClassName = true;
-            window.am4core.useTheme(window.am4themes_animated);
+            window.am4core.useTheme(window.am4themes_animated);            
 
-            // CONTAINER ///
-            var chartcontainer = window.am4core.create("chartdiv", window.am4core.Container);
-            chartcontainer.width = window.am4core.percent(100);
-            chartcontainer.height = window.am4core.percent(100);
-
-            // Create chart instance
-            var chart = chartcontainer.createChild(window.am4charts.PieChart)
-            chart.startAngle = 0;
-            chart.endAngle = -180;
-            chart.dy = 150;
+            // Create chart instance            
+            this.chartInstance.startAngle = 0;
+            this.chartInstance.endAngle = -180;
+            this.chartInstance.dy = 130;
             // Let's cut a hole in our Pie chart
-            chart.innerRadius = window.am4core.percent(3);
-
+            this.chartInstance.innerRadius = window.am4core.percent(3);
+        
             //accelerator chart
-            this.renderAcceleratorChart(chart, accelerators);
+            this.renderAcceleratorChart(accelerators);
             //Top Stratergies chart
-            this.renderTopStratergiesChart(chart, this.gaugeData);
+            this.renderTopStratergiesChart(this.gaugeData);
             // Startergies chart
-            let strategySeries = chart.series.push(new window.am4charts.PieSeries());
+            let strategySeries = this.chartInstance.series.push(new window.am4charts.PieSeries());
             this.renderStratergiesChart(strategySeries, strategies);
             //radial chart
             let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
+            this.radialChartInstance = radialChart;
             this.renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries);
+            this.radialChartInstance.preloader.disabled = true;            
+                      
             let categoryAxis = null;
 
             //Reset Button
@@ -544,7 +578,8 @@ export class ChartComponent implements OnInit {
             // Export Button
             this.renderExportButton(chartcontainer);
 
-            chart.toFront();
+            this.chartInstance.toFront();
+            
 
             // //events
             strategySeries.interactionsEnabled = true;
@@ -583,15 +618,17 @@ export class ChartComponent implements OnInit {
             radialChart.scrollbarX.valign = "bottom";
             radialChart.scrollbarX.align = "left";
             radialChart.scrollbarX.marginBottom = 10;
-            radialChart.scrollbarX.marginRight = 10;
+            radialChart.scrollbarX.marginLeft = 60;
+            radialChart.scrollbarX.width = window.am4core.percent(90);
 
             radialChart.scrollbarY = new window.am4core.Scrollbar();
             radialChart.scrollbarY.parent = chartcontainer;
             radialChart.scrollbarY.exportable = false;
             radialChart.scrollbarY.align = "right";
             radialChart.scrollbarY.valign = "bottom";
-            radialChart.scrollbarX.marginBottom = 10;
+            radialChart.scrollbarY.marginBottom = 50;
             radialChart.scrollbarY.marginRight = 10;
+            radialChart.scrollbarY.height = window.am4core.percent(90);
 
             var zoomOutButton = radialChart.zoomOutButton;
             zoomOutButton.dx = -12;
@@ -602,6 +639,11 @@ export class ChartComponent implements OnInit {
             zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
             zoomOutButton.icon.strokeWidth = 2;
             zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
+            }            
+
+            // window.am4core.options.autoDispose = true;  
+            //this.radialChartInstance.dispose();
+            // this.chartInstance.dispose();
         });
 
     }
@@ -615,9 +657,6 @@ export class ChartComponent implements OnInit {
     }
 
 
-    keyFormat(str) {
-        return str.slice(0, 1).toUpperCase().concat(str.slice(1)).split(/(?=[A-Z])/).join(" ");
-    }
 
     downloadAsPNG() {
         const modalBody = document.getElementById("modal-body") as HTMLElement;
@@ -627,5 +666,11 @@ export class ChartComponent implements OnInit {
         }).then(canvas => {
             this.saveAs(canvas.toDataURL(), `dataExport_${Date.now()}.png`);
         })
+    }
+
+    ngOnDestroy() {
+        this.obs.unsubscribe();
+        // this.radialChartInstance.dispose();
+        window.am4core.disposeAllCharts();
     }
 }

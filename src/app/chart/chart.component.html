@@ -1,6 +1,5 @@
 <div id="chartdiv"></div>
 
-<ngx-spinner></ngx-spinner>
 <ng-template #dataModal let-modal>
     <!-- Modal Header -->
     <div class="modal-header">
@@ -22,12 +21,10 @@
     <div id="modal-body" class="modal-body p-4">
         <div class="row row-cols-1 row-cols-md-2">
             <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                <div class="col px-1" *ngIf="obj === 'projectName' || obj === 'projectId'">
-                    <div class="card-container p-2">
-                        <div>
-                            <b>{{keyFormat(obj)}} : </b>
-                            <span>{{modalContent[obj]}}</span>
-                        </div>
+                <div class="col px-1 card-container p-2 flex-1 project-name-id" *ngIf="obj === 'projectName' || obj === 'projectId'">
+                    <div>
+                        <b>{{keyFormat(obj)}} : </b>
+                        <span>{{modalContent[obj]}}</span>
                     </div>
                 </div>
             </ng-container>
@@ -65,27 +62,19 @@
                         </div>
                     </ng-container>
                 </div>
-                <div class="row row-cols-1 row-cols-md-2">
+                <div class="row row-cols-1 row-cols-md-2" style="max-width: 35rem">
                     <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                        <div class="col px-2" *ngIf="obj === 'projectSponsor'">
-                            <div class="card card-container px-2 py-1">
-                                <div class="col">
-                                    <div class="pr-2 col-auto"><b>Project Sponsor : </b></div>
-                                    <div class="col">
-                                        <small>{{modalContent[obj]}}</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col px-2 card card-container px-2 py-1 flex-1" *ngIf="obj === 'projectSponsor'">                           
+                                <div><b>Project Sponsor : </b></div>
+                                <div>
+                                    <small>{{modalContent[obj]}}</small>
+                                </div>                                                      
                         </div>
-                        <div class="col px-2" *ngIf="obj === 'projectManager'">
-                            <div class="card card-container px-2 py-1">
-                                <div class="col">
-                                    <div class="pr-2 col-auto"><b>Project Manager : </b></div>
-                                    <div class="col">
-                                        <small>{{modalContent[obj]}}</small>
-                                    </div>
-                                </div>
-                            </div>
+                        <div class="col px-2 card card-container px-2 py-1 flex-1 project-manager" *ngIf="obj === 'projectManager'">                            
+                                <div><b>Project Manager : </b></div>
+                                <div>
+                                    <small>{{modalContent[obj]}}</small>
+                                </div>                                
                         </div>
                     </ng-container>
                 </div>
@@ -108,9 +97,9 @@
                 <div class="row row-cols-1">
                     <div class="col">
                         <div class="card-container px-2 py-1 card">
-                            <div class="col">
-                                <div class="pr-2 col-auto"><b>Financials :</b></div>
-                                <div class="col" style="display: flex; justify-content: space-around;">
+                           
+                                <div><b>Financials :</b></div>
+                                <div style="display: flex; justify-content: space-around;">
                                     <small>
                                         <b class="pl-2">Capital : </b>
                                         {{amountFormat(modalContent['capital'])}}
@@ -124,7 +113,7 @@
                                         {{amountFormat(modalContent['totalProjectValue'])}}
                                     </small>
                                 </div>
-                            </div>
+                            
                         </div>
                     </div>
                 </div>
@@ -204,19 +193,21 @@
             </ng-container>
         </div>
         <div class="row row-cols-1 row-cols-md-2 mt-1">
-            <div class="col px-1">
-                <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                    <div class="card card-container tech-resrc-cards p-2" *ngIf="obj === 'involvedTechnologyOrSystem'">
+            <ng-container *ngFor="let obj of objectKeys(modalContent)">
+            <div class="col px-1 card card-container tech-resrc-cards p-2 flex-1" *ngIf="obj === 'involvedTechnologyOrSystem'">
+                
+                    
                         <div class="row">
                             <div class="col col-auto pr-2"><b>{{keyFormat(obj)}} : </b></div>
-                        </div>
-                        <div class="col"><small class="mb-0">{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
-                    </div>
-                </ng-container>
+                            <div class="col"><small class="mb-0">{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</small></div>
+                        </div>                        
+                
             </div>
-            <div class="col px-1">
-                <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                    <div class="card card-container tech-resrc-cards p-2" *ngIf="obj === 'resourceRequired'">
+            </ng-container>
+            <ng-container *ngFor="let obj of objectKeys(modalContent)">
+            <div class="col px-1 card card-container tech-resrc-cards p-2 flex-1" *ngIf="obj === 'resourceRequired'">
+                
+                    
                         <div class="row">
                             <div class="col col-auto pr-2">
                                 <b>{{keyFormat(obj)}} : </b>
@@ -225,9 +216,9 @@
                                 <p class="mb-0">{{modalContent[obj] === "" ? '---' : modalContent[obj]}}</p>
                             </div>
                         </div>
-                    </div>
-                </ng-container>
+                                  
             </div>
+            </ng-container>
         </div>
     </div>
 
