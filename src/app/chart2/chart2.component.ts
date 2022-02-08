@@ -194,7 +194,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                     var itemDate: Date = new Date(target.dataItem.values.dateY.value);
                     var priorDate: Date = new Date(itemDate.getFullYear(), 0, 0);
                     var dayOfYear = Math.floor((itemDate.getTime() - priorDate.getTime()) / 1000 / 60 / 60 / 24); var offset = 0.0;
-                    offset = (dayOfYear / 365) * 220;
+                    offset = (dayOfYear / 365) * 170;
                     return val + offset;
                 });
                 bullet.events.on("hit", this.onClickChartItem, this)
