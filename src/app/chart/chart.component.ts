@@ -97,7 +97,7 @@ export class ChartComponent implements OnInit, OnDestroy {
         acceleratorsSeries.innerRadius = window.am4core.percent(1);
         acceleratorsSeries.startAngle = 0;
         acceleratorsSeries.endAngle = 360;
-        acceleratorsSeries.dy = 120;
+        acceleratorsSeries.dy = 150;
 
         acceleratorsSeries.dataFields.value = "value";
         acceleratorsSeries.dataFields.category = "name";
@@ -167,7 +167,7 @@ export class ChartComponent implements OnInit, OnDestroy {
         topStrategiesSeries.maxWidth = 50;
         topStrategiesSeries.wrap = true;
         topStrategiesSeries.inside = true;
-        topStrategiesSeries.dy = 120;
+        topStrategiesSeries.dy = 150;
         topStrategiesSeries.slices.template.interactionsEnabled = true;
 
         let topStrategyLabelsTemplate = topStrategiesSeries.labels.template;
@@ -213,7 +213,7 @@ export class ChartComponent implements OnInit, OnDestroy {
         strategySeries.radius = window.am4core.percent(22);
         strategySeries.innerRadius = window.am4core.percent(17);
         strategySeries.colors.list = stratergy_colors;
-        strategySeries.dy = 120;
+        strategySeries.dy = 150;
         strategySeries.alignLabels = false;
         strategySeries.ticks.template.disabled = true;
         let strategyLabelsTemplate = strategySeries.labels.template;
@@ -238,7 +238,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries) { // configuring radial chart   
         radialChart.startAngle = 0;
         radialChart.endAngle = -180;
-        radialChart.dy = 250;
+        radialChart.dy = 280;
         radialChart.dx = 0;
         radialChart.responsive.enabled = true;
         radialChart.colors.step = 2;
@@ -337,7 +337,7 @@ export class ChartComponent implements OnInit, OnDestroy {
         //radialChart.legend.width = 200;
         radialChart.legend.fillOpacity = 0.70;
         radialChart.legend.strokeWidth = 0;
-        radialChart.legend.y = -215;
+        radialChart.legend.y = -250;
         radialChart.legend.fontSize = 10;
         radialChart.legend.contentAlign = "top";
         radialChart.legend.itemContainers.template.clickable = true;
