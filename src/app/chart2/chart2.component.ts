@@ -39,12 +39,32 @@ export class Chart2Component implements OnInit, OnDestroy {
     ];
 
     rawdata;
-    cats = [{ "category": "100% Digital QMS" },
-    { "category": "98% Satisfaction in Customer Facing KPIs" },
-    { "category": "80% Automated QC and Product Release" },
-    { "category": "100% Integrated Data" },
-    { "category": "75% Focused on Patient, Consumer & Customer Exp" },
-    { "category": "N/A" }];
+    cats = [
+        {
+            "name": "100% Digital QMS",
+            "fill": "#de4c4f"
+        },
+        {
+            "name": "98% Satisfaction in Customer Facing KPIs",
+            "fill": "#eea638"
+        },
+        {
+            "name": "80% Automated QC and Product Release",
+            "fill": "#86a965"
+        },
+        {
+            "name": "100% Integrated Data",
+            "fill": "#a7a737"
+        },
+        {
+            "name": "75% Focused on Patient, Consumer & Customer Exp",
+            "fill": "#d8854f"
+        },
+        {
+            "name": "N/A",
+            "fill": "grey"
+        }
+    ];
 
     constructor(private modalService: NgbModal, private chartService: ChartService) { }
 
@@ -122,11 +142,37 @@ export class Chart2Component implements OnInit, OnDestroy {
                 // chart.endAngle = -10;
                 chart.innerRadius = window.am4core.percent(30);
                 chart.dateFormatter.dateFormat = "M/d/yy";
-                chart.legend = new window.am4charts.Legend();
-                chart.legend.useDefaultMarker = true;
+                let legend = new window.am4charts.Legend();
+                legend.parent = chart.chartContainer;
+                legend.useDefaultMarker = true;
+                legend.labels.template.fontSize = 12;
+                legend.data = this.cats;
+                legend.itemContainers.template.events.on("hit", (ev: any) => {
+                    console.log(ev.target);
+                    console.log(ev.target.dataItem.dataContext.name);
+                    let bamValue = ev.target.dataItem.dataContext.name;
+                    let selected = ev.target.dataItem.properties.color;
+                    console.log("Clicked on", bamValue + ":" + selected);
+                    let finalData: any = [];
+                    if (!selected) {
+                        finalData = this.rawdata.filter(function (item: any) {
+                            return item.bamAllignment != bamValue;
+                        });
+                    } else {
+                        finalData = finalData.filter(function (item: any) {
+                            return item.bamAllignment === bamValue;
+                        });
+                    }
+                    if (finalData.length == 0) {
+                        finalData = this.rawdata;
+                    }
+                    console.log("finalData ", finalData.length);
+                    chart.data = finalData;
+                });
+
 
                 var categoryAxis = chart.xAxes.push(new window.am4charts.CategoryAxis());
-                categoryAxis.dataFields.category = "category";
+                categoryAxis.dataFields.category = "name";
                 categoryAxis.renderer.grid.template.location = 0;
                 categoryAxis.data = this.cats;
 
@@ -141,12 +187,12 @@ export class Chart2Component implements OnInit, OnDestroy {
                     "timeUnit": "year",
                     "count": 1
                 }
-                valueAxis.renderer.grid.template.stroke = window.am4core.color("darkblue");
-                valueAxis.renderer.grid.template.strokeWidth = 2;
+                valueAxis.renderer.grid.template.stroke = window.am4core.color("#0000FF");
+                valueAxis.renderer.grid.template.strokeWidth = 3;
                 valueAxis.interactionsEnabled = true;
 
                 categoryAxis.renderer.labels.template.location = 0.5;
-                categoryAxis.renderer.labels.template.fontSize = 10;
+                categoryAxis.renderer.labels.template.fontSize = 12;
 
                 categoryAxis.interactionsEnabled = true;
                 categoryAxis.renderer.axisFills.template.disabled = false;
@@ -154,7 +200,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                 categoryAxis.renderer.interactionsEnabled = true;
                 categoryAxis.renderer.layout = "grid";
                 categoryAxis.renderer.ticks.template.disabled = false;
-                categoryAxis.renderer.ticks.template.strokeOpacity = 0.5;
+                categoryAxis.renderer.ticks.template.strokeOpacity = 1;
 
                 // categoryAxis.renderer.grid gridContainer
 
@@ -164,9 +210,8 @@ export class Chart2Component implements OnInit, OnDestroy {
                 series.dataFields.dateY = "startDate";
                 series.dataFields.value = "totalProjectCost";
                 series.strokeOpacity = 0;
-                // series.sequencedInterpolation = true;
-                // series.sequencedInterpolationDelay = 100;
-                series.legendSettings.labelText = "BAM Alignment";
+                series.sequencedInterpolation = true;
+                series.sequencedInterpolationDelay = 100;
                 series.interactionsEnabled = true;
                 series.clickable = true;
 
@@ -186,7 +231,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                     var dayOfYear = Math.floor((itemDate.getTime() - priorDate.getTime()) / 1000 / 60 / 60 / 24);
                     var offset = 0.0;
                     offset = (1 - (dayOfYear / 365)) * 110;
-                    console.log(itemDate, "dayOfYear", dayOfYear, offset);
+                    // console.log(itemDate, "dayOfYear", dayOfYear, offset);
                     return val + offset;
                 });
 
@@ -261,8 +306,8 @@ export class Chart2Component implements OnInit, OnDestroy {
                     return -target.radius;
                 })
 
-                chart.cursor = new window.am4charts.RadarCursor();
-                chart.cursor.behavior = "zoomXY";
+                // chart.cursor = new window.am4charts.RadarCursor();
+                // chart.cursor.behavior = "zoomXY";
                 chart.scrollbarX = new window.am4core.Scrollbar();
                 chart.scrollbarY = new window.am4core.Scrollbar();
 
