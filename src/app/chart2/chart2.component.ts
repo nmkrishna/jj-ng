@@ -103,18 +103,37 @@ export class Chart2Component implements OnInit, OnDestroy {
         })
     }
 
-    obs: Subscription;
+     //loader code
+     indicator;
+     showIndicator() {
+         this.indicator = this.chartInstance.tooltipContainer.createChild(window.am4core.Container);
+         this.indicator.background.fill = window.am4core.color("#fff");
+         this.indicator.background.fillOpacity = 0.8;
+         this.indicator.width = window.am4core.percent(100);
+         this.indicator.height = window.am4core.percent(100);
+         let indicatorLabel = this.indicator.createChild(window.am4core.Label);
+         indicatorLabel.text = "Loading ...";
+         indicatorLabel.align = "center";
+         indicatorLabel.valign = "middle";
+         indicatorLabel.fontSize = 20;
+     }
+ 
+     hideIndicator() {
+         this.indicator.hide();
+     }
+
 
     ngOnInit(): void {
 
         window.am4core.useTheme(window.am4themes_animated);
         window.am4core.addLicense('CH300383565');
-
-        this.obs = this.chartService.chartResponse.subscribe(data => {
+        var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
+        this.chartInstance = chart;
+        this.showIndicator();
+        this.chartService.getChartData().then(data => {
             this.rawdata = chart2data;
             if (this.rawdata.length > 0) {
-                var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
-                this.chartInstance = chart;
+                this.hideIndicator();                   
                 chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
                 chart.startAngle = 270 - 180;
                 chart.endAngle = 270 + 180;
@@ -300,7 +319,6 @@ export class Chart2Component implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         //this.chartInstance = null;
-        this.obs.unsubscribe();
         this.chartInstance.dispose();
         window.am4core.disposeAllCharts();
     }

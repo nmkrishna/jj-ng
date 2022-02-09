@@ -82,7 +82,7 @@ const getAccelarators = (rawData: any) => {
         "Across Accelerators"];
 };
 
-const getOwners = (rawData: any) => {
+const getOwners = (rawData: any) => {    
     let entries: any = [];
     owners = [];
     entries = [
@@ -120,7 +120,7 @@ const getStratergies = (rawData: any) => {
 const getInitiatives = (rawData: any) => {
     let result: Array<string> = [];
     rawData.forEach((element, index) => {
-        result = result.concat(element.initiative);
+        result = result.concat((index + 1) + "." + element.initiative);
     });
     return [...new Set(result)];
 };
@@ -142,7 +142,7 @@ const getInitiativesSeries = (rawData: any) => {
             let seriesObj: any = {};
             var id = initIndex + 1;
             seriesObj.id = id;
-            seriesObj.initiative = entry.initiative;
+            seriesObj.initiative = id + "." + entry.initiative;
             seriesObj.qualityEnabler = entry.qualityEnabler;
             seriesObj.strategy = strategy;
             seriesObj[`start${initIndex}`] = allStrategies.indexOf(strategy);

@@ -275,7 +275,7 @@ export class ChartComponent implements OnInit, OnDestroy {
             initiativesSeries.fill = initiativeColor;
             initiativesSeries.stroke = initiativeColor;
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
-            <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
+            <span style="font-size:8px"><center><strong>{initiative.split('.')[1]}</strong></center></span>
             <hr/>
             <table>
             </tr>
@@ -345,22 +345,19 @@ export class ChartComponent implements OnInit, OnDestroy {
 
         radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
-            let selected = ev.target.dataItem.properties.color;
-            console.log("Clicked on", ownerValue + ":" + selected);
+            let selected = ev.target.dataItem.properties.color;            
             let finalData: any = [];
             if (!selected) {
                 let filteredData = chartSeries.filter(function (item: any) {
                     return item.owner === ownerValue;
                 });
-                finalData = finalData.concat(filteredData);
-                console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
+                finalData = finalData.concat(filteredData);                
                 radialChart.legend.dataItems.values.forEach((element: any) => {
                     if (element.properties.color) {
                         filteredData = chartSeries.filter(function (item: any) {
                             return item.owner === element.name;
                         });
-                        finalData = finalData.concat(filteredData);
-                        console.log("1-final adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
+                        finalData = finalData.concat(filteredData);                        
                     }
                 });
 
@@ -371,23 +368,19 @@ export class ChartComponent implements OnInit, OnDestroy {
                         let filteredData = chartSeries.filter(function (item: any) {
                             return item.owner === element.name;
                         });
-                        finalData = finalData.concat(filteredData);
-                        console.log("2-final adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
+                        finalData = finalData.concat(filteredData);                        
                     }
                 });
                 finalData = finalData.filter(function (item: any) {
                     return item.owner != ownerValue;
-                });
-                console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
+                });                
 
-            }
-            //console.log("final filtered size:" + finalData.length);
+            }            
             if (finalData.length == 0) {
                 finalData = chartSeries;
             }
             radialChart.data = finalData;
-            categoryAxis.data = finalData;
-            //console.log("filtered chart.data", radialChart.data.length);
+            categoryAxis.data = finalData;            
         });
         radialChart.legend.data = owners;
         radialChart.data = chartSeries;
@@ -396,14 +389,12 @@ export class ChartComponent implements OnInit, OnDestroy {
     screenshot() {
         Array.from(document
             .getElementsByClassName("amcharts-Scrollbar-group"))
-            .forEach((element) => {
-                // console.log(element);
+            .forEach((element) => {                
                 element.setAttribute("style", "display: none");
             });
         Array.from(document
             .getElementsByClassName("amcharts-Button-group"))
-            .forEach((element) => {
-                // console.log(element);
+            .forEach((element) => {                
                 element.setAttribute("style", "display: none");
             });
         window
@@ -421,8 +412,7 @@ export class ChartComponent implements OnInit, OnDestroy {
                     });
                 Array.from(document
                     .getElementsByClassName("amcharts-Button-group"))
-                    .forEach((element) => {
-                        // console.log(element);
+                    .forEach((element) => {                        
                         element.setAttribute("style", "display: block");
                     });
 
@@ -521,8 +511,6 @@ export class ChartComponent implements OnInit, OnDestroy {
         this.indicator.hide();
     }
 
-    obs : Subscription;
-
     ngOnInit(): void {
         // Themes begin
 
@@ -534,16 +522,15 @@ export class ChartComponent implements OnInit, OnDestroy {
 
         // this.spinner.show();
         this.showIndicator();
-        this.obs = this.chartService.chartResponse.subscribe((data) => {
-            if(data.length > 0) {
-                console.log('chart api successfull', data);
+        this.chartService.getChartData().then((data) => {
+            if(data.length > 0) {                
             // this.spinner.hide();
             this.hideIndicator();            
             var accelerators = getAccelarators(data);
             let owners = getOwners(data);
             var strategies = getStratergies(data);
             var chartSeries = getInitiativesSeries(data);
-            var initiatives = getInitiatives(data);            
+            var initiatives = getInitiatives(data);
             window.am4core.addLicense('CH300383565');
             //enable class names for custom styling
             window.am4core.options.autoSetClassName = true;
@@ -669,7 +656,6 @@ export class ChartComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.obs.unsubscribe();
         // this.radialChartInstance.dispose();
         window.am4core.disposeAllCharts();
     }

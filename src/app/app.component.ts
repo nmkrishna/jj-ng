@@ -1,4 +1,4 @@
-import { Component, OnInit} from '@angular/core';
+import { Component} from '@angular/core';
 import { ChartService } from './chart.service';
 
 @Component({
@@ -6,13 +6,8 @@ import { ChartService } from './chart.service';
     templateUrl: './app.component.html',
     styleUrls: ['./app.component.scss']
 })
-export class AppComponent implements OnInit{
+export class AppComponent {
     title = 'jj-chart';
     
-    constructor(private chartService: ChartService) { }
-
-    ngOnInit(): void {
-        this.chartService.fetchData();
-    }
 
 }
