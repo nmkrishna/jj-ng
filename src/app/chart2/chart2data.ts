@@ -1281,4 +1281,48 @@ const chart2data = [
     }
 ];
 
-export default chart2data;
+const bamAlignments = [
+    {
+        "name": "100% Digital QMS",
+        "fill": "#de4c4f"
+    },
+    {
+        "name": "98% Satisfaction in Customer Facing KPIs",
+        "fill": "#eea638"
+    },
+    {
+        "name": "80% Automated QC and Product Release",
+        "fill": "#86a965"
+    },
+    {
+        "name": "100% Integrated Data",
+        "fill": "#a7a737"
+    },
+    {
+        "name": "75% Focused on Patient, Consumer & Customer Exp",
+        "fill": "#d8854f"
+    },
+    {
+        "name": "N/A",
+        "fill": "grey"
+    }
+];
+
+const getBAMAlignments = (rawData: any) => {
+    let result: any = [];
+    var nf = new Intl.NumberFormat('en-US', {
+        style: 'currency',
+        currency: 'USD',
+        minimumFractionDigits: 0,
+        maximumFractionDigits: 0
+    });
+    bamAlignments.forEach(element => {
+        let initiatives = rawData.filter(item => item.bamAllignment == element.name);
+        let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + (obj.totalProjectCost ? obj.totalProjectCost : 0) }, 0);
+        result.push({ "name": element.name, "fill": element.fill, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": nf.format(totalProjectsCost) });
+
+    });
+    return result;
+};
+
+export { chart2data, getBAMAlignments, bamAlignments };
