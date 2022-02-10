@@ -1,5 +1,5 @@
 import { Component, Input, OnInit, OnDestroy, TemplateRef, ViewChild, ElementRef } from '@angular/core';
-import chart2data from "./chart2data"
+import { chart2data, getBAMAlignments, bamAlignments } from "./chart2data"
 import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { faMinusSquare, faCheckSquare, faDownload } from '@fortawesome/free-solid-svg-icons';
 import { ChartService } from '../chart.service';
@@ -39,32 +39,7 @@ export class Chart2Component implements OnInit, OnDestroy {
     ];
 
     rawdata;
-    cats = [
-        {
-            "name": "100% Digital QMS",
-            "fill": "#de4c4f"
-        },
-        {
-            "name": "98% Satisfaction in Customer Facing KPIs",
-            "fill": "#eea638"
-        },
-        {
-            "name": "80% Automated QC and Product Release",
-            "fill": "#86a965"
-        },
-        {
-            "name": "100% Integrated Data",
-            "fill": "#a7a737"
-        },
-        {
-            "name": "75% Focused on Patient, Consumer & Customer Exp",
-            "fill": "#d8854f"
-        },
-        {
-            "name": "N/A",
-            "fill": "grey"
-        }
-    ];
+    cats = bamAlignments;
 
     constructor(private modalService: NgbModal, private chartService: ChartService) { }
 
@@ -123,18 +98,39 @@ export class Chart2Component implements OnInit, OnDestroy {
         })
     }
 
-    obs: Subscription;
+    //loader code
+    indicator;
+    showIndicator() {
+        this.indicator = this.chartInstance.tooltipContainer.createChild(window.am4core.Container);
+        this.indicator.background.fill = window.am4core.color("#fff");
+        this.indicator.background.fillOpacity = 0.8;
+        this.indicator.width = window.am4core.percent(100);
+        this.indicator.height = window.am4core.percent(100);
+        let indicatorLabel = this.indicator.createChild(window.am4core.Label);
+        indicatorLabel.text = "Loading ...";
+        indicatorLabel.align = "center";
+        indicatorLabel.valign = "middle";
+        indicatorLabel.fontSize = 20;
+    }
+
+    hideIndicator() {
+        this.indicator.hide();
+    }
+
 
     ngOnInit(): void {
 
         window.am4core.useTheme(window.am4themes_animated);
         window.am4core.addLicense('CH300383565');
-
-        this.obs = this.chartService.chartResponse.subscribe(data => {
+        var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
+        this.chartInstance = chart;
+        this.showIndicator();
+        this.chartService.getChartData().then(data => {
             this.rawdata = chart2data;
+            this.cats = getBAMAlignments(this.rawdata);
+
             if (this.rawdata.length > 0) {
-                var chart = window.am4core.create("chart2div", window.am4charts.RadarChart);
-                this.chartInstance = chart;
+                this.hideIndicator();
                 chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
                 chart.startAngle = 270 - 180;
                 chart.endAngle = 270 + 180;
@@ -142,34 +138,6 @@ export class Chart2Component implements OnInit, OnDestroy {
                 // chart.endAngle = -10;
                 chart.innerRadius = window.am4core.percent(30);
                 chart.dateFormatter.dateFormat = "M/d/yy";
-                let legend = new window.am4charts.Legend();
-                legend.parent = chart.chartContainer;
-                legend.useDefaultMarker = true;
-                legend.labels.template.fontSize = 12;
-                legend.data = this.cats;
-                legend.itemContainers.template.events.on("hit", (ev: any) => {
-                    console.log(ev.target);
-                    console.log(ev.target.dataItem.dataContext.name);
-                    let bamValue = ev.target.dataItem.dataContext.name;
-                    let selected = ev.target.dataItem.properties.color;
-                    console.log("Clicked on", bamValue + ":" + selected);
-                    let finalData: any = [];
-                    if (!selected) {
-                        finalData = this.rawdata.filter(function (item: any) {
-                            return item.bamAllignment != bamValue;
-                        });
-                    } else {
-                        finalData = finalData.filter(function (item: any) {
-                            return item.bamAllignment === bamValue;
-                        });
-                    }
-                    if (finalData.length == 0) {
-                        finalData = this.rawdata;
-                    }
-                    console.log("finalData ", finalData.length);
-                    chart.data = finalData;
-                });
-
 
                 var categoryAxis = chart.xAxes.push(new window.am4charts.CategoryAxis());
                 categoryAxis.dataFields.category = "name";
@@ -179,8 +147,8 @@ export class Chart2Component implements OnInit, OnDestroy {
                 var valueAxis = chart.yAxes.push(new window.am4charts.DateAxis());
                 //dynamic date range
                 chart.events.on("ready", function (ev) {
-                    valueAxis.min = valueAxis.minZoomed;
-                    valueAxis.max = valueAxis.maxZoomed;
+                    valueAxis.min = valueAxis.minZoomed - 24 * 60 * 60 * 1000;
+                    valueAxis.max = valueAxis.maxZoomed + 24 * 60 * 60 * 1000;
                 });
 
                 valueAxis.baseInterval = {
@@ -189,6 +157,8 @@ export class Chart2Component implements OnInit, OnDestroy {
                 }
                 valueAxis.renderer.grid.template.stroke = window.am4core.color("#0000FF");
                 valueAxis.renderer.grid.template.strokeWidth = 3;
+                valueAxis.renderer.labels.template.fontSize = 12;
+
                 valueAxis.interactionsEnabled = true;
 
                 categoryAxis.renderer.labels.template.location = 0.5;
@@ -231,14 +201,14 @@ export class Chart2Component implements OnInit, OnDestroy {
                     var dayOfYear = Math.floor((itemDate.getTime() - priorDate.getTime()) / 1000 / 60 / 60 / 24);
                     var offset = 0.0;
                     offset = (1 - (dayOfYear / 365)) * 110;
-                    // console.log(itemDate, "dayOfYear", dayOfYear, offset);
                     return val + offset;
                 });
 
                 bullet.adapter.add("dx", function (val, target, key) {
                     var itemDate: Date = new Date(target.dataItem.values.dateY.value);
                     var priorDate: Date = new Date(itemDate.getFullYear(), 0, 0);
-                    var dayOfYear = Math.floor((itemDate.getTime() - priorDate.getTime()) / 1000 / 60 / 60 / 24); var offset = 0.0;
+                    var dayOfYear = Math.floor((itemDate.getTime() - priorDate.getTime()) / 1000 / 60 / 60 / 24);
+                    var offset = 0.0;
                     offset = (dayOfYear / 365) * 170;
                     return val + offset;
                 });
@@ -319,11 +289,87 @@ export class Chart2Component implements OnInit, OnDestroy {
                     chart.endAngle = 270 + start * 179 + 1;
                     valueAxis.renderer.axisAngle = chart.startAngle;
                 });
-
                 for (let i = 0; i < this.rawdata.length; i++) {
                     this.rawdata[i]['color'] = this.getColor(this.rawdata[i].bamAllignment);
                 };
+
+                // chart.events.on("ready", function (event) {
+
+                let legend = new window.am4charts.Legend();
+                legend.parent = chart.chartContainer;
+                legend.useDefaultMarker = true;
+                legend.labels.template.fontSize = 12;
+                legend.showTooltipOn = "hover";
+                legend.labels.template.text = "[bold]{name}[/]\n [font-size: 10px] Projects: {initiatives} \n Total Cost:{totalProjectsCost} [/]";
+                legend.data = this.cats;
+
+                legend.itemContainers.template.events.on("hit", (ev: any) => {
+
+                    let bamValue = ev.target.dataItem.dataContext.name;
+                    let selected = ev.target.dataItem.properties.color;
+                    let finalData: any = [];
+                    legend.dataItems.values.forEach((element: any) => {
+                        // console.log("element", element.dataContext.name, element.properties.color);
+                        if (!element.properties.color) {
+                            let matches = this.rawdata.filter(function (item: any) {
+                                return item.bamAllignment === element.dataContext.name;
+                            });
+                            finalData = finalData.concat(matches);
+                        }
+                    });
+                    let filteredData = this.rawdata.filter(function (item: any) {
+                        return item.bamAllignment === bamValue;
+                    });
+                    // console.log("filteredData", filteredData);
+
+                    if (!selected) {
+                        finalData = finalData.filter(ar => !filteredData.find(rm => (rm.bamAllignment === ar.bamAllignment)))
+                    } else {
+                        finalData = finalData.concat(filteredData);
+                    }
+
+                    if (finalData.length == 0) {
+                        categoryAxis.data = this.cats;
+                        finalData = this.rawdata;
+                        chart.reinit();
+                        legend.reinit();
+                        legend.children.each((item) => {
+                            item.isActive = false;
+                        });
+                    }
+                    // console.log("finaldata", finalData);
+                    categoryAxis.data = this.cats;
+                    chart.data = finalData;
+                });
+
+
+                // legend.itemContainers.template.events.on("hit", (ev: any) => {
+                //     console.log(ev.target);
+                //     console.log(ev.target.dataItem.dataContext.name);
+                //     let bamValue = ev.target.dataItem.dataContext.name;
+                //     let selected = ev.target.dataItem.properties.color;
+                //     console.log("Clicked on", bamValue + ":" + selected);
+                //     let finalData: any = [];
+                //     if (!selected) {
+                //         finalData = this.rawdata.filter(function (item: any) {
+                //             return item.bamAllignment != bamValue;
+                //         });
+                //     } else {
+                //         finalData = finalData.filter(function (item: any) {
+                //             return item.bamAllignment === bamValue;
+                //         });
+                //     }
+                //     if (finalData.length == 0) {
+                //         finalData = this.rawdata;
+                //     }
+                //     console.log("finalData ", finalData);
+                //     categoryAxis.data = this.cats;
+                //     chart.data = finalData;
+
+                // });
+                // });
                 chart.data = this.rawdata;
+
             }
         })
 
@@ -345,7 +391,6 @@ export class Chart2Component implements OnInit, OnDestroy {
 
     ngOnDestroy() {
         //this.chartInstance = null;
-        this.obs.unsubscribe();
         this.chartInstance.dispose();
         window.am4core.disposeAllCharts();
     }

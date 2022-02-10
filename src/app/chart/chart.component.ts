@@ -41,7 +41,6 @@ import {
     getInitiativesSeries,
     getInitiativeColor
 } from '../chart/chartdata';
-import chart2data from '../chart2/chart2data';
 import { Subscription } from 'rxjs';
 
 @Component({
@@ -62,7 +61,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     faMinusSquare = faMinusSquare;
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
-    chartInstance:any;
+    chartInstance: any;
     radialChartInstance: any;
     @ViewChild('dataModal') dataModal: TemplateRef<any>;
     constructor(private chartService: ChartService, private modalService: NgbModal) { }
@@ -90,7 +89,7 @@ export class ChartComponent implements OnInit, OnDestroy {
     ];
 
 
-    renderAcceleratorChart( accelerators) {
+    renderAcceleratorChart(accelerators) {
         // Add and configure Series
         var acceleratorsSeries = this.chartInstance.series.push(new window.am4charts.PieSeries());
         acceleratorsSeries.radius = window.am4core.percent(8);
@@ -275,7 +274,7 @@ export class ChartComponent implements OnInit, OnDestroy {
             initiativesSeries.fill = initiativeColor;
             initiativesSeries.stroke = initiativeColor;
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
-            <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
+            <span style="font-size:8px"><center><strong>{initiative.split('.')[1]}</strong></center></span>
             <hr/>
             <table>
             </tr>
@@ -346,21 +345,18 @@ export class ChartComponent implements OnInit, OnDestroy {
         radialChart.legend.itemContainers.template.events.on("hit", (ev: any) => {
             let ownerValue = ev.target.dataItem.name;
             let selected = ev.target.dataItem.properties.color;
-            console.log("Clicked on", ownerValue + ":" + selected);
             let finalData: any = [];
             if (!selected) {
                 let filteredData = chartSeries.filter(function (item: any) {
                     return item.owner === ownerValue;
                 });
                 finalData = finalData.concat(filteredData);
-                console.log("adding items for owner:" + ownerValue + ":" + filteredData.length + "/" + finalData.length);
                 radialChart.legend.dataItems.values.forEach((element: any) => {
                     if (element.properties.color) {
                         filteredData = chartSeries.filter(function (item: any) {
                             return item.owner === element.name;
                         });
                         finalData = finalData.concat(filteredData);
-                        console.log("1-final adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
                     }
                 });
 
@@ -372,22 +368,18 @@ export class ChartComponent implements OnInit, OnDestroy {
                             return item.owner === element.name;
                         });
                         finalData = finalData.concat(filteredData);
-                        console.log("2-final adding items for owner:" + element.name + ":" + filteredData.length + "/" + finalData.length);
                     }
                 });
                 finalData = finalData.filter(function (item: any) {
                     return item.owner != ownerValue;
                 });
-                console.log("removing items for owner:" + ownerValue + ":" + finalData.length);
 
             }
-            //console.log("final filtered size:" + finalData.length);
             if (finalData.length == 0) {
                 finalData = chartSeries;
             }
             radialChart.data = finalData;
             categoryAxis.data = finalData;
-            //console.log("filtered chart.data", radialChart.data.length);
         });
         radialChart.legend.data = owners;
         radialChart.data = chartSeries;
@@ -397,13 +389,11 @@ export class ChartComponent implements OnInit, OnDestroy {
         Array.from(document
             .getElementsByClassName("amcharts-Scrollbar-group"))
             .forEach((element) => {
-                // console.log(element);
                 element.setAttribute("style", "display: none");
             });
         Array.from(document
             .getElementsByClassName("amcharts-Button-group"))
             .forEach((element) => {
-                // console.log(element);
                 element.setAttribute("style", "display: none");
             });
         window
@@ -422,7 +412,6 @@ export class ChartComponent implements OnInit, OnDestroy {
                 Array.from(document
                     .getElementsByClassName("amcharts-Button-group"))
                     .forEach((element) => {
-                        // console.log(element);
                         element.setAttribute("style", "display: block");
                     });
 
@@ -521,8 +510,6 @@ export class ChartComponent implements OnInit, OnDestroy {
         this.indicator.hide();
     }
 
-    obs : Subscription;
-
     ngOnInit(): void {
         // Themes begin
 
@@ -534,112 +521,111 @@ export class ChartComponent implements OnInit, OnDestroy {
 
         // this.spinner.show();
         this.showIndicator();
-        this.obs = this.chartService.chartResponse.subscribe((data) => {
-            if(data.length > 0) {
-                console.log('chart api successfull', data);
-            // this.spinner.hide();
-            this.hideIndicator();            
-            var accelerators = getAccelarators(data);
-            let owners = getOwners(data);
-            var strategies = getStratergies(data);
-            var chartSeries = getInitiativesSeries(data);
-            var initiatives = getInitiatives(data);            
-            window.am4core.addLicense('CH300383565');
-            //enable class names for custom styling
-            window.am4core.options.autoSetClassName = true;
-            window.am4core.useTheme(window.am4themes_animated);            
+        this.chartService.getChartData().then((data) => {
+            if (data.length > 0) {
+                // this.spinner.hide();
+                this.hideIndicator();
+                var accelerators = getAccelarators(data);
+                let owners = getOwners(data);
+                var strategies = getStratergies(data);
+                var chartSeries = getInitiativesSeries(data);
+                var initiatives = getInitiatives(data);
+                window.am4core.addLicense('CH300383565');
+                //enable class names for custom styling
+                window.am4core.options.autoSetClassName = true;
+                window.am4core.useTheme(window.am4themes_animated);
 
-            // Create chart instance            
-            this.chartInstance.startAngle = 0;
-            this.chartInstance.endAngle = -180;
-            this.chartInstance.dy = 130;
-            // Let's cut a hole in our Pie chart
-            this.chartInstance.innerRadius = window.am4core.percent(3);
-        
-            //accelerator chart
-            this.renderAcceleratorChart(accelerators);
-            //Top Stratergies chart
-            this.renderTopStratergiesChart(this.gaugeData);
-            // Startergies chart
-            let strategySeries = this.chartInstance.series.push(new window.am4charts.PieSeries());
-            this.renderStratergiesChart(strategySeries, strategies);
-            //radial chart
-            let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
-            this.radialChartInstance = radialChart;
-            this.renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries);
-            this.radialChartInstance.preloader.disabled = true;            
-                      
-            let categoryAxis = null;
+                // Create chart instance            
+                this.chartInstance.startAngle = 0;
+                this.chartInstance.endAngle = -180;
+                this.chartInstance.dy = 130;
+                // Let's cut a hole in our Pie chart
+                this.chartInstance.innerRadius = window.am4core.percent(3);
 
-            //Reset Button
-            this.renderResetButton(chartcontainer, radialChart, strategySeries, chartSeries)
+                //accelerator chart
+                this.renderAcceleratorChart(accelerators);
+                //Top Stratergies chart
+                this.renderTopStratergiesChart(this.gaugeData);
+                // Startergies chart
+                let strategySeries = this.chartInstance.series.push(new window.am4charts.PieSeries());
+                this.renderStratergiesChart(strategySeries, strategies);
+                //radial chart
+                let radialChart = chartcontainer.createChild(window.am4charts.RadarChart);
+                this.radialChartInstance = radialChart;
+                this.renderRadialChart(radialChart, initiatives, strategies, owners, data, chartSeries);
+                this.radialChartInstance.preloader.disabled = true;
+
+                let categoryAxis = null;
+
+                //Reset Button
+                this.renderResetButton(chartcontainer, radialChart, strategySeries, chartSeries)
 
 
-            // Export Button
-            this.renderExportButton(chartcontainer);
+                // Export Button
+                this.renderExportButton(chartcontainer);
 
-            this.chartInstance.toFront();
-            
+                this.chartInstance.toFront();
 
-            // //events
-            strategySeries.interactionsEnabled = true;
-            strategySeries.slices.template.events.on("hit", (ev: any) => {
-                let finalData: any = [];
-                var allOff = true;
-                strategySeries.slices.values.forEach((element: any) => {
-                    if (element.isActive) {
-                        element.fillOpacity = 1;
-                        let filteredData = chartSeries.filter(function (item: any) {
-                            return item.strategy === element.dataItem.dataContext.name;
-                        });
-                        finalData = finalData.concat(filteredData);
-                        allOff = false;
-                    } else {
-                        element.fillOpacity = 0.5;
+
+                // //events
+                strategySeries.interactionsEnabled = true;
+                strategySeries.slices.template.events.on("hit", (ev: any) => {
+                    let finalData: any = [];
+                    var allOff = true;
+                    strategySeries.slices.values.forEach((element: any) => {
+                        if (element.isActive) {
+                            element.fillOpacity = 1;
+                            let filteredData = chartSeries.filter(function (item: any) {
+                                return item.strategy === element.dataItem.dataContext.name;
+                            });
+                            finalData = finalData.concat(filteredData);
+                            allOff = false;
+                        } else {
+                            element.fillOpacity = 0.5;
+                        }
+
+                    });
+                    if (allOff) {
+                        finalData = chartSeries;
                     }
-
+                    radialChart.data = finalData;
+                    radialChart.yAxes.values[0].data = finalData;
+                    radialChart.legend.data = owners;
+                    radialChart.legend.reinit();
+                    radialChart.legend.children.each((item) => {
+                        item.isActive = false;
+                    });
                 });
-                if (allOff) {
-                    finalData = chartSeries;
-                }
-                radialChart.data = finalData;
-                radialChart.yAxes.values[0].data = finalData;
-                radialChart.legend.data = owners;
-                radialChart.legend.reinit();
-                radialChart.legend.children.each((item) => {
-                    item.isActive = false;
-                });
-            });
 
-            // Zoom Controls
-            radialChart.scrollbarX = new window.am4core.Scrollbar();
-            radialChart.scrollbarX.parent = chartcontainer;
-            radialChart.scrollbarX.exportable = false;
-            radialChart.scrollbarX.valign = "bottom";
-            radialChart.scrollbarX.align = "left";
-            radialChart.scrollbarX.marginBottom = 10;
-            radialChart.scrollbarX.marginLeft = 60;
-            radialChart.scrollbarX.width = window.am4core.percent(90);
+                // Zoom Controls
+                radialChart.scrollbarX = new window.am4core.Scrollbar();
+                radialChart.scrollbarX.parent = chartcontainer;
+                radialChart.scrollbarX.exportable = false;
+                radialChart.scrollbarX.valign = "bottom";
+                radialChart.scrollbarX.align = "left";
+                radialChart.scrollbarX.marginBottom = 10;
+                radialChart.scrollbarX.marginLeft = 60;
+                radialChart.scrollbarX.width = window.am4core.percent(90);
 
-            radialChart.scrollbarY = new window.am4core.Scrollbar();
-            radialChart.scrollbarY.parent = chartcontainer;
-            radialChart.scrollbarY.exportable = false;
-            radialChart.scrollbarY.align = "right";
-            radialChart.scrollbarY.valign = "bottom";
-            radialChart.scrollbarY.marginBottom = 50;
-            radialChart.scrollbarY.marginRight = 10;
-            radialChart.scrollbarY.height = window.am4core.percent(90);
+                radialChart.scrollbarY = new window.am4core.Scrollbar();
+                radialChart.scrollbarY.parent = chartcontainer;
+                radialChart.scrollbarY.exportable = false;
+                radialChart.scrollbarY.align = "right";
+                radialChart.scrollbarY.valign = "bottom";
+                radialChart.scrollbarY.marginBottom = 50;
+                radialChart.scrollbarY.marginRight = 10;
+                radialChart.scrollbarY.height = window.am4core.percent(90);
 
-            var zoomOutButton = radialChart.zoomOutButton;
-            zoomOutButton.dx = -12;
-            zoomOutButton.dy = -3;
-            zoomOutButton.parent = radialChart.tooltipContainer;
-            zoomOutButton.background.cornerRadius(5, 5, 5, 5);
-            zoomOutButton.background.fill = new window.am4core.color("#25283D");
-            zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
-            zoomOutButton.icon.strokeWidth = 2;
-            zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
-            }            
+                var zoomOutButton = radialChart.zoomOutButton;
+                zoomOutButton.dx = -12;
+                zoomOutButton.dy = -3;
+                zoomOutButton.parent = radialChart.tooltipContainer;
+                zoomOutButton.background.cornerRadius(5, 5, 5, 5);
+                zoomOutButton.background.fill = new window.am4core.color("#25283D");
+                zoomOutButton.icon.stroke = new window.am4core.color("#EFD9CE");
+                zoomOutButton.icon.strokeWidth = 2;
+                zoomOutButton.background.states.getKey("hover").properties.fill = new window.am4core.color("#606271");
+            }
 
             // window.am4core.options.autoDispose = true;  
             //this.radialChartInstance.dispose();
@@ -669,7 +655,6 @@ export class ChartComponent implements OnInit, OnDestroy {
     }
 
     ngOnDestroy() {
-        this.obs.unsubscribe();
         // this.radialChartInstance.dispose();
         window.am4core.disposeAllCharts();
     }

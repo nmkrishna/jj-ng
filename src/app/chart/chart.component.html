@@ -5,7 +5,7 @@
     <div class="modal-header">
         <!-- <h4 class="modal-title">Data</h4> -->
         <ng-container *ngFor="let obj of objectKeys(modalContent)">
-            <strong *ngIf="obj === 'initiative'">{{modalContent[obj]}}</strong>
+            <strong *ngIf="obj === 'initiative'">{{modalContent[obj].split(".")[1]}}</strong>
         </ng-container>
         <div style="display:flex">
             <button type="button" class="download" style="font-size:1.1rem; padding-top:2px" aria-label="Close" (click)="downloadAsPNG()">
