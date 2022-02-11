@@ -19,43 +19,17 @@ export class Chart2Component implements OnInit, OnDestroy {
     faCheckSquare = faCheckSquare;
     faDownload = faDownload;
     chartInstance: any;
-    quadrants = [
-        {
-            value: 1,
-            name: 'Our People',
-        },
-        {
-            value: 1,
-            name: 'Trusted partnership',
-        },
-        {
-            value: 1,
-            name: 'Quality as a differentiator',
-        },
-        {
-            value: 1,
-            name: 'Next gen quality',
-        },
-    ];
-
     rawdata;
     cats = bamAlignments;
 
     constructor(private modalService: NgbModal, private chartService: ChartService) { }
 
     getColor(bamAllignment) {
-        if (bamAllignment == "100% Digital QMS") {
-            return "#de4c4f";
-        } else if (bamAllignment == "98% Satisfaction in Customer Facing KPIs") {
-            return "#eea638";
-        } else if (bamAllignment == "80% Automated QC and Product Release") {
-            return "#86a965";
-        } else if (bamAllignment == "100% Integrated Data") {
-            return "#a7a737";
-        } else if (bamAllignment == "75% Focused on Patient, Consumer & Customer Exp") {
-            return "#d8854f";
-        } else if (bamAllignment == "N/A") {
-            return "grey";
+        let match = this.cats.find(element => element.name === bamAllignment);
+        if (!match) {
+            return "#C0C0C0";
+        } else {
+            return match.fill;
         }
     }
 
@@ -158,6 +132,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                 valueAxis.renderer.grid.template.stroke = window.am4core.color("#0000FF");
                 valueAxis.renderer.grid.template.strokeWidth = 3;
                 valueAxis.renderer.labels.template.fontSize = 12;
+                valueAxis.renderer.labels.template.inside = false;
 
                 valueAxis.interactionsEnabled = true;
 
@@ -210,6 +185,8 @@ export class Chart2Component implements OnInit, OnDestroy {
                     var dayOfYear = Math.floor((itemDate.getTime() - priorDate.getTime()) / 1000 / 60 / 60 / 24);
                     var offset = 0.0;
                     offset = (dayOfYear / 365) * 170;
+                    // offset = offset < 10 ? 10 : offset;
+                    // offset = offset > 170 ? 165 : offset;
                     return val + offset;
                 });
                 bullet.events.on("hit", this.onClickChartItem, this)
@@ -310,7 +287,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                     let finalData: any = [];
                     legend.dataItems.values.forEach((element: any) => {
                         // console.log("element", element.dataContext.name, element.properties.color);
-                        if (!element.properties.color) {
+                        if (element.properties.color) {
                             let matches = this.rawdata.filter(function (item: any) {
                                 return item.bamAllignment === element.dataContext.name;
                             });
@@ -323,12 +300,12 @@ export class Chart2Component implements OnInit, OnDestroy {
                     // console.log("filteredData", filteredData);
 
                     if (!selected) {
-                        finalData = finalData.filter(ar => !filteredData.find(rm => (rm.bamAllignment === ar.bamAllignment)))
-                    } else {
                         finalData = finalData.concat(filteredData);
+                    } else {
+                        finalData = finalData.filter(ar => !filteredData.find(rm => (rm.bamAllignment === ar.bamAllignment)))
                     }
 
-                    if (finalData.length == 0) {
+                    if (finalData.length == 0 || finalData.length == this.rawdata.length) {
                         categoryAxis.data = this.cats;
                         finalData = this.rawdata;
                         chart.reinit();
