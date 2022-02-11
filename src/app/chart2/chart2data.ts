@@ -1304,7 +1304,7 @@ const bamAlignments = [
     },
     {
         "name": "N/A",
-        "fill": "grey"
+        "fill": "#3399FF"
     }
 ];
 
