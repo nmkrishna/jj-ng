@@ -286,7 +286,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                     let selected = ev.target.dataItem.properties.color;
                     let finalData: any = [];
                     legend.dataItems.values.forEach((element: any) => {
-                        console.log("element", element.dataContext.name, element.properties.color);
+                        // console.log("element", element.dataContext.name, element.properties.color);
                         if (element.properties.color) {
                             let matches = this.rawdata.filter(function (item: any) {
                                 return item.bamAllignment === element.dataContext.name;
@@ -297,7 +297,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                     let filteredData = this.rawdata.filter(function (item: any) {
                         return item.bamAllignment === bamValue;
                     });
-                    console.log("filteredData", filteredData);
+                    // console.log("filteredData", filteredData);
 
                     if (!selected) {
                         finalData = finalData.concat(filteredData);
@@ -314,7 +314,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                             item.isActive = false;
                         });
                     }
-                    console.log("finaldata", finalData);
+                    // console.log("finaldata", finalData);
                     categoryAxis.data = this.cats;
                     chart.data = finalData;
                 });
