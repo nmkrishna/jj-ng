@@ -150,7 +150,7 @@ export class Chart2Component implements OnInit, OnDestroy {
         button.dy = -680;
         button.zIndex = "12";
         button.events.on("hit", () => {
-            categoryAxis.data = this.cats;            
+            categoryAxis.data = this.cats;
             chart.data = this.rawdata;
             legend.reinit();
             legend.children.each((item) => {
@@ -172,7 +172,7 @@ export class Chart2Component implements OnInit, OnDestroy {
             this.cats = getBAMAlignments(this.rawdata);
 
             if (this.rawdata.length > 0) {
-                this.hideIndicator();                
+                this.hideIndicator();
                 chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
                 chart.startAngle = 270 - 180;
                 chart.endAngle = 270 + 180;
@@ -351,10 +351,12 @@ export class Chart2Component implements OnInit, OnDestroy {
                 legend.itemContainers.template.events.on("hit", (ev: any) => {
 
                     let bamValue = ev.target.dataItem.dataContext.name;
-                    let selected = ev.target.dataItem.properties.color;
+                    let selected = ev.target.isActive;
+                    // console.log("bam", bamValue, selected);
+
                     let finalData: any = [];
                     legend.dataItems.values.forEach((element: any) => {
-                        // console.log("element", element.dataContext.name, element.properties.color);
+                        console.log("element", element.dataContext.name, element.properties.color);
                         if (element.properties.color) {
                             let matches = this.rawdata.filter(function (item: any) {
                                 return item.bamAllignment === element.dataContext.name;
@@ -365,24 +367,27 @@ export class Chart2Component implements OnInit, OnDestroy {
                     let filteredData = this.rawdata.filter(function (item: any) {
                         return item.bamAllignment === bamValue;
                     });
-                    // console.log("filteredData", filteredData);
+                    // console.log("filteredData", filteredData.length);
 
                     if (!selected) {
                         finalData = finalData.concat(filteredData);
+                        // ev.target.isActive = false;
                     } else {
                         finalData = finalData.filter(ar => !filteredData.find(rm => (rm.bamAllignment === ar.bamAllignment)))
+                        // ev.target.isActive = true;
                     }
 
-                    if (finalData.length == 0 || finalData.length == this.rawdata.length) {
+                    if (finalData.length == 0) {
                         categoryAxis.data = this.cats;
                         finalData = this.rawdata;
-                        chart.reinit();
                         legend.reinit();
-                        legend.children.each((item) => {
-                            item.isActive = false;
-                        });
+                        chart.reinit();
+                        // legend.children.each((item) => {
+                        //     item.isActive = false;
+                        // });
                     }
-                    // console.log("finaldata", finalData);
+                    // console.log("finaldata", finalData.length);
+
                     categoryAxis.data = this.cats;
                     chart.data = finalData;
                 });
