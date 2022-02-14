@@ -91,6 +91,74 @@ export class Chart2Component implements OnInit, OnDestroy {
         this.indicator.hide();
     }
 
+    screenshot() {
+        Array.from(document
+            .getElementsByClassName("amcharts-Scrollbar-group"))
+            .forEach((element) => {
+                element.setAttribute("style", "display: none");
+            });
+        Array.from(document
+            .getElementsByClassName("amcharts-Button-group"))
+            .forEach((element) => {
+                element.setAttribute("style", "display: none");
+            });
+        window
+            .html2canvas(document.getElementById("chart2div"), {
+                height: window.outerHeight + 600,
+                windowHeight: window.outerHeight + 700,
+            })
+            .then((canvas) => {
+                //document.body.appendChild(canvas);
+                this.saveAs(canvas.toDataURL(), `jjchart${Date.now()}.png`);
+                Array.from(document
+                    .getElementsByClassName("amcharts-Scrollbar-group"))
+                    .forEach((element) => {
+                        element.setAttribute("style", "display: block");
+                    });
+                Array.from(document
+                    .getElementsByClassName("amcharts-Button-group"))
+                    .forEach((element) => {
+                        element.setAttribute("style", "display: block");
+                    });
+
+            });
+    }
+
+    renderExportButton(chart) {
+        var ExportButton = chart.chartContainer.createChild(window.am4core.Button);
+        ExportButton.label.text = 'Export';
+        ExportButton.padding(5, 5, 5, 5);
+        ExportButton.width = 50;
+        ExportButton.align = "right";
+        ExportButton.marginRight = 80;
+        ExportButton.fontSize = 12;
+        ExportButton.dy = -653;
+        ExportButton.zIndex = "12";
+        ExportButton.events.on("hit", () => {
+            this.screenshot();
+        });
+    }
+
+    renderResetButton(chart, legend, categoryAxis) {
+        var button = chart.chartContainer.createChild(window.am4core.Button);
+        button.label.text = "Reset";
+        button.padding(5, 5, 5, 5);
+        button.width = 50;
+        button.align = "right";
+        button.marginRight = 150;
+        button.fontSize = 12;
+        button.dy = -680;
+        button.zIndex = "12";
+        button.events.on("hit", () => {
+            categoryAxis.data = this.cats;            
+            chart.data = this.rawdata;
+            legend.reinit();
+            legend.children.each((item) => {
+                item.isActive = false;
+            });
+        });
+    }
+
 
     ngOnInit(): void {
 
@@ -104,7 +172,7 @@ export class Chart2Component implements OnInit, OnDestroy {
             this.cats = getBAMAlignments(this.rawdata);
 
             if (this.rawdata.length > 0) {
-                this.hideIndicator();
+                this.hideIndicator();                
                 chart.hiddenState.properties.opacity = 0; // this creates initial fade-in
                 chart.startAngle = 270 - 180;
                 chart.endAngle = 270 + 180;
@@ -112,7 +180,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                 // chart.endAngle = -10;
                 chart.innerRadius = window.am4core.percent(30);
                 chart.dateFormatter.dateFormat = "M/d/yy";
-
+                window.am4core.options.autoSetClassName = true;
                 var categoryAxis = chart.xAxes.push(new window.am4charts.CategoryAxis());
                 categoryAxis.dataFields.category = "name";
                 categoryAxis.renderer.grid.template.location = 0;
@@ -318,6 +386,10 @@ export class Chart2Component implements OnInit, OnDestroy {
                     categoryAxis.data = this.cats;
                     chart.data = finalData;
                 });
+
+                // Export Button
+                this.renderExportButton(chart);
+                this.renderResetButton(chart, legend, categoryAxis);
 
 
                 // legend.itemContainers.template.events.on("hit", (ev: any) => {
