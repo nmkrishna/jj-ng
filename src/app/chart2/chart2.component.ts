@@ -258,57 +258,52 @@ export class Chart2Component implements OnInit, OnDestroy {
                     return val + offset;
                 });
                 bullet.events.on("hit", this.onClickChartItem, this)
-
-                bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
-                     <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
-                     <hr/>
-                     <table>
-                     </tr>
-                         <tr>
-                     <th align="left" style="font-size:8px">Lead</th>
-                     <td style="font-size:8px">{projectManager}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px">Ownership</th>
-                     <td style="font-size:8px">{owner}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px">Strategy</th>
-                     <td style="font-size:8px">{strategy}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px">Quality Enabler</th>
-                     <td style="font-size:8px">{qualityEnabler}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px">Pillar</th>
-                     <td style="font-size:8px">{topStrategy}</td>
-                     </tr>
-                     <th align="left" style="font-size:8px">Accelerator</th>
-                     <td style="font-size:8px">{janssenOneAccelerator}</td>
-                     </tr>
-                     <th align="left" style="font-size:8px">Investment Type</th>
-                     <td style="font-size:8px">{investmentType}</td>
-                     </tr>
-                         <th align="left" style="font-size:8px">Planned Start</th>
-                     <td style="font-size:8px">{startDate}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px">Planned End</th>
-                     <td style="font-size:8px">{endDate}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px">BAM Alignmnent</th>
-                     <td style="font-size:8px">{bamAllignment}</td>
-                     </tr>
-                     <th align="left" style="font-size:8px">Total Project Cost</th>
-                     <td style="font-size:8px">$ {totalProjectCost}</td>
-                     </tr>
-                     <tr>
-                     <th align="left" style="font-size:8px"></th>
-                     <td style="font-size:8px"></td>
-                     </tr>
-                     </body>`;
+            bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
+            <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
+            <hr/>
+            <table>
+            </tr>
+                <tr>
+              <th align="left" style="font-size:8px">Lead</th>
+              <td style="font-size:8px">{projectManager}</td>
+            </tr>
+            <tr>
+              <th align="left" style="font-size:8px">Ownership</th>
+              <td style="font-size:8px">{owner}</td>
+            </tr>
+            <tr>
+              <th align="left" style="font-size:8px">Characteristic</th>
+              <td style="font-size:8px">{strategy}</td>
+            </tr>
+            <tr>
+              <th align="left" style="font-size:8px">Principle</th>
+              <td style="font-size:8px">{topStrategy}</td>
+            </tr>
+            <tr>
+              <th align="left" style="font-size:8px">Investment Type</th>
+              <td style="font-size:8px">{investmentType}</td>
+            </tr>
+             <tr>
+                <th align="left" style="font-size:8px">Planned Start</th>
+              <td style="font-size:8px">{startDate}</td>
+            </tr>
+            <tr>
+             <tr>
+            <th align="left" style="font-size:8px">Planned End</th>
+              <td style="font-size:8px">{endDate}</td>
+            </tr>
+            <tr>
+            <th align="left" style="font-size:8px">BAM Alignmnent</th>
+              <td style="font-size:8px">{bamAllignment}</td>
+            </tr>
+            <th align="left" style="font-size:8px">Total Project Cost</th>
+              <td style="font-size:8px">$ {totalProjectCost}</td>
+            </tr>
+            <tr>
+              <th align="left" style="font-size:8px"></th>
+              <td style="font-size:8px"></td>
+            </tr>
+            </body>`;
 
                 var hoverState = bullet.states.create("hover");
                 hoverState.properties.fillOpacity = 1;
@@ -327,7 +322,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                 chart.scrollbarY = new window.am4core.Scrollbar();
 
                 var slider = chart.createChild(window.am4core.Slider);
-                slider.start = 0.5;
+                slider.start = 0;
                 slider.events.on("rangechanged", () => {
                     var start = slider.start;
                     chart.startAngle = 270 - start * 179 - 1;
