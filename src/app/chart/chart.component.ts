@@ -274,7 +274,7 @@ export class ChartComponent implements OnInit, OnDestroy {
             initiativesSeries.fill = initiativeColor;
             initiativesSeries.stroke = initiativeColor;
             initiativesSeries.columns.template.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
-            <span style="font-size:8px"><center><strong>{initiative.split('.')[1]}</strong></center></span>
+            <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
             <hr/>
             <table>
             </tr>
@@ -287,27 +287,23 @@ export class ChartComponent implements OnInit, OnDestroy {
               <td style="font-size:8px">{owner}</td>
             </tr>
             <tr>
-              <th align="left" style="font-size:8px">Strategy</th>
+              <th align="left" style="font-size:8px">Characteristic</th>
               <td style="font-size:8px">{strategy}</td>
             </tr>
             <tr>
-              <th align="left" style="font-size:8px">Quality Enabler</th>
-              <td style="font-size:8px">{qualityEnabler}</td>
-            </tr>
-            <tr>
-              <th align="left" style="font-size:8px">Pillar</th>
+              <th align="left" style="font-size:8px">Principle</th>
               <td style="font-size:8px">{topStrategy}</td>
             </tr>
-              <th align="left" style="font-size:8px">Accelerator</th>
-              <td style="font-size:8px">{janssenOneAccelerator}</td>
-            </tr>
+            <tr>
               <th align="left" style="font-size:8px">Investment Type</th>
               <td style="font-size:8px">{investmentType}</td>
             </tr>
+             <tr>
                 <th align="left" style="font-size:8px">Planned Start</th>
               <td style="font-size:8px">{startDate}</td>
             </tr>
             <tr>
+             <tr>
             <th align="left" style="font-size:8px">Planned End</th>
               <td style="font-size:8px">{endDate}</td>
             </tr>

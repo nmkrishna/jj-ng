@@ -5,7 +5,7 @@
     <div class="modal-header">
         <!-- <h4 class="modal-title">Data</h4> -->
         <ng-container *ngFor="let obj of objectKeys(modalContent)">
-            <strong *ngIf="obj === 'initiative'">{{modalContent[obj].split(".")[1]}}</strong>
+            <strong *ngIf="obj === 'initiative'">{{modalContent[obj]}}</strong>
         </ng-container>
         <div style="display:flex">
             <button type="button" class="download" style="font-size:1.1rem; padding-top:2px" aria-label="Close" (click)="downloadAsPNG()">
@@ -169,7 +169,7 @@
         </div>
         <div class="row row-cols-1 row-cols-md-5">
             <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                <div class="col px-1" *ngIf="obj === 'janssenOneAccelerator' || obj === 'affectedQCDimensions' || obj === 'bamAllignment'">
+                <div class="col px-1" *ngIf="obj === 'affectedQCDimensions' || obj === 'bamAllignment'">
                     <div class="card card-container primary-cards p-2">
                         <b class="primary-cards-title">{{keyFormat(obj)}} :</b>
                         <ng-container>

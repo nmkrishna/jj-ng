@@ -169,7 +169,7 @@
         </div>
         <div class="row row-cols-1 row-cols-md-5">
             <ng-container *ngFor="let obj of objectKeys(modalContent)">
-                <div class="col px-1" *ngIf="obj === 'janssenOneAccelerator' || obj === 'affectedQCDimensions' || obj === 'bamAllignment'">
+                <div class="col px-1" *ngIf="obj === 'affectedQCDimensions' || obj === 'bamAllignment'">
                     <div class="card card-container primary-cards p-2">
                         <b class="primary-cards-title">{{keyFormat(obj)}} :</b>
                         <ng-container>
