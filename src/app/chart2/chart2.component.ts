@@ -206,6 +206,8 @@ export class Chart2Component implements OnInit, OnDestroy {
 
                 categoryAxis.renderer.labels.template.location = 0.5;
                 categoryAxis.renderer.labels.template.fontSize = 12;
+                categoryAxis.renderer.labels.template.wrap = true;
+                categoryAxis.renderer.labels.template.maxWidth = 180;
 
                 categoryAxis.interactionsEnabled = true;
                 categoryAxis.renderer.axisFills.template.disabled = false;
@@ -214,6 +216,8 @@ export class Chart2Component implements OnInit, OnDestroy {
                 categoryAxis.renderer.layout = "grid";
                 categoryAxis.renderer.ticks.template.disabled = false;
                 categoryAxis.renderer.ticks.template.strokeOpacity = 1;
+                categoryAxis.renderer.maxLabelPosition = 1;
+
 
                 // categoryAxis.renderer.grid gridContainer
 
@@ -258,7 +262,7 @@ export class Chart2Component implements OnInit, OnDestroy {
                     return val + offset;
                 });
                 bullet.events.on("hit", this.onClickChartItem, this)
-            bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
+                bullet.tooltipHTML = `<body style="font-size:8px; background-color:grey, width:50px; white-space: nowrap; overflow:hidden; text-overflow:ellipsis">
             <span style="font-size:8px"><center><strong>{initiative}</strong></center></span>
             <hr/>
             <table>
@@ -269,15 +273,11 @@ export class Chart2Component implements OnInit, OnDestroy {
             </tr>
             <tr>
               <th align="left" style="font-size:8px">Ownership</th>
-              <td style="font-size:8px">{owner}</td>
+              <td style="font-size:8px">{functionalOwnership}</td>
             </tr>
             <tr>
               <th align="left" style="font-size:8px">Characteristic</th>
-              <td style="font-size:8px">{strategy}</td>
-            </tr>
-            <tr>
-              <th align="left" style="font-size:8px">Principle</th>
-              <td style="font-size:8px">{topStrategy}</td>
+              <td style="font-size:8px">{strategies}</td>
             </tr>
             <tr>
               <th align="left" style="font-size:8px">Investment Type</th>
