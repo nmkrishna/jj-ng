@@ -520,6 +520,16 @@ export class ChartComponent implements OnInit, OnDestroy {
         this.chartService.getChartData().then((data) => {
             if (data.length > 0) {
                 // this.spinner.hide();
+                console.log("before filter",data.length);
+                data = data.filter(item => (item.expense+ item.capital) > 0);
+                console.log("after filter", data.length);
+
+                data.forEach((entry: any) => {
+                    entry.totalProjectCost = (entry.capital + entry.expense);
+                });
+
+                console.log(data);
+
                 this.hideIndicator();
                 var accelerators = getAccelarators(data);
                 let owners = getOwners(data);

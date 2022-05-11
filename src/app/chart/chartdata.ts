@@ -109,8 +109,8 @@ const getStratergies = (rawData: any) => {
         maximumFractionDigits: 0
     });
     allStrategies.forEach(element => {
-        let initiatives = rawData.filter(item => item.strategies.includes(element));
-        let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + (obj.totalProjectCost ? obj.totalProjectCost : 0) }, 0);
+        let initiatives = rawData.filter(item => item.primary === element);
+        let totalProjectsCost = initiatives.reduce(function (acc, obj) { return acc + (obj.expense ? obj.expense : 0) + (obj.capital ? obj.capital : 0) }, 0);
         result.push({ "name": element, "value": 1, "initiatives": initiatives.length, "totalProjectsCost": nf.format(totalProjectsCost) });
 
     });
@@ -162,7 +162,7 @@ const getInitiativesSeries = (rawData: any) => {
             seriesObj.functionalOwnership = entry.functionalOwnership;
             seriesObj.projectId = entry.projectId;
             seriesObj.totalProjectValue = entry.totalProjectValue;
-            seriesObj.totalProjectCost = entry.totalProjectCost;
+            seriesObj.totalProjectCost = entry.expense + entry.capital;
             seriesObj.expense = entry.expense;
             seriesObj.capital = entry.capital;
             seriesObj.startDate = entry.startDate;
